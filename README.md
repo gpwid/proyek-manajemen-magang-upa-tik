@@ -14,3 +14,11 @@ Halo, untuk berkontribusi pada project ini diharapkan untuk :
    php artisan serve
    ```
 3. Jika sudah, maka sudah bisa kerja. Jangan lupa untuk membuat branch baru dan kabari kalo mau merge.
+4. Untuk membuat branch, buat dulu dari GitLab atau GitHub dengan nama fitur yang ingin di tambah
+5. ```bash
+   \\ Kode untuk commit dari suatu branch
+   git fetch origin
+   git switch <nama branch kamu>
+   git commit -m "<pesan>"
+   git push
+   ```
