@@ -1,5 +1,7 @@
 ## Tutorial Kontribusi
 
+### PASTIKAN UNTUK MEMBUAT BRANCH DAN DAN REQUEST MERGE JIKA SUDAH"
+
 Halo, untuk berkontribusi pada project ini diharapkan untuk :
 1. Menggunakan Laragon versi terbaru, dan membuka directory Laragon dengan terminal (C:\laragon\www)
 2. ```bash
