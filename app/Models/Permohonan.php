@@ -22,4 +22,8 @@ class Permohonan extends Model
         'file_permohonan',
     ];
 
+    public function user()
+    {
+        return $this->belongsTo(Instansi::class, 'id_instansi');
+    }
 }
