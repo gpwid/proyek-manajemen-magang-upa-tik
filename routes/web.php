@@ -8,7 +8,7 @@ Route::get('/', function () {
 });
 
 Route::get('/permohonan', function () {
-    return view('admin.dashboard.index');
+    return view('admin.permohonan.index');
 });
 
 Route::get('/permohonan', [App\Http\Controllers\Admin\PermohonanController::class, 'index'])->name('admin.permohonan.index');
