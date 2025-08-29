@@ -40,17 +40,10 @@
                     <span>Permohonan</span></a>
             </li>
 
-<<<<<<< HEAD
             <!-- Nav Item - Charts -->
             <li class="nav-item">
                 <a class="nav-link" href="{{ route('admin.permohonan.index') }}">
                     <i class="fas fa-envelope-open-text"></i>
-=======
-            <!-- Nav Item - Tables -->
-            <li class="nav-item">
-                <a class="nav-link" href="tables.html">
-                    <i class="fas fa-fw fa-table"></i>
->>>>>>> 489abc9d60dcfca4acff2bd96b52b6e5f0c58e00
                     <span>Permohonan</span></a>
             </li>
 

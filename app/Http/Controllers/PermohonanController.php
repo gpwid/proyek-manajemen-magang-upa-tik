@@ -12,9 +12,4 @@ class PermohonanController extends Controller
         return view('admin.permohonan.index');
     }
 
-    public function create(): View
-    {
-        $instans = \App\Models\Instansi::all();
-        return view('admin.permohonan.tambah', compact('instans'));
-    }
 }
