@@ -13,7 +13,7 @@
 
             <!-- Nav Item - Dashboard -->
             <li class="nav-item active">
-                <a class="nav-link" href="index.html">
+                <a class="nav-link" href="{{ route('admin.dashboard.index') }}">
                     <i class="fas fa-fw fa-tachometer-alt"></i>
                     <span>Dashboard</span></a>
             </li>
@@ -40,10 +40,10 @@
                     <span>Permohonan</span></a>
             </li>
 
-            <!-- Nav Item - Tables -->
+            <!-- Nav Item - Charts -->
             <li class="nav-item">
-                <a class="nav-link" href="tables.html">
-                    <i class="fas fa-fw fa-table"></i>
+                <a class="nav-link" href="{{ route('admin.permohonan.index') }}">
+                    <i class="fas fa-envelope-open-text"></i>
                     <span>Permohonan</span></a>
             </li>
 
