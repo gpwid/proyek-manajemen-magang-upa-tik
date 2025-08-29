@@ -23,7 +23,7 @@ return new class extends Migration
             $table->date('tgl_suratmasuk');
             $table->enum('jenis_magang', ['Mandiri', 'MBKM', 'Sekolah']);
             $table->enum('status', ['Aktif', 'Pending', 'Selesai'])->default('Pending');
-            $table->file('file_permohonan');
+            $table->string('file_permohonan', 255);
             $table->timestamps();
         });
     }
