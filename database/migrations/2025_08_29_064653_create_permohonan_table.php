@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('id_instansi');
             $table->date('tgl_surat');
-            $table->date('instansi');
+            $table->strin('instansi');
             $table->date('tgl_mulai');
             $table->date('tgl_selesai');
             $table->string('pembimbing_sekolah', 255);
@@ -23,7 +23,7 @@ return new class extends Migration
             $table->date('tgl_suratmasuk');
             $table->enum('jenis_magang', ['Mandiri', 'MBKM', 'Sekolah']);
             $table->enum('status', ['Aktif', 'Pending', 'Selesai'])->default('Pending');
-            $table->string('file_permohonan', 255);
+            $table->string('file_permohonan');
             $table->timestamps();
         });
     }
