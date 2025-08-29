@@ -16,11 +16,36 @@ Halo, untuk berkontribusi pada project ini diharapkan untuk :
    php artisan serve
    ```
 3. Jika sudah, maka sudah bisa kerja. Jangan lupa untuk membuat branch baru dan kabari kalo mau merge.
-4. Untuk membuat branch, buat dulu dari GitLab atau GitHub dengan nama fitur yang ingin di tambah
-5. ```bash
-   \\ Kode untuk commit dari suatu branch
+4. Untuk membuat branch, buat dulu dari GitLab atau GitHub dengan nama fitur yang ingin di tambah. Bisa dari GitLab nya, atau lewat terminal :
+   ```bash
+   git switch main
+   git pull                 # sinkron dengan remote
+   git switch -c feat/nama-fitur   # contoh: feat/user-auth
+   # ...koding...
+   git add .
+   git commit -m "feat: deskripsi singkat perubahan"
+   git push -u origin feat/nama-fitur   # -u: set upstream (sekali saja)
+   ```
+5. Atau jika sudah ada branch,
+   ```bash
    git fetch origin
    git switch <nama branch kamu>
-   git commit -m "<pesan>"
+   git commit -m "Menambahkan fitur bla bla bla"
    git push
+
    ```
+
+6. Untuk buat Merge Request (MR) ke main, Checklist sebelum minta review:
+   - Sinkron dulu dengan main:
+
+   ```bash
+   git fetch origin
+   git rebase origin/main   # atau git merge origin/main
+   ```
+   - Tidak ada file terlarang di commit (.env, vendor/, node_modules/, dump .sql).
+
+   - Migration & seeder sudah jalan di lokal (php artisan migrate --seed).
+
+   - Kode sudah dirapikan (pint) dan test penting lulus (php artisan test).
+
+   - MR kecil & fokus (lebih mudah direview).
