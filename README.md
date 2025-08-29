@@ -29,11 +29,18 @@ Halo, untuk berkontribusi pada project ini diharapkan untuk :
 5. Atau jika sudah ada branch,
    ```bash
    git fetch origin
-   git switch <nama branch kamu>
-   git commit -m "Menambahkan fitur bla bla bla"
+   git switch feat/nama-fitur
+   git pull
+   # ...koding...
+   git add .
+   git commit -m "feat: update fitur X"
    git push
-
    ```
+   Konvensi nama branch:
+   - feat/<nama-fitur> — fitur baru
+   - fix/<deskripsi-bug> — bugfix
+   - chore/<aktivitas> — pekerjaan non-fungsional (build, deps)
+   - docs/<topik> — dokumentasi
 
 6. Untuk buat Merge Request (MR) ke main, Checklist sebelum minta review:
    - Sinkron dulu dengan main:
