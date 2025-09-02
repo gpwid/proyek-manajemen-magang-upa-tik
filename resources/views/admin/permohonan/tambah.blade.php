@@ -14,7 +14,7 @@
     <form action="/user" method="POST">
         @csrf
         <div class="mb-3">
-            <label for="">Tanggal Surat</label>
+            <label for="">Tanggal Surat <label class="text-danger">*</label></label>
             <input value="{{ old('tgl_surat') }}" type="date" name="tgl_surat" id="" class="form-control @error('tgl_surat') is-invalid @enderror">
             @error('tgl_surat')
                 <div class="invalid-feedback">
@@ -23,7 +23,7 @@
             @enderror
         </div>
         <div class="mb-3">
-            <label for="">Instansi</label>
+            <label for="">Instansi <label class="text-danger">*</label></label></label>
             <select name="id_instansi" class="form-control @error('id_instansi')
             is-invalid @enderror" id="">
                 <option value="">--Pilih Instansi--</option>
@@ -40,7 +40,7 @@
             @enderror
         </div>
         <div class="mb-3">
-            <label for="">Tanggal Mulai</label>
+            <label for="">Tanggal Mulai <label class="text-danger">*</label></label></label>
             <input value="{{ old('tgl_mulai') }}" type="date" name="tgl_mulai" id="" class="form-control @error('tgl_mulai') is-invalid @enderror">
             @error('tgl_mulai')
                 <div class="invalid-feedback">
@@ -49,7 +49,7 @@
             @enderror
         </div>
         <div class="mb-3">
-            <label for="">Tanggal Selesai</label>
+            <label for="">Tanggal Selesai <label class="text-danger">*</label></label></label>
             <input value="{{ old('tgl_selesai') }}" type="date" name="tgl_selesai" id="" class="form-control @error('tgl_selesai') is-invalid @enderror">
             @error('tgl_selesai')
                 <div class="invalid-feedback">
@@ -58,7 +58,7 @@
             @enderror
         </div>
         <div class="mb-3">
-            <label for="">Pembimbing Sekolah</label>
+            <label for="">Pembimbing Sekolah <label class="text-danger">*</label></label></label>
             <input value="{{ old('pembimbing_sekolah') }}" type="teks" name="pembimbing_sekolah" id="" class="form-control @error('pembimbing_sekolah') is-invalid @enderror">
             @error('pembimbing_sekolah')
                 <div class="invalid-feedback">
@@ -67,7 +67,7 @@
             @enderror
         </div>
         <div class="mb-3">
-            <label for="">Kontak Pembimbing</label>
+            <label for="">Kontak Pembimbing <label class="text-danger">*</label></label></label>
             <input value="{{ old('kontak_pembimbing') }}" type="date" name="kontak" id="" class="form-control @error('kontak') is-invalid @enderror">
             @error('kontak')
                 <div class="invalid-feedback">
@@ -76,7 +76,7 @@
             @enderror
         </div>
         <div class="mb-3">
-            <label for="">Tanggal Surat Masuk</label>
+            <label for="">Tanggal Surat Masuk <label class="text-danger">*</label></label></label>
             <input value="{{ old('tgl_suratmasuk') }}" type="date" name="tgl_suratmasuk" id="" class="form-control @error('tgl_suratmasuk') is-invalid @enderror">
             @error('tgl_suratmasuk')
                 <div class="invalid-feedback">
@@ -85,7 +85,7 @@
             @enderror
         </div>
         <div class="mb-3">
-            <label for="">Jenis Magang</label>
+            <label for="">Jenis Magang <label class="text-danger">*</label></label></label>
             <select name="jenis_magang" id="" class="form-control @error('jenis_magang')
                 is-invalid
             @enderror">
@@ -101,23 +101,7 @@
             @enderror
         </div>
         <div class="mb-3">
-            <label for="">Status</label>
-            <select name="status" id="" class="form-control @error('status')
-                is-invalid
-            @enderror">
-                <option value="">--Pilih Status--</option>
-                <option value="Aktif">Aktif</option>
-                <option value="Pending">Pending</option>
-                <option value="Selesai">Selesai</option>
-            </select>
-            @error('status')
-                <div class="invalid-feedback">
-                    {{ $message }}
-                </div>
-            @enderror
-        </div>
-        <div class="mb-3">
-            <label for="">File Permohonan</label>
+            <label for="">File Permohonan <label class="text-danger">*</label></label></label>
             <input value="{{ old('file_permohonan') }}" type="file" name="file_permohonan" id="" class="form-control @error('file_permohonan') is-invalid @enderror">
             @error('file_permohonan')
                 <div class="invalid-feedback">
