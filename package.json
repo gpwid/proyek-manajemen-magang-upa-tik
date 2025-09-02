@@ -16,6 +16,8 @@
         "vite": "^5.0"
     },
     "dependencies": {
+        "@fortawesome/fontawesome-free": "^7.0.0",
+        "bootstrap": "^5.3.8",
         "lodash": "^4.17.21"
     }
 }
