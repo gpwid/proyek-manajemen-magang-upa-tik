@@ -27,7 +27,7 @@
             <select name="id_instansi" class="form-control @error('id_instansi')
             is-invalid @enderror" id="">
                 <option value="">--Pilih Instansi--</option>
-                @forelse ($instans as $x)
+                @forelse ($tempatinstansis as $x)
                 <option value="{{$x->id}}">{{ $x->nama_instansi }}</option>
                 @empty
                 <option value="">Tidak Ada Instansi</option>

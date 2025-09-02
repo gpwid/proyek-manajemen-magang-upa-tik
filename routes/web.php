@@ -3,6 +3,7 @@
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Admin\PermohonanController;
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\TambahPermohonanController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -10,7 +11,7 @@ Route::get('/', function () {
 });
 
 Route::get('/permohonan', [PermohonanController::class, 'index'])->name('admin.permohonan.index');
-Route::get('/permohonan.tambah', [PermohonanController::class, 'create'])->name('admin.permohonan.tambah');
+Route::get('/permohonan.tambah', [TambahPermohonanController::class, 'index'])->name('admin.permohonan.tambah');
 
 Route::get('/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard.index');
 
