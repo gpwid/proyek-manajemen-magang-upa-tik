@@ -11,6 +11,11 @@
             <!-- Divider -->
             <hr class="sidebar-divider my-0">
 
+            <!-- Heading -->
+            <div class="sidebar-heading">
+                Menu
+            </div>
+
             <!-- Nav Item - Dashboard -->
             <li class="nav-item active">
                 <a class="nav-link" href="{{ route('admin.dashboard.index') }}">
@@ -18,13 +23,8 @@
                     <span>Dashboard</span></a>
             </li>
 
-            <!-- Divider -->
-            <hr class="sidebar-divider">
 
-            <!-- Heading -->
-            <div class="sidebar-heading">
-                Menu
-            </div>
+
 
             <!-- Nav Item - Tables -->
             <li class="nav-item @yield('permohonan-active')">
@@ -35,8 +35,8 @@
 
             <!-- Nav Item - Tables -->
             <li class="nav-item">
-                <a class="nav-link" href="tables.html">
-                    <i class="fas fa-fw fa-table"></i>
+                <a class="nav-link" href="{{ route('admin.permohonan.index') }}">
+                    <i class="fas fa-envelope-open-text"></i>
                     <span>Permohonan</span></a>
             </li>
 
