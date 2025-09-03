@@ -10,7 +10,8 @@ class PermohonanController extends Controller
     public function index()
     {
         $searchinstansis = \App\Models\Instansi::all();
-        return view('admin.permohonan.index', compact('searchinstansis'));
+        $permohonan = \App\Models\Permohonan::all();
+        return view('admin.permohonan.index', compact('searchinstansis', 'permohonan'));
     }
 
 }

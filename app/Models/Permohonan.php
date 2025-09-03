@@ -7,6 +7,14 @@ use Illuminate\Database\Eloquent\Model;
 class Permohonan extends Model
 {
     protected $guarded = ['id'];
+    protected $table = 'permohonan';
+
+    protected $casts = [
+        'tgl_surat' => 'date',
+        'tgl_mulai' => 'date',
+        'tgl_selesai' => 'date',
+        'tgl_suratmasuk' => 'date',
+    ];
 
     protected $fillable = [
         'id_instansi',

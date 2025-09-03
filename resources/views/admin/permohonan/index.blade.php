@@ -41,7 +41,7 @@
             </div>
 
             <div class="col-xl-3 col-md-6 mb-4">
-                <div class="card card-hover border-left-danger shadow h-100 py-2 text-center">
+                <div class="card card-hover border-left-danger h-100 py-2 text-center">
                     <div class="card-body">
                         <div class="mb-2">
                             <span class="d-inline-flex align-items-center justify-content-center rounded-circle"><i
@@ -55,7 +55,7 @@
             </div>
 
             <div class="col-xl-3 col-md-6 mb-4">
-                <div class="card card-hover border-left-primary shadow h-100 py-2 text-center">
+                <div class="card card-hover border-left-primary h-100 py-2 text-center">
                     <div class="card-body">
                         <div class="mb-2">
                             <span class="d-inline-flex align-items-center justify-content-center rounded-circle"><i
@@ -87,7 +87,8 @@
                 </div>
                 <div class="col-md-3 mb-3">
                     <label class="form-label">Institusi</label>
-                    <select name="id_instansi" class="form-control @error('id_instansi')
+                    <select name="id_instansi"
+                        class="form-select form-control @error('id_instansi')
                         is-invalid @enderror"
                         id="">
                         <option value="">--Pilih Instansi--</option>
@@ -97,7 +98,7 @@
                             <option value="">Tidak Ada Instansi</option>
                         @endforelse
                     </select>
-                    @error('id_instansi')   
+                    @error('id_instansi')
                         <div class="invalid-feedback">
                             {{ $message }}
                         </div>
@@ -112,10 +113,62 @@
             </div>
         </div>
 
-        <a href="{{ route('admin.permohonan.tambah') }}"
-            class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
-                class="fas fa-download fa-sm text-white-50"></i> Generate Report</a>
+        <div class="d-flex justify-start gap-2 mb-4">
+            <a href="{{ route('admin.permohonan.tambah') }}"
+                class="d-none d-sm-inline-block btn btn-lg btn-primary rounded-3 shadow-sm"><i
+                    class="fa-solid fa-file-circle-plus text-white"></i> Permohonan Baru
+            </a>
 
+            <a href="{{ route('admin.permohonan.tambah') }}"
+                class="d-none d-sm-inline-block btn btn-lg btn-warning rounded-3 shadow-sm"><i
+                    class="fa-solid fa-file-circle-plus text-white"></i> Edit Permohonan
+            </a>
+        </div>
+
+        <div class="row">
+            @forelse ($permohonan as $item)
+                <div class="col-md-4 mb-4">
+                    <div class="card h-100 card-hover">
+                        <div
+                            class="card-header {{ $item->status == 'Aktif' ? 'bg-success-subtle' : ($item->status == 'Pending' ? 'bg-warning-subtle' : 'bg-danger-subtle') }}">
+                            
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div class="d-flex align-items-center">
+                                    <div>
+                                        <h6 class="mb-0">{{ $item->instansi }}</h6>
+                                        <small class="text-muted">{{ $item->tgl_surat }}</small>
+                                    </div>
+                                </div>
+                                <span
+                                    class="badge {{ $item->status == 'Aktif' ? 'bg-success' : ($item->status == 'Pending' ? 'bg-warning' : 'bg-danger') }}">{{ $item->status }}</span>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="row mb-3">
+                                <div class="col-6">
+                                    <strong>Instansi</strong>
+                                    <br>
+                                    <span class="text-muted">{{ $item->instansi }}</span>
+                                </div>
+                                <div class="col-6">
+                                    <strong>Jenis Magang</strong>
+                                    <br>
+                                    <span class="text-muted">{{ $item->jenis_magang }}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            @empty
+                <div class="col-md-4 mb-4">
+                    <div class="card shadow h-100 card-hover">
+                        <div class="card-header bg-secondary">
+                            Tidak ada permohonan
+                        </div>
+                    </div>
+                </div>
+            @endforelse
+        </div>
 
     </div>
 
