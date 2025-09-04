@@ -68,7 +68,7 @@
         </div>
         <div class="mb-3">
             <label for="">Kontak Pembimbing <label class="text-danger">*</label></label></label>
-            <input value="{{ old('kontak_pembimbing') }}" type="date" name="kontak" id="" class="form-control @error('kontak') is-invalid @enderror">
+            <input value="{{ old('kontak_pembimbing') }}" type="number" name="kontak" id="" class="form-control @error('kontak') is-invalid @enderror">
             @error('kontak')
                 <div class="invalid-feedback">
                     {{ $message }}
