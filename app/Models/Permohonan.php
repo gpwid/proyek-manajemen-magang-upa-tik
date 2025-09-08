@@ -28,9 +28,17 @@ class Permohonan extends Model
         'jenis_magang',
         'status',
         'file_permohonan',
+        'file_permohonan_nama_asli',
+        'file_permohonan_size',
+        'file_permohonan_mime',
     ];
 
     public function user()
+    {
+        return $this->belongsTo(Instansi::class, 'id_instansi');
+    }
+
+    public function Instansi()
     {
         return $this->belongsTo(Instansi::class, 'id_instansi');
     }

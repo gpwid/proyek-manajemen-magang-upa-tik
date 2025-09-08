@@ -24,6 +24,9 @@ return new class extends Migration
             $table->enum('jenis_magang', ['Mandiri', 'MBKM', 'Sekolah']);
             $table->enum('status', ['Aktif', 'Proses', 'Selesai', 'Ditolak'])->default('Proses');
             $table->string('file_permohonan');
+            $table->string('file_permohonan_nama_asli')->nullable();
+            $table->unsignedBigInteger('file_permohonan_size')->nullable();
+            $table->string('file_permohonan_mime')->nullable();
             $table->timestamps();
         });
     }
