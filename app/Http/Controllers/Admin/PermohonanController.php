@@ -12,6 +12,11 @@ use Yajra\DataTables\Facades\DataTables;
 
 class PermohonanController extends Controller
 {
+    public function show(Permohonan $permohonan)
+    {
+        return view('admin.permohonan.show', compact('permohonan'));
+    }
+
     public function index(Request $request): View
     {
         $searchinstansis = Instansi::orderBy('nama_instansi')->get();
@@ -54,12 +59,12 @@ class PermohonanController extends Controller
             })
             ->addColumn('aksi', function ($p) {
                 $url1 = route('admin.permohonan.edit', $p->id);
-                $url2 = route('admin.permohonan.tambah');
+                $url2 = route('admin.permohonan.show', $p->id);
                 return "<div class='flex gap-2'>
-                        <a href='$url1' class='btn btn-sm btn-warning text-dark'>
+                        <a href='$url1' class='btn btn-sm btn-primary text-white'>
                             <i class='fa-solid fa-pen-to-square'></i> Edit
                         </a>
-                        <a href='$url2' class='btn btn-sm btn-warning text-dark'>
+                        <a href='$url2' class='btn btn-sm btn-success text-white'>
                             <i class='fa-solid fa-eye'></i> Detail
                         </a>
                         </div>";
@@ -93,7 +98,6 @@ class PermohonanController extends Controller
             'tgl_suratmasuk'     => 'required|date',
             'jenis_magang'       => 'required|in:Mandiri,MBKM,Sekolah',
             'file_permohonan'    => 'nullable|file|mimes:pdf|max:5120', // EDIT: tidak wajib
-            'status'             => 'required|in:Aktif,Proses,Selesai,Ditolak', // kalau mau diedit
         ]);
 
         $instansi = Instansi::findOrFail($validated['id_instansi']);
@@ -118,11 +122,34 @@ class PermohonanController extends Controller
             'kontak_pembimbing'  => $validated['kontak_pembimbing'],
             'tgl_suratmasuk'     => $validated['tgl_suratmasuk'],
             'jenis_magang'       => $validated['jenis_magang'],
-            'status'             => $validated['status'],      // atau pertahankan $permohonan->status jika tidak diedit
+            'status'             => $permohonan->status,
             'file_permohonan'    => $path,
         ]);
 
         return redirect()->route('admin.permohonan.index')
             ->with('success', 'Permohonan berhasil diperbarui.');
+    }
+
+    public function updateStatus(Request $request, Permohonan $permohonan)
+    {
+        $data = $request->validate([
+            'to' => 'required|in:Aktif,Proses,Selesai,Ditolak',
+        ]);
+
+        $to = $data['to'];
+
+        $allowed = match ($permohonan->status) {
+            'Aktif' => ['Selesai', 'Ditolak'],
+            'Proses' => ['Aktif', 'Ditolak'],
+            default => [],
+        };
+
+        if (! in_array($to, $allowed, true)) {
+            return back()->withErrors('Transisi status tidak diizinkan dari ' . $permohonan->status . ' ke ' . $to);
+        }
+
+        $permohonan->update(['status' => $to]);
+
+        return back()->with('success', 'Status permohonan berhasil diperbarui menjadi ' . $to);
     }
 }

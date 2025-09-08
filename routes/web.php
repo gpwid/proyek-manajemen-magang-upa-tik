@@ -17,6 +17,8 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::post('/permohonan/store',       [TambahPermohonanController::class, 'store'])->name('permohonan.store');
     Route::get('/permohonan/{permohonan}/edit', [PermohonanController::class, 'edit'])->name('permohonan.edit');
     Route::put('/permohonan/{permohonan}',      [PermohonanController::class, 'update'])->name('permohonan.update');
+    Route::get('/permohonan/{permohonan}',       [PermohonanController::class, 'show'])->name('permohonan.show');
+    Route::patch('/permohonan/{permohonan}/status', [PermohonanController::class, 'updateStatus'])->name('permohonan.status');
 });
 
 
