@@ -14,11 +14,13 @@ class PermohonanController extends Controller
 {
     public function show(Permohonan $permohonan)
     {
+        // Menampilkan detail permohonan
         return view('admin.permohonan.show', compact('permohonan'));
     }
 
     public function index(Request $request): View
     {
+        // Filter instansi, jumlah per status
         $searchinstansis = Instansi::orderBy('nama_instansi')->get();
 
         $totalAktif = Permohonan::where('status', 'Aktif')->count();
@@ -32,8 +34,10 @@ class PermohonanController extends Controller
 
     public function data(Request $request)
     {
+        // Endpoint untuk DataTables Yajra
         $query = Permohonan::query();
 
+        // Filter berdasarkan query parameters
         if ($request->filled('q')) {
             $q = $request->q;
             $query->where(function ($x) use ($q) {
@@ -49,6 +53,7 @@ class PermohonanController extends Controller
         }
 
 
+        // Query untuk DataTables
         return DataTables::of($query)
             ->editColumn('tgl_surat', fn($p) => optional($p->tgl_surat)->format('d-m-Y'))
             ->editColumn('tgl_mulai', fn($p) => optional($p->tgl_mulai)->format('d-m-Y'))
@@ -81,6 +86,7 @@ class PermohonanController extends Controller
 
     public function edit(Permohonan $permohonan)
     {
+        // Form edit permohonan
         $searchinstansis = Instansi::orderBy('nama_instansi')->get();
         return view('admin.permohonan.edit', compact('permohonan', 'searchinstansis'));
     }
@@ -88,6 +94,7 @@ class PermohonanController extends Controller
 
     public function update(Request $request, Permohonan $permohonan)
     {
+        // Validasi input
         $validated = $request->validate([
             'tgl_surat'          => 'required|date',
             'id_instansi'        => 'required|exists:instansi,id',
@@ -100,8 +107,10 @@ class PermohonanController extends Controller
             'file_permohonan'    => 'nullable|file|mimes:pdf|max:5120', // EDIT: tidak wajib
         ]);
 
+        // Cari instansi terkait
         $instansi = Instansi::findOrFail($validated['id_instansi']);
 
+        // Proses upload file jika ada
         if ($request->hasFile('file_permohonan')) {
             // hapus file lama (jika ada)
             if ($permohonan->file_permohonan) {
@@ -112,6 +121,7 @@ class PermohonanController extends Controller
             $path = $permohonan->file_permohonan; // tetap pakai yang lama
         }
 
+        // Update data permohonan
         $permohonan->update([
             'id_instansi'        => $instansi->id,
             'instansi'           => $instansi->nama_instansi,
@@ -126,30 +136,36 @@ class PermohonanController extends Controller
             'file_permohonan'    => $path,
         ]);
 
+        // Redirect dengan pesan sukses
         return redirect()->route('admin.permohonan.index')
             ->with('success', 'Permohonan berhasil diperbarui.');
     }
 
     public function updateStatus(Request $request, Permohonan $permohonan)
     {
+        // Validasi input status
         $data = $request->validate([
             'to' => 'required|in:Aktif,Proses,Selesai,Ditolak',
         ]);
 
         $to = $data['to'];
 
+        // Transisi status sesuai aturan
         $allowed = match ($permohonan->status) {
             'Aktif' => ['Selesai', 'Ditolak'],
             'Proses' => ['Aktif', 'Ditolak'],
             default => [],
         };
 
+        // Cek apakah transisi status diizinkan (cari $to di dalam array $allowed)
         if (! in_array($to, $allowed, true)) {
             return back()->withErrors('Transisi status tidak diizinkan dari ' . $permohonan->status . ' ke ' . $to);
         }
 
+        // Update status permohonan
         $permohonan->update(['status' => $to]);
 
+        // Redirect dengan pesan sukses
         return back()->with('success', 'Status permohonan berhasil diperbarui menjadi ' . $to);
     }
 }
