@@ -1,0 +1,16 @@
+.border-left-pending {
+    border-left: .25rem solid #ebdd0d !important;
+}
+
+.text-pending {
+    color: #ebdd0d;
+}
+
+.card-hover {
+    transition: all 0.2s ease-in-out;
+}
+
+.card-hover:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+}
