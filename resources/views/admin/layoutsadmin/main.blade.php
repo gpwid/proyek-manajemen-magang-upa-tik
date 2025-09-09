@@ -10,6 +10,7 @@
     <meta name="author" content="">
 
     <title>SB Admin 2 - @yield('title')</title>
+    <title>SB Admin 2 - @yield('title')</title>
 
     <!-- Custom fonts for this template-->
     <link href="{{ asset('asset/vendor/fontawesome-free/css/all.min.css') }}" rel="stylesheet" type="text/css">
@@ -100,13 +101,24 @@
 
 <!-- DataTables -->
 <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <!-- jQuery dulu -->
+<script src="{{asset('asset/vendor/jquery/jquery.min.js')}}"></script>
+<script src="{{asset('asset/vendor/bootstrap/js/bootstrap.bundle.min.js')}}"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+<!-- DataTables -->
+<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
 
 <!-- Core plugin -->
 <script src="{{ asset('asset/vendor/jquery-easing/jquery.easing.min.js') }}"></script>
 
 <!-- SB Admin -->
 <script src="{{asset('asset/js/sb-admin-2.min.js')}}"></script>
+<!-- SB Admin -->
+<script src="{{asset('asset/js/sb-admin-2.min.js')}}"></script>
 
+<!-- Scripts tambahan dari halaman -->
+@yield('scripts')
 <!-- Scripts tambahan dari halaman -->
 @yield('scripts')
 
