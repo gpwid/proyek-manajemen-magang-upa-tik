@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('id_instansi');
             $table->date('tgl_surat');
-            $table->strin('instansi');
+            $table->string('instansi');
             $table->date('tgl_mulai');
             $table->date('tgl_selesai');
             $table->string('pembimbing_sekolah', 255);
