@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Controller;
 use Illuminate\View\View;
 use App\Models\Participant;
 use Yajra\DataTables\Facades\DataTables;

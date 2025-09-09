@@ -5,7 +5,7 @@ use App\Http\Controllers\Admin\PermohonanController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\PenugasanController;
 use App\Http\Controllers\Admin\TambahPermohonanController;
-use App\Http\Controllers\ParticipantController;
+use App\Http\Controllers\Admin\ParticipantController;
 use Illuminate\Support\Facades\Route;
 
 Route::redirect('/', '/admin/dashboard'); // root diarahkan ke dashboard admin
