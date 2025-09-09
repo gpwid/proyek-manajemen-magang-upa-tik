@@ -359,144 +359,92 @@
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
 <script>
-    $(function () {
-        let table = $('#participants-table').DataTable({
-            processing: true,
-            serverSide: true,
-            ajax: {
-                url: '{!! route("admin.peserta.data") !!}',
-                data: d => {
-                    d.jenis_kelamin = $('#jenis_kelamin_filter').val();
-                    d.searchbox = $('#searchbox').val();
-                }
-            },
-            columns: [{
-                    data: 'DT_RowIndex',
-                    name: 'DT_RowIndex',
-                    orderable: false,
-                    searchable: false
-                },
-                {
-                    data: 'nama',
-                    name: 'nama'
-                },
-                {
-                    data: 'nisnim',
-                    name: 'nisnim',
-                    className: 'text-nowrap'
-                },
-                {
-                    data: 'jenis_kelamin',
-                    name: 'jenis_kelamin',
-                    render: (data, type) => {
-                        if (type === 'display') {
-                            const isL = (data || '').toUpperCase() === 'L';
-                            return `<span class="badge badge-pill ${isL?'badge-gender-l':'badge-gender-p'}">${isL?'Laki-laki':'Perempuan'}</span>`;
-                        }
-                        return data;
-                    }
-                },
-                {
-                    data: 'jurusan',
-                    name: 'jurusan'
-                },
-                {
-                    data: 'kontak_peserta',
-                    name: 'kontak_peserta',
-                    className: 'text-nowrap'
-                },
-                {
-                    data: 'actions',
-                    name: 'actions',
-                    orderable: false,
-                    searchable: false,
-                    className: 'text-nowrap'
-                }
-            ],
-
-            pageLength: 10,
-            lengthMenu: [
-                [10, 25, 50, -1],
-                [10, 25, 50, 'Semua']
-            ],
-
-            // TOP: Show entries
-            // MIDDLE: table
-            // BOTTOM: info + pagination
-            dom: "<'row align-items-center mb-2'<'col-md-6'l><'col-md-6'>>" +
-                "<'row'<'col-12'tr>>" +
-                "<'row mt-2'<'col-md-4'i><'col-md-8'p>>",
-
-            language: {
-                url: '//cdn.datatables.net/plug-ins/1.13.6/i18n/id.json',
-                lengthMenu: 'Tampilkan _MENU_',
-                paginate: {
-                    previous: 'Sebelumnya',
-                    next: 'Berikutnya'
-                }
-            },
-            responsive: true,
-            autoWidth: false,
-
-            initComplete: function () {
-                // Length menu (Show entries) jadi Select2
-                $('.dataTables_length select').select2({
-                    minimumResultsForSearch: Infinity,
-                    width: 'style'
-                });
-
-                // Filter jenis kelamin jadi Select2
-                $('#jenis_kelamin_filter').select2({
-                    placeholder: 'Pilih jenis kelamin',
-                    allowClear: true,
-                    width: '100%'
-                });
+  $(function () {
+    const sel = '#participants-table';
+    /** Ambil instance jika sudah ada, kalau belum baru init */
+    let table = $.fn.DataTable.isDataTable(sel) 
+      ? $(sel).DataTable()
+      : $(sel).DataTable({
+          processing: true,
+          serverSide: true,
+          ajax: {
+            url: '{!! route("admin.peserta.data") !!}',
+            data: d => {
+              d.jenis_kelamin = $('#jenis_kelamin_filter').val();
+              d.searchbox = $('#searchbox').val();
             }
+          },
+          columns: [
+            { data: 'DT_RowIndex', name: 'DT_RowIndex', orderable: false, searchable: false },
+            { data: 'nama', name: 'nama' },
+            { data: 'nisnim', name: 'nisnim', className: 'text-nowrap' },
+            { data: 'jenis_kelamin', name: 'jenis_kelamin',
+              render: (data, type) => {
+                if (type === 'display') {
+                  const isL = (data || '').toUpperCase() === 'L';
+                  return `<span class="badge badge-pill ${isL?'badge-gender-l':'badge-gender-p'}">${isL?'Laki-laki':'Perempuan'}</span>`;
+                }
+                return data;
+              }
+            },
+            { data: 'jurusan', name: 'jurusan' },
+            { data: 'kontak_peserta', name: 'kontak_peserta', className: 'text-nowrap' },
+            { data: 'actions', name: 'actions', orderable: false, searchable: false, className: 'text-nowrap' }
+          ],
+          pageLength: 10,
+          lengthMenu: [[10,25,50,-1],[10,25,50,'Semua']],
+          dom: "<'row align-items-center mb-2'<'col-md-6'l><'col-md-6'>>" +
+               "<'row'<'col-12'tr>>" +
+               "<'row mt-2'<'col-md-4'i><'col-md-8'p>>",
+          language: { url: '//cdn.datatables.net/plug-ins/1.13.6/i18n/id.json',
+                      lengthMenu: 'Tampilkan _MENU_',
+                      paginate: { previous: 'Sebelumnya', next: 'Berikutnya' } },
+          responsive: true,
+          autoWidth: false,
+          initComplete: function () {
+            // Hindari re-init Select2
+            const $len = $('.dataTables_length select');
+            if ($len.data('select2')) $len.select2('destroy');
+            $len.select2({ minimumResultsForSearch: Infinity, width: 'style' });
+
+            const $jk = $('#jenis_kelamin_filter');
+            if ($jk.data('select2')) $jk.select2('destroy');
+            $jk.select2({ placeholder: 'Pilih jenis kelamin', allowClear: true, width: '100%' });
+          }
         });
 
-        // Filter custom
-        $('#jenis_kelamin_filter').on('change', function () {
-            table.ajax.reload();
-        });
+    // ===== Filter & Search (pastikan tidak double-bind) =====
+    $('#jenis_kelamin_filter').off('change').on('change', () => table.ajax.reload());
+    $('#searchbox').off('keyup input');
+    $('#searchbox').on('keyup', () => table.ajax.reload());
+    $('#searchbox').on('input', function () { $('#clearSearch').toggle(this.value.length > 0); });
+    $('#clearSearch').off('click').on('click', function () {
+      $('#searchbox').val(''); $(this).hide(); table.ajax.reload();
+    }).hide();
 
-        // Search custom + tombol clear
-        $('#searchbox').on('keyup', function () {
-            table.ajax.reload();
-        });
-        $('#searchbox').on('input', function () {
-            $('#clearSearch').toggle(this.value.length > 0);
-        });
-        $('#clearSearch').on('click', function () {
-            $('#searchbox').val('');
-            $(this).hide();
-            table.ajax.reload();
-        });
-        $('#clearSearch').hide();
-
-        // Tooltip untuk tombol aksi (jika dipakai)
-        if (typeof bootstrap !== 'undefined') {
-            const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
-            tooltipTriggerList.map(el => new bootstrap.Tooltip(el));
-        }
-    });
-
-    // ===== Export buttons =====
-    function buildQuery() {
-        return $.param({
-            jenis_kelamin: $('#jenis_kelamin_filter').val() || '',
-            search: $('#searchbox').val() || ''
-        });
+    // Tooltip sekali saja
+    if (typeof bootstrap !== 'undefined') {
+      document.querySelectorAll('[data-bs-toggle="tooltip"]').forEach(el => new bootstrap.Tooltip(el));
     }
 
-    $('#btnExportExcel').on('click', function () {
-        const qs = buildQuery();
-        window.location = "{{ route('admin.peserta.export.excel') }}" + (qs ? ('?' + qs) : '');
+    // ===== Export buttons (hindari double-bind) =====
+    function buildQuery() {
+      return $.param({
+        jenis_kelamin: $('#jenis_kelamin_filter').val() || '',
+        search: $('#searchbox').val() || ''
+      });
+    }
+
+    $('#btnExportExcel').off('click').on('click', function () {
+      const qs = buildQuery();
+      window.location = "{{ route('admin.peserta.export.excel') }}" + (qs ? ('?' + qs) : '');
     });
 
-    $('#btnExportPdf').on('click', function () {
-        const qs = buildQuery();
-        window.location = "{{ route('admin.peserta.export.pdf') }}" + (qs ? ('?' + qs) : '');
+    $('#btnExportPdf').off('click').on('click', function () {
+      const qs = buildQuery();
+      window.location = "{{ route('admin.peserta.export.pdf') }}" + (qs ? ('?' + qs) : '');
     });
-
+  });
 </script>
+
 @endsection
