@@ -66,10 +66,12 @@ class PermohonanController extends Controller
                 $url1 = route('admin.permohonan.edit', $p->id);
                 $url2 = route('admin.permohonan.show', $p->id);
                 return "<div class='flex gap-2'>
-                        <a href='$url1' class='btn btn-sm btn-primary text-white'>
+                        <a href='$url1' class='btn btn-sm btn-primary text-white' data-bs-toggle='tooltip'
+        data-bs-placement='top' title='Edit'>
                             <i class='fa-solid fa-pen-to-square'></i> Edit
                         </a>
-                        <a href='$url2' class='btn btn-sm btn-success text-white'>
+                        <a href='$url2' class='btn btn-sm btn-success text-white' data-bs-toggle='tooltip'
+        data-bs-placement='top' title='Detail'>
                             <i class='fa-solid fa-eye'></i> Detail
                         </a>
                         </div>";

@@ -40,10 +40,10 @@
     </li>
 
     <!-- Nav Item - Charts -->
-    <li class="nav-item">
-        <a class="nav-link" href="{{ route('admin.permohonan.index') }}">
-            <i class="fas fa-envelope-open-text"></i>
-            <span>Permohonan</span></a>
+    <li class="nav-item @yield('peserta-active')">
+        <a class="nav-link" href="{{ route('admin.peserta.index') }}">
+            <i class="fa-solid fa-users"></i>
+            <span>Kelola Peserta Pemagang</span></a>
     </li>
 
     <!-- Divider -->

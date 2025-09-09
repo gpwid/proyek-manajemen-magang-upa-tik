@@ -3,132 +3,130 @@
 @section('title', 'Peserta')
 
 @section('content')
-<div class="container-fluid">
-    <div class="d-sm-flex align-items-center justify-content-between mb-2">
-        <h1 class="h3 mb-3 text-gray-800">Peserta</h1>
-    </div>
+    <div class="container-fluid">
+        <div class="d-sm-flex align-items-center justify-content-between mb-2">
+            <h1 class="h3 mb-3 text-gray-800">Peserta</h1>
+        </div>
 
-    <!-- Statistik -->
-    <div class="row">
-        <div class="col-xl-4 col-md-4 mb-4">
-            <div class="card border-left-primary shadow h-100 py-2">
-                <div class="card-body">
-                    <div class="row no-gutters align-items-center">
-                        <div class="col mr-2">
-                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Total Peserta</div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ $stats['total'] }}</div>
+        <!-- Statistik -->
+        <div class="row">
+            <div class="col-xl-4 col-md-4 mb-4">
+                <div class="card card-hover border-left-primary h-100 py-2 text-center">
+                    <div class="card-body">
+                        <div class="mb-2">
+                            <span class="d-inline-flex align-items-center justify-content-center rounded-circle"><i
+                                    class="fa-solid fa-users fa-2x text-primary"></i>
+                            </span>
                         </div>
-                        <div class="col-auto"><i class="fas fa-users fa-2x text-gray-300"></i></div>
+                        <div class="h4 mb-1 font-weight-bold text-dark">{{ $stats['total'] }}</div>
+                        <div class="text-muted">Total Pemagang</div>
                     </div>
                 </div>
             </div>
-        </div>
-
-        <div class="col-xl-4 col-md-4 mb-4">
-            <div class="card border-left-info shadow h-100 py-2">
-                <div class="card-body">
-                    <div class="row no-gutters align-items-center">
-                        <div class="col mr-2">
-                            <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Peserta Laki-laki</div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ $stats['laki_laki'] }}</div>
+            <div class="col-xl-4 col-md-4 mb-4">
+                <div class="card card-hover border-left-info h-100 py-2 text-center">
+                    <div class="card-body">
+                        <div class="mb-2">
+                            <span class="d-inline-flex align-items-center justify-content-center rounded-circle"><i
+                                    class="fa-solid fa-person fa-2x text-info"></i>
+                            </span>
                         </div>
-                        <div class="col-auto"><i class="fas fa-male fa-2x text-gray-300"></i></div>
+                        <div class="h4 mb-1 font-weight-bold text-dark">{{ $stats['laki_laki'] }}</div>
+                        <div class="text-muted">Total Pemagang Laki-Laki</div>
                     </div>
                 </div>
             </div>
-        </div>
 
-        <div class="col-xl-4 col-md-4 mb-4">
-            <div class="card border-left-warning shadow h-100 py-2">
-                <div class="card-body">
-                    <div class="row no-gutters align-items-center">
-                        <div class="col mr-2">
-                            <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">Peserta Perempuan
-                            </div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ $stats['perempuan'] }}</div>
+            <div class="col-xl-4 col-md-4 mb-4">
+                <div class="card card-hover border-left-pink h-100 py-2 text-center">
+                    <div class="card-body">
+                        <div class="mb-2">
+                            <span class="d-inline-flex align-items-center justify-content-center rounded-circle"><i
+                                    class="fa-solid fa-person-dress fa-2x text-pink"></i>
+                            </span>
                         </div>
-                        <div class="col-auto"><i class="fas fa-female fa-2x text-gray-300"></i></div>
+                        <div class="h4 mb-1 font-weight-bold text-dark">{{ $stats['perempuan'] }}</div>
+                        <div class="text-muted">Total Pemagang Perempuan</div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
 
-    <div class="card">
-        <div class="card-body">
-            {{-- Filter + Search + Tambah --}}
-            <div class="row align-items-end g-3 mb-3">
+        <div class="card">
+            <div class="card-body">
+                {{-- Filter + Search + Tambah --}}
+                <div class="row align-items-end g-3 mb-3">
 
-                {{-- Filter --}}
-                <div class="col-md-4">
-                    <label class="form-label">Filter Jenis Kelamin</label>
-                    <select id="jenis_kelamin_filter" class="form-control">
-                        <option value="">Pilih jenis kelamin</option>
-                        <option value="L">Laki-laki</option>
-                        <option value="P">Perempuan</option>
-                    </select>
-                </div>
+                    {{-- Filter --}}
+                    <div class="col-md-4">
+                        <label class="form-label">Filter Jenis Kelamin</label>
+                        <select id="jenis_kelamin_filter" class="form-control">
+                            <option value="">Pilih jenis kelamin</option>
+                            <option value="L">Laki-laki</option>
+                            <option value="P">Perempuan</option>
+                        </select>
+                    </div>
 
-                {{-- Search (beri padding-end supaya tidak nempel tombol) --}}
-                <div class="col-md-5 pe-lg-3">
-                    <label class="form-label">Pencarian</label>
-                    <div class="search-wrapper">
-                        <span class="search-icon" aria-hidden="true">
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
-                                <circle cx="11" cy="11" r="7" stroke="#94A3B8" stroke-width="2" />
-                                <line x1="16.65" y1="16.65" x2="21" y2="21" stroke="#94A3B8" stroke-width="2"
-                                    stroke-linecap="round" />
-                            </svg>
-                        </span>
-                        <input type="text" id="searchbox" class="form-control search-control" placeholder="Cari...">
-                        <button type="button" id="clearSearch" class="clear-btn" aria-label="Bersihkan">
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-                                <path d="M18 6L6 18M6 6l12 12" stroke="#9CA3AF" stroke-width="2"
-                                    stroke-linecap="round" />
-                            </svg>
-                        </button>
+                    {{-- Search (beri padding-end supaya tidak nempel tombol) --}}
+                    <div class="col-md-5 pe-lg-3">
+                        <label class="form-label">Pencarian</label>
+                        <div class="search-wrapper">
+                            <span class="search-icon" aria-hidden="true">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+                                    <circle cx="11" cy="11" r="7" stroke="#94A3B8" stroke-width="2" />
+                                    <line x1="16.65" y1="16.65" x2="21" y2="21" stroke="#94A3B8"
+                                        stroke-width="2" stroke-linecap="round" />
+                                </svg>
+                            </span>
+                            <input type="text" id="searchbox" class="form-control search-control" placeholder="Cari...">
+                            <button type="button" id="clearSearch" class="clear-btn" aria-label="Bersihkan">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                                    <path d="M18 6L6 18M6 6l12 12" stroke="#9CA3AF" stroke-width="2"
+                                        stroke-linecap="round" />
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+
+                    {{-- Tombol (kolom tersendiri, selalu rata kanan) --}}
+                    <div class="col-md-3 text-lg-end">
+                        <label class="form-label d-none d-lg-block">&nbsp;</label>
+                        <a class="btn btn-primary px-3 shadow-sm w-100 w-lg-auto"
+                            href="{{ route('admin.peserta.create') }}">
+                            <i class="fas fa-plus me-1"></i> Tambah Peserta
+                        </a>
                     </div>
                 </div>
 
-                {{-- Tombol (kolom tersendiri, selalu rata kanan) --}}
-                <div class="col-md-3 text-lg-end">
-                    <label class="form-label d-none d-lg-block">&nbsp;</label>
-                    <a class="btn btn-primary px-3 shadow-sm w-100 w-lg-auto"
-                        href="{{ route('admin.peserta.create') }}">
-                        <i class="fas fa-plus me-1"></i> Tambah Peserta
-                    </a>
+                {{-- Export Button --}}
+                <div class="d-flex flex-wrap gap-3 mb-2">
+                    <button id="btnExportExcel" type="button" class="btn btn-success">
+                        <i class="fas fa-file-excel me-1"></i> Excel
+                    </button>
+                    <button id="btnExportPdf" type="button" class="btn btn-danger">
+                        <i class="fas fa-file-pdf me-1"></i> PDF
+                    </button>
                 </div>
-            </div>
 
-            {{-- Export Button --}}
-            <div class="d-flex flex-wrap gap-3 mb-2">
-                <button id="btnExportExcel" type="button" class="btn btn-success">
-                    <i class="fas fa-file-excel me-1"></i> Excel
-                </button>
-                <button id="btnExportPdf" type="button" class="btn btn-danger">
-                    <i class="fas fa-file-pdf me-1"></i> PDF
-                </button>
+                <!-- Tabel -->
+                <table id="participants-table" class="display table table-striped table-hover align-middle"
+                    style="width:100%">
+                    <thead>
+                        <tr>
+                            <th>No.</th>
+                            <th>Nama</th>
+                            <th>NISN/NIM</th>
+                            <th>Jenis Kelamin</th>
+                            <th>Jurusan</th>
+                            <th>Kontak</th>
+                            <th>Aksi</th>
+                        </tr>
+                    </thead>
+                </table>
             </div>
-
-            <!-- Tabel -->
-            <table id="participants-table" class="display table table-striped table-hover align-middle"
-                style="width:100%">
-                <thead>
-                    <tr>
-                        <th>No.</th>
-                        <th>Nama</th>
-                        <th>NISN/NIM</th>
-                        <th>Jenis Kelamin</th>
-                        <th>Jurusan</th>
-                        <th>Kontak</th>
-                        <th>Aksi</th>
-                    </tr>
-                </thead>
-            </table>
         </div>
-    </div>
 
-</div>
+    </div>
 @endsection
 
 {{-- ====== STYLE ====== --}}
@@ -335,116 +333,159 @@
         opacity: .55;
         cursor: default !important;
     }
-
 </style>
 
 {{-- ====== SCRIPTS ====== --}}
 @section('scripts')
-@if (session('sukses'))
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<script>
-    Swal.fire({
-        position: 'center',
-        icon: 'success',
-        title: "{{ session('sukses') }}",
-        showConfirmButton: false,
-        timer: 1500
-    });
+    @if (session('sukses'))
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        <script>
+            Swal.fire({
+                position: 'center',
+                icon: 'success',
+                title: "{{ session('sukses') }}",
+                showConfirmButton: false,
+                timer: 1500
+            });
+        </script>
+    @endif
 
-</script>
-@endif
+    {{-- Select2 (CDN) --}}
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
-{{-- Select2 (CDN) --}}
-<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
-<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script>
+        $(function() {
+            const sel = '#participants-table';
+            /** Ambil instance jika sudah ada, kalau belum baru init */
+            let table = $.fn.DataTable.isDataTable(sel) ?
+                $(sel).DataTable() :
+                $(sel).DataTable({
+                    processing: true,
+                    serverSide: true,
+                    ajax: {
+                        url: '{!! route('admin.peserta.data') !!}',
+                        data: d => {
+                            d.jenis_kelamin = $('#jenis_kelamin_filter').val();
+                            d.searchbox = $('#searchbox').val();
+                        }
+                    },
+                    columns: [{
+                            data: 'DT_RowIndex',
+                            name: 'DT_RowIndex',
+                            orderable: false,
+                            searchable: false
+                        },
+                        {
+                            data: 'nama',
+                            name: 'nama'
+                        },
+                        {
+                            data: 'nisnim',
+                            name: 'nisnim',
+                            className: 'text-nowrap'
+                        },
+                        {
+                            data: 'jenis_kelamin',
+                            name: 'jenis_kelamin',
+                            render: (data, type) => {
+                                if (type === 'display') {
+                                    const isL = (data || '').toUpperCase() === 'L';
+                                    return `<span class="badge badge-pill ${isL?'badge-gender-l':'badge-gender-p'}">${isL?'Laki-laki':'Perempuan'}</span>`;
+                                }
+                                return data;
+                            }
+                        },
+                        {
+                            data: 'jurusan',
+                            name: 'jurusan'
+                        },
+                        {
+                            data: 'kontak_peserta',
+                            name: 'kontak_peserta',
+                            className: 'text-nowrap'
+                        },
+                        {
+                            data: 'actions',
+                            name: 'actions',
+                            orderable: false,
+                            searchable: false,
+                            className: 'text-nowrap'
+                        }
+                    ],
+                    pageLength: 10,
+                    lengthMenu: [
+                        [10, 25, 50, -1],
+                        [10, 25, 50, 'Semua']
+                    ],
+                    dom: "<'row align-items-center mb-2'<'col-md-6'l><'col-md-6'>>" +
+                        "<'row'<'col-12'tr>>" +
+                        "<'row mt-2'<'col-md-4'i><'col-md-8'p>>",
+                    language: {
+                        url: '//cdn.datatables.net/plug-ins/1.13.6/i18n/id.json',
+                        lengthMenu: 'Tampilkan _MENU_',
+                        paginate: {
+                            previous: 'Sebelumnya',
+                            next: 'Berikutnya'
+                        }
+                    },
+                    responsive: true,
+                    autoWidth: false,
+                    initComplete: function() {
+                        // Hindari re-init Select2
+                        const $len = $('.dataTables_length select');
+                        if ($len.data('select2')) $len.select2('destroy');
+                        $len.select2({
+                            minimumResultsForSearch: Infinity,
+                            width: 'style'
+                        });
 
-<script>
-  $(function () {
-    const sel = '#participants-table';
-    /** Ambil instance jika sudah ada, kalau belum baru init */
-    let table = $.fn.DataTable.isDataTable(sel) 
-      ? $(sel).DataTable()
-      : $(sel).DataTable({
-          processing: true,
-          serverSide: true,
-          ajax: {
-            url: '{!! route("admin.peserta.data") !!}',
-            data: d => {
-              d.jenis_kelamin = $('#jenis_kelamin_filter').val();
-              d.searchbox = $('#searchbox').val();
+                        const $jk = $('#jenis_kelamin_filter');
+                        if ($jk.data('select2')) $jk.select2('destroy');
+                        $jk.select2({
+                            placeholder: 'Pilih jenis kelamin',
+                            allowClear: true,
+                            width: '100%'
+                        });
+                    }
+                });
+
+            // ===== Filter & Search (pastikan tidak double-bind) =====
+            $('#jenis_kelamin_filter').off('change').on('change', () => table.ajax.reload());
+            $('#searchbox').off('keyup input');
+            $('#searchbox').on('keyup', () => table.ajax.reload());
+            $('#searchbox').on('input', function() {
+                $('#clearSearch').toggle(this.value.length > 0);
+            });
+            $('#clearSearch').off('click').on('click', function() {
+                $('#searchbox').val('');
+                $(this).hide();
+                table.ajax.reload();
+            }).hide();
+
+            // Tooltip sekali saja
+            if (typeof bootstrap !== 'undefined') {
+                document.querySelectorAll('[data-bs-toggle="tooltip"]').forEach(el => new bootstrap.Tooltip(el));
             }
-          },
-          columns: [
-            { data: 'DT_RowIndex', name: 'DT_RowIndex', orderable: false, searchable: false },
-            { data: 'nama', name: 'nama' },
-            { data: 'nisnim', name: 'nisnim', className: 'text-nowrap' },
-            { data: 'jenis_kelamin', name: 'jenis_kelamin',
-              render: (data, type) => {
-                if (type === 'display') {
-                  const isL = (data || '').toUpperCase() === 'L';
-                  return `<span class="badge badge-pill ${isL?'badge-gender-l':'badge-gender-p'}">${isL?'Laki-laki':'Perempuan'}</span>`;
-                }
-                return data;
-              }
-            },
-            { data: 'jurusan', name: 'jurusan' },
-            { data: 'kontak_peserta', name: 'kontak_peserta', className: 'text-nowrap' },
-            { data: 'actions', name: 'actions', orderable: false, searchable: false, className: 'text-nowrap' }
-          ],
-          pageLength: 10,
-          lengthMenu: [[10,25,50,-1],[10,25,50,'Semua']],
-          dom: "<'row align-items-center mb-2'<'col-md-6'l><'col-md-6'>>" +
-               "<'row'<'col-12'tr>>" +
-               "<'row mt-2'<'col-md-4'i><'col-md-8'p>>",
-          language: { url: '//cdn.datatables.net/plug-ins/1.13.6/i18n/id.json',
-                      lengthMenu: 'Tampilkan _MENU_',
-                      paginate: { previous: 'Sebelumnya', next: 'Berikutnya' } },
-          responsive: true,
-          autoWidth: false,
-          initComplete: function () {
-            // Hindari re-init Select2
-            const $len = $('.dataTables_length select');
-            if ($len.data('select2')) $len.select2('destroy');
-            $len.select2({ minimumResultsForSearch: Infinity, width: 'style' });
 
-            const $jk = $('#jenis_kelamin_filter');
-            if ($jk.data('select2')) $jk.select2('destroy');
-            $jk.select2({ placeholder: 'Pilih jenis kelamin', allowClear: true, width: '100%' });
-          }
+            // ===== Export buttons (hindari double-bind) =====
+            function buildQuery() {
+                return $.param({
+                    jenis_kelamin: $('#jenis_kelamin_filter').val() || '',
+                    search: $('#searchbox').val() || ''
+                });
+            }
+
+            $('#btnExportExcel').off('click').on('click', function() {
+                const qs = buildQuery();
+                window.location = "{{ route('admin.peserta.export.excel') }}" + (qs ? ('?' + qs) : '');
+            });
+
+            $('#btnExportPdf').off('click').on('click', function() {
+                const qs = buildQuery();
+                window.location = "{{ route('admin.peserta.export.pdf') }}" + (qs ? ('?' + qs) : '');
+            });
         });
-
-    // ===== Filter & Search (pastikan tidak double-bind) =====
-    $('#jenis_kelamin_filter').off('change').on('change', () => table.ajax.reload());
-    $('#searchbox').off('keyup input');
-    $('#searchbox').on('keyup', () => table.ajax.reload());
-    $('#searchbox').on('input', function () { $('#clearSearch').toggle(this.value.length > 0); });
-    $('#clearSearch').off('click').on('click', function () {
-      $('#searchbox').val(''); $(this).hide(); table.ajax.reload();
-    }).hide();
-
-    // Tooltip sekali saja
-    if (typeof bootstrap !== 'undefined') {
-      document.querySelectorAll('[data-bs-toggle="tooltip"]').forEach(el => new bootstrap.Tooltip(el));
-    }
-
-    // ===== Export buttons (hindari double-bind) =====
-    function buildQuery() {
-      return $.param({
-        jenis_kelamin: $('#jenis_kelamin_filter').val() || '',
-        search: $('#searchbox').val() || ''
-      });
-    }
-
-    $('#btnExportExcel').off('click').on('click', function () {
-      const qs = buildQuery();
-      window.location = "{{ route('admin.peserta.export.excel') }}" + (qs ? ('?' + qs) : '');
-    });
-
-    $('#btnExportPdf').off('click').on('click', function () {
-      const qs = buildQuery();
-      window.location = "{{ route('admin.peserta.export.pdf') }}" + (qs ? ('?' + qs) : '');
-    });
-  });
-</script>
+    </script>
 
 @endsection

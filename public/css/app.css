@@ -15,3 +15,10 @@
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
 }
 
+.border-left-pink {
+  border-left: 0.25rem solid #d63384 !important;
+}
+
+.text-pink {
+  color: #d63384 !important;
+}

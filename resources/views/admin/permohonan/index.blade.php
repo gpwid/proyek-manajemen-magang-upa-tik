@@ -9,19 +9,6 @@
             <h1 class="h3 mb-0 text-gray-800">Kelola Permohonan Magang</h1>
         </div>
 
-        @if (session('sukses'))
-            <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-            <script>
-                Swal.fire({
-                    position: 'center',
-                    icon: 'success',
-                    title: "{{ session('sukses') }}",
-                    showConfirmButton: false,
-                    timer: 1500
-                });
-            </script>
-        @endif
-
         @if ($errors->any())
             <div class="alert alert-danger alert-dismissible fade show" role="alert">
                 <ul class="mb-0">
@@ -31,6 +18,19 @@
                 </ul>
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
+        @endif
+
+        @if (session('success'))
+            <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+            <script>
+                Swal.fire({
+                    position: 'center',
+                    icon: 'success',
+                    title: "{{ session('success') }}",
+                    showConfirmButton: false,
+                    timer: 1500
+                });
+            </script>
         @endif
 
         <div class="row">
@@ -220,7 +220,6 @@
                 table.ajax.reload();
             });
 
-            // kalau kamu punya tombol reset dengan id resetBtn
             $('#resetBtn').on('click', function(e) {
                 e.preventDefault();
                 $('#filterForm')[0].reset();
