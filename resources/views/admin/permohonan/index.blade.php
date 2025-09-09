@@ -9,11 +9,17 @@
             <h1 class="h3 mb-0 text-gray-800">Kelola Permohonan Magang</h1>
         </div>
 
-        @if (session('success'))
-            <div class="alert alert-success alert-dismissible fade show" role="alert">
-                {{ session('success') }}
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>
+        @if (session('sukses'))
+            <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+            <script>
+                Swal.fire({
+                    position: 'center',
+                    icon: 'success',
+                    title: "{{ session('sukses') }}",
+                    showConfirmButton: false,
+                    timer: 1500
+                });
+            </script>
         @endif
 
         @if ($errors->any())
