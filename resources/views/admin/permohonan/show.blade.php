@@ -2,122 +2,151 @@
 
 @section('permohonan-active', 'active')
 @section('content')
-<div class="container-fluid">
-  <div class="d-sm-flex align-items-center justify-content-between mb-3">
-    <h1 class="h3 text-gray-800">Detail Permohonan</h1>
-    <a href="{{ route('admin.permohonan.index') }}" class="btn btn-secondary">Kembali</a>
-  </div>
-
-  @if (session('success'))
-    <div class="alert alert-success alert-dismissible fade show" role="alert">
-      {{ session('success') }}
-      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-    </div>
-  @endif
-  @if ($errors->any())
-    <div class="alert alert-danger alert-dismissible fade show" role="alert">
-      <ul class="mb-0">
-        @foreach ($errors->all() as $e) <li>{{ $e }}</li> @endforeach
-      </ul>
-      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-    </div>
-  @endif
-
-  <div class="card shadow">
-    <div class="card-body">
-      <div class="row mb-3">
-        <div class="col-md-6">
-          <dl class="row mb-0">
-            <dt class="col-5">Instansi</dt>
-            <dd class="col-7">{{ $permohonan->instansi }}</dd>
-
-            <dt class="col-5">Tanggal Surat</dt>
-            <dd class="col-7">{{ optional($permohonan->tgl_surat)->format('d-m-Y') }}</dd>
-
-            <dt class="col-5">Tanggal Mulai</dt>
-            <dd class="col-7">{{ optional($permohonan->tgl_mulai)->format('d-m-Y') }}</dd>
-
-            <dt class="col-5">Tanggal Selesai</dt>
-            <dd class="col-7">{{ optional($permohonan->tgl_selesai)->format('d-m-Y') }}</dd>
-
-            <dt class="col-5">Tanggal Surat Masuk</dt>
-            <dd class="col-7">{{ optional($permohonan->tgl_suratmasuk)->format('d-m-Y') }}</dd>
-          </dl>
+    <div class="container-fluid">
+        <div class="d-sm-flex align-items-center justify-content-between mb-3">
+            <h1 class="h3 text-gray-800">Detail Permohonan</h1>
+            <div class="mt-4 text-end">
+                <a href="{{ route('admin.permohonan.edit', $permohonan->id) }}" class="btn btn-primary me-2"><i class="fa-solid fa-pen-to-square"></i> Edit</a>
+                <a href="{{ route('admin.permohonan.index') }}" class="btn btn-secondary">Kembali</a>
+            </div>
         </div>
 
-        <div class="col-md-6">
-          <dl class="row mb-0">
-            <dt class="col-5">Pembimbing Sekolah</dt>
-            <dd class="col-7">{{ $permohonan->pembimbing_sekolah }}</dd>
+        @if (session('success'))
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                {{ session('success') }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        @endif
+        @if ($errors->any())
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <ul class="mb-0">
+                    @foreach ($errors->all() as $e)
+                        <li>{{ $e }}</li>
+                    @endforeach
+                </ul>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        @endif
 
-            <dt class="col-5">Kontak Pembimbing</dt>
-            <dd class="col-7">{{ $permohonan->kontak_pembimbing }}</dd>
+        <div class="row">
+            <!-- Main Information Card -->
+            <div class="col-md-12">
+                <div class="card shadow-sm border-0 mb-4">
+                    <div class="card-header bg-primary text-white py-3">
+                        <h5 class="card-title mb-0">
+                            <i class="fa-solid fa-file-contract me-2"></i> Informasi Permohonan
+                        </h5>
+                    </div>
+                    <div class="card-body p-4">
+                        <div class="row g-4">
+                            <!-- Nama Lengkap -->
+                            <div class="col-12">
+                                <div class="info-item">
+                                    <label class="info-label text-body-secondary my-0">Asal Instansi Surat</label>
+                                    <div class="info-value" style="font-weight: 700">{{ $permohonan->instansi }}</div>
+                                </div>
+                            </div>
 
-            <dt class="col-5">Jenis Magang</dt>
-            <dd class="col-7">{{ $permohonan->jenis_magang }}</dd>
+                            <div class="col-md-6">
+                                <div class="info-item">
+                                    <label class="info-label text-body-secondary my-0">Jenis Magang</label>
+                                    <div class="info-value" style="font-weight: 700">{{ $permohonan->jenis_magang }}</div>
+                                </div>
+                            </div>
 
-            <dt class="col-5">Status</dt>
-            <dd class="col-7">
-              @php
-                $cls = match ($permohonan->status) {
-                  'Aktif'  => 'bg-success',
-                  'Proses' => 'bg-warning text-dark',
-                  'Selesai'=> 'bg-primary',
-                  default  => 'bg-danger',
-                };
-              @endphp
-              <span class="badge {{ $cls }}">{{ $permohonan->status }}</span>
-            </dd>
+                            <!-- NIK & NISN/NIM -->
+                            <div class="col-md-6">
+                                <div class="info-item">
+                                    <label class="info-label text-body-secondary my-0">Tanggal Surat dibuat</label>
+                                    <div class="info-value" style="font-weight: 700">
+                                        {{ $permohonan->tgl_surat->format('d-m-Y') }}</div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="info-item">
+                                    <label class="info-label text-body-secondary my-0">Tanggal Surat Masuk</label>
+                                    <div class="info-value" style="font-weight: 700">
+                                        {{ $permohonan->tgl_suratmasuk->format('d-m-Y') }}</div>
+                                </div>
+                            </div>
 
-            <dt class="col-5">File Permohonan</dt>
-            <dd class="col-7">
-              @if ($permohonan->file_permohonan)
-                <a target="_blank" href="{{ Storage::url($permohonan->file_permohonan) }}">Lihat file</a>
-              @else
-                <em>Tidak ada</em>
-              @endif
-            </dd>
-          </dl>
+                            <div class="col-md-6">
+                                <div class="info-item">
+                                    <label class="info-label text-body-secondary my-0">Status</label>
+                                    <div class="info-value" style="font-weight: 700">
+                                        @if ($permohonan->status === 'Aktif')
+                                            <span class='badge bg-success'>{{ $permohonan->status }}</span>
+                                        @elseif($permohonan->status === 'Proses')
+                                            <span class='badge bg-warning text-dark'>{{ $permohonan->status }}</span>
+                                        @elseif($permohonan->status === 'Selesai')
+                                            <span class='badge bg-primary'>{{ $permohonan->status }}</span>
+                                        @elseif($permohonan->status === 'Ditolak')
+                                            <span class='badge bg-danger'>{{ $permohonan->status }}</span>
+                                        @else
+                                            <span class="text-muted">-</span>
+                                        @endif
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="info-item">
+                                    <label class="info-label text-body-secondary my-0">Tanggal Mulai Magang</label>
+                                    <div class="info-value" style="font-weight: 700">
+                                        {{ $permohonan->tgl_mulai->format('d-m-Y') }}</div>
+                                </div>
+                            </div>
+
+                            <!-- Kontak -->
+                            <div class="col-md-6">
+                                <div class="info-item">
+                                    <label class="info-label text-body-secondary my-0">Tanggal Selesai Magang</label>
+                                    <div class="info-value" style="font-weight: 700">
+                                        {{ $permohonan->tgl_selesai->format('d-m-Y') }}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="info-item">
+                                    <label class="info-label text-body-secondary my-0">Pembimbing dari Instansi</label>
+                                    <div class="info-value" style="font-weight: 700">
+                                        {{ $permohonan->pembimbing_sekolah }}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="info-item">
+                                    <label class="info-label text-body-secondary my-0">Kontak Pembimbing</label>
+                                    <div class="info-value" style="font-weight: 700">
+                                        {{ $permohonan->kontak_pembimbing }}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div>
+                                <div class="col-12 d-flex bg-primary rounded-top justify-content-between">
+                                    <div class="align-self-center">
+                                        <label class="mt-2 text-white text-lg">File PDF Permohonan</label>
+                                    </div>
+                                    <div>
+                                        <a download class="btn btn-success me-2 my-2"
+                                            href="{{ Storage::url($permohonan->file_permohonan) }}"><i
+                                                class="fa-solid fa-file-arrow-down"></i> Unduh file</a>
+                                    </div>
+                                </div>
+
+                                <div class="col-12 ratio ratio-16x9">
+                                    <iframe src="/storage/{{ $permohonan->file_permohonan }}" title="PDF Reader"
+                                        style="border:0"></iframe>
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
         </div>
-      </div>
-
-      <hr>
-
-      <h5 class="mb-3">Aksi Status</h5>
-      <div class="d-flex flex-wrap gap-2">
-        @if ($permohonan->status === 'Proses')
-          <form method="POST" action="{{ route('admin.permohonan.status', $permohonan) }}" onsubmit="return confirm('Ubah status menjadi Aktif?');">
-            @csrf @method('PATCH')
-            <input type="hidden" name="to" value="Aktif">
-            <button class="btn btn-success">Set Aktif</button>
-          </form>
-
-          <form method="POST" action="{{ route('admin.permohonan.status', $permohonan) }}" onsubmit="return confirm('Tolak permohonan ini?');">
-            @csrf @method('PATCH')
-            <input type="hidden" name="to" value="Ditolak">
-            <button class="btn btn-danger">Tolak</button>
-          </form>
-        @endif
-
-        @if ($permohonan->status === 'Aktif')
-          <form method="POST" action="{{ route('admin.permohonan.status', $permohonan) }}" onsubmit="return confirm('Tandai selesai?');">
-            @csrf @method('PATCH')
-            <input type="hidden" name="to" value="Selesai">
-            <button class="btn btn-primary">Tandai Selesai</button>
-          </form>
-
-          <form method="POST" action="{{ route('admin.permohonan.status', $permohonan) }}" onsubmit="return confirm('Tolak permohonan ini?');">
-            @csrf @method('PATCH')
-            <input type="hidden" name="to" value="Ditolak">
-            <button class="btn btn-danger">Tolak</button>
-          </form>
-        @endif
-
-        @if (in_array($permohonan->status, ['Selesai','Ditolak']))
-          <span class="text-muted">Tidak ada aksi status tersedia.</span>
-        @endif
-      </div>
     </div>
-  </div>
-</div>
 @endsection
