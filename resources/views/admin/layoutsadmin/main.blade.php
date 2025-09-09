@@ -93,20 +93,22 @@
         </div>
     </div>
 
-    <!-- Bootstrap core JavaScript-->
-    @yield('scripts')
-    <script src="cdn.datatables.net/2.3.3/js/dataTables.min.js"></script>
-    <script src="{{asset('asset/vendor/jquery/jquery.min.js')}}"></script>
-    <script src="{{asset('asset/vendor/bootstrap/js/bootstrap.bundle.min.js')}}"></script>
+    <!-- jQuery dulu -->
+<script src="{{asset('asset/vendor/jquery/jquery.min.js')}}"></script>
+<script src="{{asset('asset/vendor/bootstrap/js/bootstrap.bundle.min.js')}}"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
-    <!-- Core plugin JavaScript-->
-    <script src="{{ asset('asset/vendor/jquery-easing/jquery.easing.min.js') }}"></script>
+<!-- DataTables -->
+<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
 
-    <!-- Custom scripts for all pages-->
-    <script src="{{ asset('asset/js/sb-admin-2.min.js') }}j"></script>
+<!-- Core plugin -->
+<script src="{{ asset('asset/vendor/jquery-easing/jquery.easing.min.js') }}"></script>
 
-    <!-- Page level plugins -->
-    <script src="{{ asset('asset/vendor/chart.js/Chart.min.js') }}"></script>
+<!-- SB Admin -->
+<script src="{{asset('asset/js/sb-admin-2.min.js')}}"></script>
+
+<!-- Scripts tambahan dari halaman -->
+@yield('scripts')
 
     <!-- Page level custom scripts -->
     <script src="{{ asset('asset/js/demo/chart-area-demo.js') }}"></script>
