@@ -1,4 +1,6 @@
-<ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+<ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion sticky-top" id="accordionSidebar" style="
+    height: 100vh;
+">
 
     <!-- Sidebar - Brand -->
     <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
@@ -17,27 +19,24 @@
     </div>
 
     <!-- Nav Item - Dashboard -->
-    <li class="nav-item active">
+    <li class="nav-item @yield('dashboard-active')">
         <a class="nav-link" href="{{ route('admin.dashboard.index') }}">
             <i class="fas fa-fw fa-tachometer-alt"></i>
             <span>Dashboard</span></a>
     </li>
 
-
-
+    <!-- Nav Item - Tables -->
+    <li class="nav-item @yield('penugasan-active')">
+        <a class="nav-link" href="{{ route('admin.penugasan.index') }}">
+            <i class="fa-solid fa-list-check"></i>
+            <span>Kelola Penugasan</span></a>
+    </li>
 
     <!-- Nav Item - Tables -->
     <li class="nav-item @yield('permohonan-active')">
         <a class="nav-link" href="{{ route('admin.permohonan.index') }}">
             <i class="fas fa-envelope-open-text"></i>
-            <span>Permohonan</span></a>
-    </li>
-
-    <!-- Nav Item - Tables -->
-    <li class="nav-item">
-        <a class="nav-link" href="{{ route('admin.permohonan.index') }}">
-            <i class="fas fa-envelope-open-text"></i>
-            <span>Permohonan</span></a>
+            <span>Kelola Permohonan</span></a>
     </li>
 
     <!-- Nav Item - Charts -->

@@ -3,6 +3,7 @@
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Admin\PermohonanController;
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\PenugasanController;
 use App\Http\Controllers\Admin\TambahPermohonanController;
 use Illuminate\Support\Facades\Route;
 
@@ -19,6 +20,8 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::put('/permohonan/{permohonan}',      [PermohonanController::class, 'update'])->name('permohonan.update');
     Route::get('/permohonan/{permohonan}',       [PermohonanController::class, 'show'])->name('permohonan.show');
     Route::patch('/permohonan/{permohonan}/status', [PermohonanController::class, 'updateStatus'])->name('permohonan.status');
+
+    Route::get('/penugasan', [PenugasanController::class, 'index'])->name('penugasan.index');
 });
 
 
