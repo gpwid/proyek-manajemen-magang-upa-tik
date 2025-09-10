@@ -115,8 +115,6 @@
 
 <!-- SB Admin -->
 <script src="{{asset('asset/js/sb-admin-2.min.js')}}"></script>
-<!-- SB Admin -->
-<script src="{{asset('asset/js/sb-admin-2.min.js')}}"></script>
 
 <!-- Scripts tambahan dari halaman -->
 @yield('scripts')
