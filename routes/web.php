@@ -27,7 +27,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::get('/peserta/data', [ParticipantController::class, 'data'])->name('peserta.data'); // <- endpoint DataTables
     Route::get('/peserta/show/{participant}', [ParticipantController::class, 'show'])->name('peserta.show');
     Route::get('/peserta/create', [ParticipantController::class, 'create'])->name('peserta.create');
-    Route::post('/peserta', [ParticipantController::class, 'store'])->name('peserta.store');
+    Route::post('/peserta/store', [ParticipantController::class, 'store'])->name('peserta.store');
     Route::get('/peserta/{participant}/edit', [ParticipantController::class, 'edit'])->name('peserta.edit');
     Route::put('/peserta/{participant}', [ParticipantController::class, 'update'])->name('peserta.update');
     Route::get('/peserta/export/excel', [ParticipantController::class, 'exportExcel'])
