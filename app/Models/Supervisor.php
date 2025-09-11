@@ -4,13 +4,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Instansi extends Model
+class Supervisor extends Model
 {
     protected $guarded = ['id'];
-    protected $table = 'instansi';
 
     protected $fillable = [
-        'nama_instansi',
-        'alamat',
+        'nama',
+        'nip',
     ];
 }

@@ -9,7 +9,7 @@
     </div>
 
     <div class="card shadow col-12 p-4">
-        <form action="/peserta" method="POST">
+        <form action="/admin/peserta" method="POST">
             @csrf
 
             {{-- Nama --}}
