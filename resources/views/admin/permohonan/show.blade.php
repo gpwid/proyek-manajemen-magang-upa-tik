@@ -5,9 +5,45 @@
     <div class="container-fluid">
         <div class="d-sm-flex align-items-center justify-content-between mb-3">
             <h1 class="h3 text-gray-800">Detail Permohonan</h1>
-            <div class="mt-4 text-end">
-                <a href="{{ route('admin.permohonan.edit', $permohonan->id) }}" class="btn btn-primary me-2"><i class="fa-solid fa-pen-to-square"></i> Edit</a>
+            <div class="d-flex flex-wrap gap-2">
+                <a href="{{ route('admin.permohonan.edit', $permohonan->id) }}" class="btn btn-primary"><i
+                        class="fa-solid fa-pen-to-square"></i> Edit</a>
                 <a href="{{ route('admin.permohonan.index') }}" class="btn btn-secondary">Kembali</a>
+                @if ($permohonan->status === 'Proses')
+                    <form method="POST" action="{{ route('admin.permohonan.status', $permohonan) }}"
+                        onsubmit="return confirm('Ubah status menjadi Aktif?');">
+                        @csrf @method('PATCH')
+                        <input type="hidden" name="to" value="Aktif">
+                        <button class="btn btn-success"><i class="fa-solid fa-circle-check"></i> Set Aktif</button>
+                    </form>
+
+                    <form method="POST" action="{{ route('admin.permohonan.status', $permohonan) }}"
+                        onsubmit="return confirm('Tolak permohonan ini?');">
+                        @csrf @method('PATCH')
+                        <input type="hidden" name="to" value="Ditolak">
+                        <button class="btn btn-danger"><i class="fa-solid fa-circle-xmark"></i> Tolak</button>
+                    </form>
+                @endif
+
+                @if ($permohonan->status === 'Aktif')
+                    <form method="POST" action="{{ route('admin.permohonan.status', $permohonan) }}"
+                        onsubmit="return confirm('Tandai selesai?');">
+                        @csrf @method('PATCH')
+                        <input type="hidden" name="to" value="Selesai">
+                        <button class="btn btn-primary">Tandai Selesai</button>
+                    </form>
+
+                    <form method="POST" action="{{ route('admin.permohonan.status', $permohonan) }}"
+                        onsubmit="return confirm('Tolak permohonan ini?');">
+                        @csrf @method('PATCH')
+                        <input type="hidden" name="to" value="Ditolak">
+                        <button class="btn btn-danger">Tolak</button>
+                    </form>
+                @endif
+
+                @if (in_array($permohonan->status, ['Selesai', 'Ditolak']))
+                    <span class="text-muted">Tidak ada aksi status tersedia.</span>
+                @endif
             </div>
         </div>
 

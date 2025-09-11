@@ -174,7 +174,6 @@ class PermohonanController extends Controller
             'tgl_selesai'        => 'required|date|after_or_equal:tgl_mulai',
             'pembimbing_sekolah' => 'required|string|max:255',
             'kontak_pembimbing'  => 'required|string|max:13',
-            'tgl_suratmasuk'     => 'required|date',
             'jenis_magang'       => 'required|in:Mandiri,MBKM,Sekolah',
             'file_permohonan'    => 'nullable|file|mimes:pdf|max:5120', // EDIT: tidak wajib
         ]);
@@ -202,7 +201,6 @@ class PermohonanController extends Controller
             'tgl_selesai'        => $validated['tgl_selesai'],
             'pembimbing_sekolah' => $validated['pembimbing_sekolah'],
             'kontak_pembimbing'  => $validated['kontak_pembimbing'],
-            'tgl_suratmasuk'     => $validated['tgl_suratmasuk'],
             'jenis_magang'       => $validated['jenis_magang'],
             'status'             => $permohonan->status,
             'file_permohonan'    => $path,

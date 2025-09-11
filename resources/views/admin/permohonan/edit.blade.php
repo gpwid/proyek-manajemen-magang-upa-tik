@@ -88,16 +88,6 @@
                     </div>
 
                     <div class="mb-3">
-                        <label>Tanggal Surat Masuk <span class="text-danger">*</span></label>
-                        <input type="date" name="tgl_suratmasuk"
-                            value="{{ old('tgl_suratmasuk', optional($permohonan->tgl_suratmasuk)->format('Y-m-d')) }}"
-                            class="form-control @error('tgl_suratmasuk') is-invalid @enderror">
-                        @error('tgl_suratmasuk')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
-                    </div>
-
-                    <div class="mb-3">
                         <label>Jenis Magang <span class="text-danger">*</span></label>
                         <select name="jenis_magang" class="form-control @error('jenis_magang') is-invalid @enderror">
                             @foreach (['Mandiri', 'MBKM', 'Sekolah'] as $jm)

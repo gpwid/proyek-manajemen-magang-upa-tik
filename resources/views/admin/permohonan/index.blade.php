@@ -143,25 +143,25 @@
         </div>
     </div>
 
-    <div class="card">
-        <div class="card-body">
-            <div class="table-responsive">
-                <table id="permohonanTable" class="table">
-                    <thead>
-                        <tr>
-                            <th>Instansi</th>
-                            <th>Jenis</th>
-                            <th>Status</th>
-                            <th>Tanggal Surat</th>
-                            <th>Pembimbing</th>
-                            <th>Kontak</th>
-                            <th>Aksi</th>
-                        </tr>
-                    </thead>
-                </table>
+        <div class="card">
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table id="permohonanTable" class="table">
+                        <thead>
+                            <tr>
+                                <th>Instansi</th>
+                                <th>Jenis</th>
+                                <th>Status</th>
+                                <th>Tanggal Surat Masuk</th>
+                                <th>Pembimbing</th>
+                                <th>Kontak</th>
+                                <th>Aksi</th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
             </div>
         </div>
-    </div>
 
 </div>
 
@@ -388,8 +388,8 @@
                         name: 'status'
                     },
                     {
-                        data: 'tgl_surat',
-                        name: 'tgl_surat'
+                        data: 'tgl_suratmasuk',
+                        name: 'tgl_suratmasuk'
                     },
                     {
                         data: 'pembimbing_sekolah',
