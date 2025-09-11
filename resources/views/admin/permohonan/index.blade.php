@@ -142,7 +142,7 @@
                                 <th>Instansi</th>
                                 <th>Jenis</th>
                                 <th>Status</th>
-                                <th>Tanggal Surat</th>
+                                <th>Tanggal Surat Masuk</th>
                                 <th>Pembimbing</th>
                                 <th>Kontak</th>
                                 <th>Aksi</th>
@@ -378,8 +378,8 @@
                         name: 'status'
                     },
                     {
-                        data: 'tgl_surat',
-                        name: 'tgl_surat'
+                        data: 'tgl_suratmasuk',
+                        name: 'tgl_suratmasuk'
                     },
                     {
                         data: 'pembimbing_sekolah',

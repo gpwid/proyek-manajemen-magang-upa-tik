@@ -6,6 +6,7 @@ use Illuminate\View\View;
 use App\Http\Controllers\Controller;
 use App\Models\Instansi;
 use App\Models\Permohonan;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class TambahPermohonanController extends Controller
@@ -27,7 +28,6 @@ class TambahPermohonanController extends Controller
                 'tgl_selesai' => 'required|date|after_or_equal:tgl_mulai',
                 'pembimbing_sekolah' => 'required|string|max:255',
                 'kontak_pembimbing' => 'required|string|max:13',
-                'tgl_suratmasuk' => 'required|date',
                 'jenis_magang' => 'required|in:Mandiri,MBKM,Sekolah',
                 'file_permohonan' => 'required|file|mimes:pdf|max:5120',
             ],
@@ -64,7 +64,7 @@ class TambahPermohonanController extends Controller
             'tgl_selesai' => $validated['tgl_selesai'],
             'pembimbing_sekolah' => $validated['pembimbing_sekolah'],
             'kontak_pembimbing' => $validated['kontak_pembimbing'],
-            'tgl_suratmasuk' => $validated['tgl_suratmasuk'],
+            'tgl_suratmasuk' => Carbon::now(),
             'jenis_magang' => $validated['jenis_magang'],
             'status' => 'Proses',
             'file_permohonan' => $path,
