@@ -14,7 +14,7 @@ class ParticipantSeeder extends Seeder
     public function run(): void
     {
         DB::table('participants')->insert([
-            'nama' => 'Gusti Jawa Hitam',
+            'nama' => 'Gusti',
             'nik' => '1471027777770001',
             'nisnim' => '2407117832',
             'jenis_kelamin' => 'L',
