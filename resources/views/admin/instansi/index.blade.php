@@ -10,35 +10,32 @@
 
     <div class="card">
         <div class="card-body">
-            {{-- Filter + Search + Tambah --}}
+            {{-- Search + Tambah --}}
             <div class="row align-items-end g-3 mb-3">
 
-                {{-- Search (beri padding-end supaya tidak nempel tombol) --}}
+                {{-- Search --}}
                 <div class="col-md-5 pe-lg-3">
                     <label class="form-label">Pencarian</label>
                     <div class="search-wrapper">
                         <span class="search-icon" aria-hidden="true">
                             <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
                                 <circle cx="11" cy="11" r="7" stroke="#94A3B8" stroke-width="2" />
-                                <line x1="16.65" y1="16.65" x2="21" y2="21" stroke="#94A3B8" stroke-width="2"
-                                    stroke-linecap="round" />
+                                <line x1="16.65" y1="16.65" x2="21" y2="21" stroke="#94A3B8" stroke-width="2" stroke-linecap="round" />
                             </svg>
                         </span>
                         <input type="text" id="searchbox" class="form-control search-control" placeholder="Cari...">
                         <button type="button" id="clearSearch" class="clear-btn" aria-label="Bersihkan">
                             <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-                                <path d="M18 6L6 18M6 6l12 12" stroke="#9CA3AF" stroke-width="2"
-                                    stroke-linecap="round" />
+                                <path d="M18 6L6 18M6 6l12 12" stroke="#9CA3AF" stroke-width="2" stroke-linecap="round" />
                             </svg>
                         </button>
                     </div>
                 </div>
 
-                {{-- Tombol (kolom tersendiri, selalu rata kanan) --}}
+                {{-- Tombol Tambah --}}
                 <div class="col-md-3 text-lg-end">
                     <label class="form-label d-none d-lg-block">&nbsp;</label>
-                    <a class="btn btn-primary px-3 shadow-sm w-100 w-lg-auto"
-                        href="{{ route('admin.instansi.create') }}">
+                    <a class="btn btn-primary px-3 shadow-sm w-100 w-lg-auto" href="{{ route('admin.instansi.create') }}">
                         <i class="fas fa-plus me-1"></i> Tambah Instansi
                     </a>
                 </div>
@@ -55,8 +52,7 @@
             </div>
 
             <!-- Tabel -->
-            <table id="institute-table" class="display table table-striped table-hover align-middle"
-                style="width:100%">
+            <table id="institute-table" class="display table table-striped table-hover align-middle" style="width:100%">
                 <thead>
                     <tr>
                         <th>No.</th>
@@ -74,213 +70,59 @@
 
 {{-- ====== STYLE ====== --}}
 <style>
-    /* Card & layout */
-    .card .card-body {
-        padding: 1.25rem 1.25rem 1rem;
-    }
+    .card .card-body { padding: 1.25rem 1.25rem 1rem; }
+    #institute-table_wrapper .row { align-items: center; }
 
-    #institute-table_wrapper .row {
-        align-items: center;
-    }
-
-    /* Searchbar — samakan dengan Select2 */
-    .search-wrapper {
-        position: relative;
-    }
-
+    /* Searchbar */
+    .search-wrapper { position: relative; }
     .search-icon {
-        position: absolute;
-        left: 12px;
-        top: 50%;
-        transform: translateY(-50%);
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        width: 20px;
-        height: 20px;
-        pointer-events: none;
+        position: absolute; left: 12px; top: 50%; transform: translateY(-50%);
+        display: inline-flex; align-items: center; justify-content: center; width: 20px; height: 20px; pointer-events: none;
     }
-
     .clear-btn {
-        position: absolute;
-        right: 10px;
-        top: 50%;
-        transform: translateY(-50%);
-        border: 0;
-        background: transparent;
-        display: none;
-        padding: 0;
-        line-height: 0;
+        position: absolute; right: 10px; top: 50%; transform: translateY(-50%);
+        border: 0; background: transparent; display: none; padding: 0; line-height: 0;
     }
-
     .search-control {
-        height: 42px !important;
-        border-radius: 12px !important;
-        border: 1px solid #e5e7eb !important;
-        /* >>> ini kunci supaya teks tidak tertimpa ikon */
-        padding-left: 2.6rem !important;
-        padding-right: 2.4rem !important;
-        box-shadow: 0 1px 2px rgba(16, 24, 40, .04) !important;
+        height: 42px !important; border-radius: 12px !important; border: 1px solid #e5e7eb !important;
+        padding-left: 2.6rem !important; padding-right: 2.4rem !important; box-shadow: 0 1px 2px rgba(16,24,40,.04) !important;
     }
+    .search-control::placeholder { color: #9ca3af; }
+    .search-control:focus { border-color: #c7d2fe !important; box-shadow: 0 0 0 .2rem rgba(99,102,241,.2) !important; }
 
-    .search-control::placeholder {
-        color: #9ca3af;
-    }
-
-    .search-control:focus {
-        border-color: #c7d2fe !important;
-        box-shadow: 0 0 0 .2rem rgba(99, 102, 241, .2) !important;
-    }
-
-
-
-    /* Select2 look */
-    .select2-container .select2-selection--single {
-        height: 42px !important;
-        border-radius: 12px !important;
-        border: 1px solid #e5e7eb !important;
-        padding: .35rem .75rem;
-        box-shadow: 0 1px 2px rgba(16, 24, 40, .04);
-    }
-
-    .select2-container--default .select2-selection--single .select2-selection__arrow {
-        top: 7px !important;
-        right: 10px !important;
-    }
-
-    /* DataTables length (Show entries) container */
-    .dataTables_length {
-        display: flex;
-        align-items: center;
-        gap: .5rem;
-    }
-
-    .dataTables_length label {
-        font-weight: 600;
-        color: #64748b;
-        margin-bottom: 0;
-    }
-
-    .dataTables_length .select2 {
-        min-width: 120px;
-    }
-
-    .dataTables_length:after {
-        content: 'data';
-        margin-left: .35rem;
-        color: #64748b;
-        font-weight: 600;
-    }
-
-    @media (max-width:768px) {
-        .dataTables_length:after {
-            display: none;
-        }
-    }
+    /* DataTables length */
+    .dataTables_length { display: flex; align-items: center; gap: .5rem; }
+    .dataTables_length label { font-weight: 600; color: #64748b; margin-bottom: 0; }
+    .dataTables_length:after { content: 'data'; margin-left: .35rem; color: #64748b; font-weight: 600; }
+    @media (max-width:768px){ .dataTables_length:after { display:none; } }
 
     /* Table polish */
-    #institute-table {
-        border-radius: 14px;
-        overflow: hidden;
-    }
-
-    #institute-table thead th {
-        background: #f8fafc;
-        font-weight: 700;
-        border-bottom: 1px solid #e9ecef;
-    }
-
-    #institute-table tbody td {
-        vertical-align: middle;
-    }
-
-    #institute-table.table-hover tbody tr:hover {
-        background: #f6f9ff;
-    }
-
-    .text-nowrap {
-        white-space: nowrap;
-    }
-
-    /* Gender badges */
-    .badge-pill {
-        border-radius: 999px;
-        padding: .35rem .6rem;
-        font-weight: 600;
-    }
-
-    .badge-gender-l {
-        background-color: #e0f2fe !important;
-        /* Light blue */
-        color: #0369a1 !important;
-        /* Darker blue */
-    }
-
-    .badge-gender-p {
-        background-color: #fce7f3 !important;
-        /* Light pink */
-        color: #be185d !important;
-        /* Darker pink */
-    }
+    #institute-table { border-radius: 14px; overflow: hidden; }
+    #institute-table thead th { background: #f8fafc; font-weight: 700; border-bottom: 1px solid #e9ecef; }
+    #institute-table tbody td { vertical-align: middle; }
+    #institute-table.table-hover tbody tr:hover { background: #f6f9ff; }
+    .text-nowrap { white-space: nowrap; }
 
     /* Actions */
-    .btn-icon {
-        width: 34px;
-        height: 34px;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        border-radius: 10px;
-    }
-
-    .btn-icon+.btn-icon {
-        margin-left: .35rem;
-    }
+    .btn-icon { width: 34px; height: 34px; display: inline-flex; align-items: center; justify-content: center; border-radius: 10px; }
+    .btn-icon + .btn-icon { margin-left: .35rem; }
 
     /* Info & Pagination */
-    .dataTables_info {
-        color: #6b7280;
-    }
-
-    .dataTables_paginate {
-        text-align: right;
-    }
-
+    .dataTables_info { color: #6b7280; }
+    .dataTables_paginate { text-align: right; }
     .dataTables_paginate .paginate_button {
-        border: 1px solid #e5e7eb !important;
-        border-radius: 9999px !important;
-        padding: .48rem .9rem !important;
-        margin: 0 .2rem !important;
-        background: #fff !important;
-        color: #334155 !important;
-        font-weight: 600 !important;
+        border: 1px solid #e5e7eb !important; border-radius: 9999px !important;
+        padding: .48rem .9rem !important; margin: 0 .2rem !important;
+        background: #fff !important; color: #334155 !important; font-weight: 600 !important;
     }
-
-    .dataTables_paginate .paginate_button.previous::before {
-        content: '‹';
-        margin-right: .35rem;
-        font-weight: 800;
-    }
-
-    .dataTables_paginate .paginate_button.next::after {
-        content: '›';
-        margin-left: .35rem;
-        font-weight: 800;
-    }
-
+    .dataTables_paginate .paginate_button.previous::before { content: '‹'; margin-right: .35rem; font-weight: 800; }
+    .dataTables_paginate .paginate_button.next::after { content: '›'; margin-left: .35rem; font-weight: 800; }
     .dataTables_paginate .paginate_button.current,
     .dataTables_paginate .paginate_button:hover {
-        background: #eef2ff !important;
-        border-color: #c7d2fe !important;
-        color: #3730a3 !important;
+        background: #eef2ff !important; border-color: #c7d2fe !important; color: #3730a3 !important;
         box-shadow: 0 1px 2px rgba(16, 24, 40, .08);
     }
-
-    .dataTables_paginate .paginate_button.disabled {
-        opacity: .55;
-        cursor: default !important;
-    }
-
+    .dataTables_paginate .paginate_button.disabled { opacity: .55; cursor: default !important; }
 </style>
 
 {{-- ====== SCRIPTS ====== --}}
@@ -295,110 +137,100 @@
         showConfirmButton: false,
         timer: 1500
     });
-
 </script>
 @endif
 
-{{-- Select2 (CDN) --}}
-<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
-<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-
 <script>
-    $(function () {
-        if ($.fn.DataTable.isDataTable('#institute-table')) {
-            $('#institute-table').DataTable().destroy();
-        }
-        let table = $('#institute-table').DataTable({
-            processing: true,
-            serverSide: true,
-            ajax: {
-                url: '{!! route("admin.instansi.data") !!}',
-                data: d => {
-                    d.searchbox = $('#searchbox').val();
-                }
-            },
-            columns: [{
-                    data: 'DT_RowIndex',
-                    name: 'DT_RowIndex',
-                    orderable: false,
-                    searchable: false
-                },
-                {
-                    data: 'nama_instansi',
-                    name: 'nama_instansi'
-                },
-                {
-                    data: 'alamat',
-                    name: 'alamat',
-                    className: 'text-nowrap'
-                },
-                {
-                    data: 'actions',
-                    name: 'actions',
-                    orderable: false,
-                    searchable: false,
-                    className: 'text-nowrap'
-                }
-            ],
+$(function () {
+    if ($.fn.DataTable.isDataTable('#institute-table')) {
+        $('#institute-table').DataTable().destroy();
+    }
 
-            pageLength: 10,
-            lengthMenu: [
-                [10, 25, 50, -1],
-                [10, 25, 50, 'Semua']
-            ],
-
-            // TOP: Show entries
-            // MIDDLE: table
-            // BOTTOM: info + pagination
-            dom: "<'row align-items-center mb-2'<'col-md-6'l><'col-md-6'>>" +
-                "<'row'<'col-12'tr>>" +
-                "<'row mt-2'<'col-md-4'i><'col-md-8'p>>",
-
-            language: {
-                url: '//cdn.datatables.net/plug-ins/1.13.6/i18n/id.json',
-                lengthMenu: 'Tampilkan _MENU_',
-                paginate: {
-                    previous: 'Sebelumnya',
-                    next: 'Berikutnya'
-                }
-            },
-            responsive: true,
-            autoWidth: false,
-
-            initComplete: function () {
-                // Length menu (Show entries) jadi Select2
-                $('.dataTables_length select').select2({
-                    minimumResultsForSearch: Infinity,
-                    width: 'style'
-                });
+    const table = $('#institute-table').DataTable({
+        processing: true,
+        serverSide: true,
+        ajax: {
+            url: '{!! route("admin.instansi.data") !!}',
+            data: d => {
+                d.searchbox = $('#searchbox').val();
             }
-        });
+        },
+        columns: [
+            { // No.
+                data: 'DT_RowIndex',
+                name: 'DT_RowIndex',
+                orderable: false,
+                searchable: false
+            },
+            { // Nama Instansi
+                data: 'nama_instansi',
+                name: 'nama_instansi'
+            },
+            { // Alamat
+                data: 'alamat',
+                name: 'alamat',
+                className: 'text-nowrap'
+            },
+            { // Aksi
+                data: 'actions',
+                name: 'actions',
+                orderable: false,
+                searchable: false,
+                className: 'text-nowrap'
+            }
+        ],
 
-        // Search custom + tombol clear
-        $('#searchbox').on('keyup', function () {
-            table.ajax.reload();
-        });
-        $('#searchbox').on('input', function () {
-            $('#clearSearch').toggle(this.value.length > 0);
-        });
-        $('#clearSearch').on('click', function () {
-            $('#searchbox').val('');
-            $(this).hide();
-            table.ajax.reload();
-        });
-        $('#clearSearch').hide();
+        // Default order: kolom Nama Instansi ASC (index 1)
+        order: [[1, 'asc']],
 
-        // Tooltip untuk tombol aksi (jika dipakai)
-        if (typeof bootstrap !== 'undefined') {
-            const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
-            tooltipTriggerList.map(el => new bootstrap.Tooltip(el));
+        pageLength: 10,
+        lengthMenu: [[10, 25, 50, -1], [10, 25, 50, 'Semua']],
+
+        dom:
+          "<'row align-items-center mb-2'<'col-md-6'l><'col-md-6'>>" +
+          "<'row'<'col-12'tr>>" +
+          "<'row mt-2'<'col-md-4'i><'col-md-8'p>>",
+
+        language: {
+            url: '//cdn.datatables.net/plug-ins/1.13.6/i18n/id.json',
+            lengthMenu: 'Tampilkan _MENU_',
+            paginate: { previous: 'Sebelumnya', next: 'Berikutnya' }
+        },
+
+        responsive: true,
+        autoWidth: false,
+
+        initComplete: function () {
+            // (Opsional) aktifkan Select2 untuk length menu:
+            // $('.dataTables_length select').select2({ minimumResultsForSearch: Infinity, width: 'style' });
         }
     });
+
+    // === Search + tombol clear ===
+    const debounce = (fn, ms=300) => {
+        let t; return (...args) => { clearTimeout(t); t=setTimeout(()=>fn.apply(this,args), ms); };
+    };
+
+    $('#searchbox').on('keyup', debounce(() => table.ajax.reload()));
+    $('#searchbox').on('input', function () {
+        $('#clearSearch').toggle(this.value.length > 0);
+    });
+    $('#clearSearch').on('click', function () {
+        $('#searchbox').val('');
+        $(this).hide();
+        table.ajax.reload();
+    }).hide();
+
+    // Tooltip (jika pakai Bootstrap)
+    if (typeof bootstrap !== 'undefined') {
+        const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+        tooltipTriggerList.map(el => new bootstrap.Tooltip(el));
+    }
 
     // ===== Export buttons =====
     function buildQuery() {
         return $.param({
-            search: $('#searchbox').val() || ''
+            searchbox: $('#searchbox').val() || ''
         });
     }
 
@@ -411,6 +243,6 @@
         const qs = buildQuery();
         window.location = "{{ route('admin.instansi.export.pdf') }}" + (qs ? ('?' + qs) : '');
     });
-
+});
 </script>
 @endsection
