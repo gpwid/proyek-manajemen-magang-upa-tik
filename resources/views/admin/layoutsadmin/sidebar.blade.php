@@ -25,6 +25,12 @@
             <span>Dashboard</span></a>
     </li>
 
+    <li class="nav-item @yield('internship-active')">
+        <a class="nav-link" href="{{ route('admin.internship.index') }}">
+            <i class="fa-solid fa-briefcase"></i>
+            <span>Kelola Data Magang</span></a>
+    </li>
+
     <!-- Nav Item - Tables -->
     <li class="nav-item @yield('penugasan-active')">
         <a class="nav-link" href="{{ route('admin.penugasan.index') }}">
