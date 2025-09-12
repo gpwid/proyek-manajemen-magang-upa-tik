@@ -46,6 +46,20 @@
             <span>Kelola Peserta Pemagang</span></a>
     </li>
 
+    <!-- Nav Item - Charts -->
+    <li class="nav-item @yield('pembimbing-active')">
+        <a class="nav-link" href="{{ route('admin.pembimbing.index') }}">
+            <i class="fa-solid fa-users"></i>
+            <span>Kelola Pembimbing</span></a>
+    </li>
+
+    <!-- Nav Item - Charts -->
+    <li class="nav-item @yield('instansi-active')">
+        <a class="nav-link" href="{{ route('admin.instansi.index') }}">
+            <i class="fa-solid fa-users"></i>
+            <span>Kelola Instansi</span></a>
+    </li>
+
     <!-- Divider -->
     <hr class="sidebar-divider d-none d-md-block">
 

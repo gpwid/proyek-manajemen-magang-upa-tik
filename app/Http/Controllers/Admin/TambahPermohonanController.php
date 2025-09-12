@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use Illuminate\View\View;
 use App\Http\Controllers\Controller;
-use App\Models\Instansi;
+use App\Models\Institute;
 use App\Models\Permohonan;
 use Illuminate\Http\Request;
 
@@ -12,8 +12,8 @@ class TambahPermohonanController extends Controller
 {
     public function index()
     {
-        $tempatinstansis = \App\Models\Instansi::all();
-        return view('admin.permohonan.tambah', compact('tempatinstansis'));
+        $data = \App\Models\Institute::all();
+        return view('admin.permohonan.tambah', compact('data'));
     }
 
     public function store(Request $request)
@@ -22,7 +22,7 @@ class TambahPermohonanController extends Controller
         $validated = $request->validate(
             [
                 'tgl_surat' => 'required|date',
-                'id_instansi' => 'required|exists:instansi,id',
+                'id_institute' => 'required|exists:institutes,id',
                 'tgl_mulai' => 'required|date',
                 'tgl_selesai' => 'required|date|after_or_equal:tgl_mulai',
                 'pembimbing_sekolah' => 'required|string|max:255',
@@ -34,7 +34,7 @@ class TambahPermohonanController extends Controller
             [
                 // required
                 'tgl_surat.required'           => 'Tanggal surat wajib diisi.',
-                'id_instansi.required'         => 'Silakan pilih instansi.',
+                'id_institute.required'         => 'Silakan pilih institute.',
                 'tgl_mulai.required'           => 'Tanggal mulai wajib diisi.',
                 'tgl_selesai.required'         => 'Tanggal selesai wajib diisi.',
                 'pembimbing_sekolah.required'  => 'Nama pembimbing sekolah wajib diisi.',
@@ -47,18 +47,18 @@ class TambahPermohonanController extends Controller
                 'tgl_selesai.after_or_equal'   => 'Tanggal selesai tidak boleh sebelum tanggal mulai.',
                 'file_permohonan.mimes'        => 'File permohonan harus berformat PDF.',
                 'file_permohonan.max'          => 'Ukuran file maksimal 5 MB.',
-                'id_instansi.exists'           => 'Instansi yang dipilih tidak ditemukan.',
+                'id_institute.exists'           => 'Institute yang dipilih tidak ditemukan.',
                 'tgl_surat.date'               => 'Format tanggal surat tidak valid.',
             ],
         );
 
-        $instansi = Instansi::findOrFail($validated['id_instansi']);
+        $institute = Institute::findOrFail($validated['id_institute']);
 
         $path = $request->file('file_permohonan')->store('permohonan', 'public');
 
         Permohonan::create([
-            'id_instansi' => $instansi->id,
-            'instansi' => $instansi->nama_instansi,
+            'id_institute' => $institute->id,
+            'instansi' => $institute->nama_instansi,
             'tgl_surat' => $validated['tgl_surat'],
             'tgl_mulai' => $validated['tgl_mulai'],
             'tgl_selesai' => $validated['tgl_selesai'],

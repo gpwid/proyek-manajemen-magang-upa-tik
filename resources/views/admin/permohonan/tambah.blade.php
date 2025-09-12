@@ -34,11 +34,10 @@
                 </div>
                 <div class="mb-3">
                     <label for="">Instansi <label class="text-danger">*</label></label></label>
-                    <select name="id_instansi" class="form-control @error('id_instansi')
-            is-invalid @enderror"
+                    <select name="id_institute" class="form-control @error('id_institute') is-invalid @enderror"
                         id="">
                         <option value="">--Pilih Instansi--</option>
-                        @forelse ($tempatinstansis as $x)
+                        @forelse ($data as $x)
                             <option value="{{ $x->id }}">{{ $x->nama_instansi }}</option>
                         @empty
                             <option value="">Tidak Ada Instansi</option>
@@ -106,7 +105,7 @@
                         class="form-control @error('jenis_magang')
                 is-invalid
             @enderror">
-                        <option value="">--Jenis Magang--</option>
+                        <option value="{{ old('jenis_magang') }}">--Jenis Magang--</option>
                         <option value="Mandiri">Mandiri</option>
                         <option value="MBKM">MBKM</option>
                         <option value="Sekolah">Sekolah</option>
