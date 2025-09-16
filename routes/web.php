@@ -41,7 +41,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
     // Internship/Magang
     Route::get('/magang', [InternshipController::class, 'index'])->name('internship.index');
     Route::get('/magang/data', [InternshipController::class, 'data'])->name('internship.data');
-    Route::get('/magang/detail/{participant}', [InternshipController::class, 'show'])->name('internship.show');
+    Route::get('/magang/show/{internship}', [InternshipController::class, 'show'])->name('internship.show');
     Route::get('/magang/create', [InternshipController::class, 'create'])->name('internship.create');
     Route::post('/magang/store', [InternshipController::class, 'store'])->name('internship.store');
     Route::get('/magang/{internship}/edit', [InternshipController::class, 'edit'])->name('internship.edit');

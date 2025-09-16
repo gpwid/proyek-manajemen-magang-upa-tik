@@ -33,6 +33,12 @@ class InternshipController extends Controller
         return view('admin.internship.index', compact('totalAktif', 'totalNonaktif', 'totalSemua', 'internships'));
     }
 
+    public function show(Internship $internship) {
+        $internship->load(['permohonan', 'participant', 'supervisor']);
+
+        return view('admin.internship.detail', compact('internship'));
+    }
+
     public function data(Request $request)
     {
         // Endpoint untuk DataTables Yajra
@@ -135,7 +141,7 @@ class InternshipController extends Controller
 
     public function edit(Internship $internship)
     {
-        $permohonan  = Permohonan::orderBy('instansi')->get();
+        $permohonan  = Permohonan::where('status', 'Aktif')->orderBy('instansi')->get();
         $supervisors = Supervisor::orderBy('nama')->get();
         $participants = Participant::orderBy('nama')->get();
 
@@ -153,7 +159,7 @@ class InternshipController extends Controller
         // Validasi input
         $validated = $request->validate([
             'id_permohonan' => 'required|integer|exists:permohonan,id',
-            'id_pembimbing' => 'required|integer|exists:supervisors,id',
+            'id_pembimbing' => ['required', 'integer', Rule::exists('permohonan', 'id')->where(fn($q) => $q->where('status', 'Aktif'))],
             'id_peserta' => 'required|integer|exists:participants,id',
             'status_magang'       => ['required', Rule::in(['Aktif', 'Nonaktif'])],
         ]);
@@ -168,6 +174,10 @@ class InternshipController extends Controller
                 ->withErrors(['id_peserta' => 'Peserta ini sudah terdaftar pada permohonan tersebut.'])
                 ->withInput();
         }
+
+        $permohonan = Permohonan::whereKey($validated['id_permohonan'])
+            ->where('status', 'Diterima') // ganti ke 'status_permohonan' jika perlu
+            ->first();
 
         // Update data permohonan
         $internship->update([
