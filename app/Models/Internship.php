@@ -13,7 +13,6 @@ class Internship extends Model
     protected $fillable = [
         'id_pembimbing',
         'id_permohonan',
-        'id_peserta',
         'status_magang',
     ];
 
@@ -27,8 +26,8 @@ class Internship extends Model
         return $this->belongsTo(Permohonan::class, 'id_permohonan');
     }
 
-    public function Participant()
+    public function Participants()
     {
-        return $this->belongsTo(Participant::class, 'id_peserta');
+        return $this->belongsToMany(Participant::class, 'internship_participant');
     }
 }

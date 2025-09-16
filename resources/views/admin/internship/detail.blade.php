@@ -84,6 +84,19 @@
                                 </div>
                             </div>
 
+                            <div class="col-md-6">
+                                <div class="info-item">
+                                    <label class="info-label text-body-secondary my-0">Nama-nama pemagang</label>
+                                    <div class="info-value" style="font-weight: 700">
+                                        <ul>
+                                            @foreach ($internship->participants as $pm)
+                                                <li>{{ $pm->nama }}</li>
+                                            @endforeach
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+
                         </div>
 
                     </div>

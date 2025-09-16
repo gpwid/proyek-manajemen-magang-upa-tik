@@ -113,7 +113,6 @@
                                 <th>ID Magang</th>
                                 <th>Pembimbing</th>
                                 <th>ID Permohonan</th>
-                                <th>Peserta</th>
                                 <th>Status</th>
                                 <th>Tanggal Mulai</th>
                                 <th>Tanggal Selesai</th>
@@ -348,10 +347,6 @@
                         name: 'permohonan',
                     },
                     {
-                        data: 'peserta',
-                        name: 'peserta',
-                    },
-                    {
                         data: 'status_magang',
                         name: 'status_magang'
                     },
@@ -371,7 +366,7 @@
                     }
                 ],
                 order: [
-                    [4, 'desc']
+                    [3, 'desc']
                 ],
                 language: {
                     url: 'https://cdn.datatables.net/plug-ins/1.13.8/i18n/id.json'

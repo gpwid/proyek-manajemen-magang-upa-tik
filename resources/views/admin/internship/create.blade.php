@@ -57,10 +57,11 @@
                 {{-- Peserta --}}
                 <div class="mb-3">
                     <label class="form-label">Peserta <span class="text-danger">*</span></label>
-                    <select name="id_peserta" class="form-control select2 @error('id_peserta') is-invalid @enderror">
-                        <option value="">-- Pilih Peserta --</option>
+                    <select name="id_peserta[]" class="form-control select2 @error('id_peserta') is-invalid @enderror"
+                        multiple required>
                         @foreach ($participants as $peserta)
-                            <option value="{{ $peserta->id }}" {{ old('id_peserta') == $peserta->id ? 'selected' : '' }}>
+                            <option value="{{ $peserta->id }}"
+                                {{ in_array($peserta->id, old('id_peserta', [])) ? 'selected' : '' }}>
                                 {{ $peserta->nama }} ({{ $peserta->nik }})
                             </option>
                         @endforeach

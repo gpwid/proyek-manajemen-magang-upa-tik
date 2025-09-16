@@ -13,9 +13,8 @@ return new class extends Migration
     {
         Schema::create('internship', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('id_pembimbing');
-            $table->foreignId('id_permohonan');
-            $table->foreignId('id_peserta');
+            $table->foreignId('id_permohonan')->constrained('permohonan')->onDelete('cascade');
+            $table->foreignId('id_pembimbing')->constrained('supervisors')->onDelete('cascade');
             $table->enum('status_magang', ['Aktif', 'Nonaktif'])->default('Aktif');
             $table->timestamps();
         });
