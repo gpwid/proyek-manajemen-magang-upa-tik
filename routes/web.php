@@ -4,7 +4,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Admin\PermohonanController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\InstituteController;
-use App\Http\Controllers\Admin\InternshipController;
+use App\Http\Controllers\admin\InternshipController;
 use App\Http\Controllers\Admin\PenugasanController;
 use App\Http\Controllers\Admin\TambahPermohonanController;
 use App\Http\Controllers\Admin\ParticipantController;
@@ -44,6 +44,8 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::get('/peserta/export/pdf', [ParticipantController::class, 'exportPdf'])
         ->name('peserta.export.pdf');
 
+    
+    Route::get('/penugasan', [TasksController::class, 'index'])->name('penugasan.index');
     // Pembimbing
     Route::get('/pembimbing', [SupervisorController::class, 'index'])->name('pembimbing.index');
     Route::get('/pembimbing/data', [SupervisorController::class, 'data'])->name('pembimbing.data'); // <- endpoint DataTables

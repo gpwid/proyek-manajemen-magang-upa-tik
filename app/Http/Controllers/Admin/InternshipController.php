@@ -23,7 +23,7 @@ class InternshipController extends Controller
         $totalSemua = Internship::count();
 
         $internships = Internship::with([
-            'participants:id,nama,nik',
+            'participant:id,nama,nik',
             'permohonan:id,instansi,tgl_mulai,tgl_selesai,jenis_magang',
             'supervisor:id,nama,nip',
         ])
