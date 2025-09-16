@@ -14,8 +14,10 @@ class SupervisorSeeder extends Seeder
     public function run(): void
     {
         DB::table('supervisors')->insert([
-            'nama' => 'Drs. H. Agus Salim, M.Pd',
-            'nip' => '1987654321',
-        ]);
+            [
+                'nama' => 'Supervisor 1',
+                'nip' => '123123998847',
+            ]
+            ]);
     }
 }

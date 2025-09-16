@@ -90,16 +90,6 @@
                     @enderror
                 </div>
                 <div class="mb-3">
-                    <label for="">Tanggal Surat Masuk <label class="text-danger">*</label></label></label>
-                    <input value="{{ old('tgl_suratmasuk') }}" type="date" name="tgl_suratmasuk" id=""
-                        class="form-control @error('tgl_suratmasuk') is-invalid @enderror">
-                    @error('tgl_suratmasuk')
-                        <div class="invalid-feedback">
-                            {{ $message }}
-                        </div>
-                    @enderror
-                </div>
-                <div class="mb-3">
                     <label for="">Jenis Magang <label class="text-danger">*</label></label></label>
                     <select name="jenis_magang" id=""
                         class="form-control @error('jenis_magang')

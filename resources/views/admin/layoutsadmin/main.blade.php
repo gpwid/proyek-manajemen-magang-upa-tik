@@ -24,13 +24,15 @@
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     <link href="{{ asset('asset/css/sb-admin-2.min.css') }}" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.8/css/dataTables.bootstrap5.min.css">
-
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 </head>
 
 {{-- JS (jQuery + DataTables) --}}
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 <script src="https://cdn.datatables.net/1.13.8/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.datatables.net/1.13.8/js/dataTables.bootstrap5.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
 @stack('scripts')
 
 
@@ -96,28 +98,28 @@
     </div>
 
     <!-- jQuery dulu -->
-<script src="{{asset('asset/vendor/jquery/jquery.min.js')}}"></script>
-<script src="{{asset('asset/vendor/bootstrap/js/bootstrap.bundle.min.js')}}"></script>
-<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script src="{{ asset('asset/vendor/jquery/jquery.min.js') }}"></script>
+    <script src="{{ asset('asset/vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
-<!-- DataTables -->
-<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <!-- DataTables -->
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
     <!-- jQuery dulu -->
-<script src="{{asset('asset/vendor/jquery/jquery.min.js')}}"></script>
-<script src="{{asset('asset/vendor/bootstrap/js/bootstrap.bundle.min.js')}}"></script>
-<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script src="{{ asset('asset/vendor/jquery/jquery.min.js') }}"></script>
+    <script src="{{ asset('asset/vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
-<!-- DataTables -->
-<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <!-- DataTables -->
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
 
-<!-- Core plugin -->
-<script src="{{ asset('asset/vendor/jquery-easing/jquery.easing.min.js') }}"></script>
+    <!-- Core plugin -->
+    <script src="{{ asset('asset/vendor/jquery-easing/jquery.easing.min.js') }}"></script>
 
 <!-- SB Admin -->
 <script src="{{asset('asset/js/sb-admin-2.min.js')}}"></script>
 
-<!-- Scripts tambahan dari halaman -->
-@yield('scripts')
+    <!-- Scripts tambahan dari halaman -->
+    @yield('scripts')
     <!-- Page level custom scripts -->
     <script src="{{ asset('asset/js/demo/chart-area-demo.js') }}"></script>
     <script src="{{ asset('asset/js/demo/chart-pie-demo.js') }}"></script>

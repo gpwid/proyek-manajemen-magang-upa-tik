@@ -4,11 +4,12 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Admin\PermohonanController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\InstituteController;
+use App\Http\Controllers\admin\InternshipController;
 use App\Http\Controllers\Admin\PenugasanController;
 use App\Http\Controllers\Admin\TambahPermohonanController;
 use App\Http\Controllers\Admin\ParticipantController;
 use App\Http\Controllers\Admin\SupervisorController;
-use App\Http\Controllers\Admin\InstituteControllerController;
+use App\Http\Controllers\admin\TasksController;
 use Illuminate\Support\Facades\Route;
 
 Route::redirect('/', '/admin/dashboard'); // root diarahkan ke dashboard admin
@@ -16,10 +17,11 @@ Route::redirect('/', '/admin/dashboard'); // root diarahkan ke dashboard admin
 Route::prefix('admin')->name('admin.')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
 
-    Route::get('/permohonan', [PermohonanController::class, 'index'])->name('permohonan.index');
-    Route::get('/permohonan/data', [PermohonanController::class, 'data'])->name('permohonan.data'); // endpoint JSON Yajra
-    Route::get('/permohonan/tambah', [TambahPermohonanController::class, 'index'])->name('permohonan.tambah');
-    Route::post('/permohonan/store', [TambahPermohonanController::class, 'store'])->name('permohonan.store');
+    // Permohonan
+    Route::get('/permohonan',              [PermohonanController::class, 'index'])->name('permohonan.index');
+    Route::get('/permohonan/data',         [PermohonanController::class, 'data'])->name('permohonan.data'); // endpoint JSON Yajra
+    Route::get('/permohonan/tambah',       [PermohonanController::class, 'indexTambah'])->name('permohonan.tambah');
+    Route::post('/permohonan/store',       [PermohonanController::class, 'store'])->name('permohonan.store');
     Route::get('/permohonan/{permohonan}/edit', [PermohonanController::class, 'edit'])->name('permohonan.edit');
     Route::put('/permohonan/{permohonan}', [PermohonanController::class, 'update'])->name('permohonan.update');
     Route::get('/permohonan/detail/{permohonan}', [PermohonanController::class, 'show'])->name('permohonan.show');
@@ -42,6 +44,8 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::get('/peserta/export/pdf', [ParticipantController::class, 'exportPdf'])
         ->name('peserta.export.pdf');
 
+    
+    Route::get('/penugasan', [TasksController::class, 'index'])->name('penugasan.index');
     // Pembimbing
     Route::get('/pembimbing', [SupervisorController::class, 'index'])->name('pembimbing.index');
     Route::get('/pembimbing/data', [SupervisorController::class, 'data'])->name('pembimbing.data'); // <- endpoint DataTables
@@ -66,8 +70,17 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::get('/instansi/export/pdf', [InstituteController::class, 'exportPdf'])
         ->name('instansi.export.pdf');
 
+    // Internship/Magang
+    Route::get('/magang', [InternshipController::class, 'index'])->name('internship.index');
+    Route::get('/magang/data', [InternshipController::class, 'data'])->name('internship.data');
+    Route::get('/magang/show/{internship}', [InternshipController::class, 'show'])->name('internship.show');
+    Route::get('/magang/create', [InternshipController::class, 'create'])->name('internship.create');
+    Route::post('/magang/store', [InternshipController::class, 'store'])->name('internship.store');
+    Route::get('/magang/{internship}/edit', [InternshipController::class, 'edit'])->name('internship.edit');
+    Route::put('/magang/{internship}', [InternshipController::class, 'update'])->name('internship.update');
 
-    Route::get('/penugasan', [PenugasanController::class, 'index'])->name('penugasan.index');
+    
+    Route::get('/penugasan', [TasksController::class, 'index'])->name('penugasan.index');
 });
 
 
