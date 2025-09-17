@@ -28,9 +28,9 @@
                     <select name="id_permohonan" class="form-control select2 @error('id_permohonan') is-invalid @enderror">
                         <option value="">-- Pilih Permohonan --</option>
                         @foreach ($permohonan as $pm)
-                            <option value="{{ $pm->id }}"
-                                {{ old('id_permohonan', $internship->id_permohonan) == $pm->id ? 'selected' : '' }}>
-                                {{ $pm->instansi }} ({{ $pm->tgl_mulai }} - {{ $pm->tgl_selesai }})
+                            <option value="{{ $pm->id }}" {{ old('id_permohonan') == $pm->id ? 'selected' : '' }}>
+                                {{ $pm->id }} - {{ $pm->institute->nama_instansi ?? 'Nama Instansi Tidak Ditemukan' }}
+                                ({{ $pm->tgl_surat->format('d-m-Y') }})
                             </option>
                         @endforeach
                     </select>

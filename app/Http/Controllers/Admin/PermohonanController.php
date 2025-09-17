@@ -121,7 +121,7 @@ class PermohonanController extends Controller
             ->addColumn('instansi', function ($p) {
                 return $p->institute->nama_instansi ?? '-';
             })
-            ->editColumn('tgl_surat', fn($p) => $p->tgl_surat?->format('d-m-Y'))
+            ->editColumn('tgl_suratmasuk', fn($p) => $p->tgl_surat?->format('d-m-Y'))
             ->editColumn('tgl_mulai', fn($p) => $p->tgl_mulai?->format('d-m-Y'))
             ->editColumn('tgl_selesai', fn($p) => $p->tgl_selesai?->format('d-m-Y'))
             ->editColumn('status', function ($p) {
@@ -202,7 +202,6 @@ class PermohonanController extends Controller
         // Update data permohonan
         $permohonan->update([
             'id_institute'        => $institute->id,
-            'institute'           => $institute->nama_instansi,
             'tgl_surat'          => $validated['tgl_surat'],
             'tgl_mulai'          => $validated['tgl_mulai'],
             'tgl_selesai'        => $validated['tgl_selesai'],
@@ -259,7 +258,6 @@ class PermohonanController extends Controller
 
         Permohonan::create([
             'id_institute' => $institute->id,
-            'instansi' => $institute->nama_instansi,
             'tgl_surat' => $validated['tgl_surat'],
             'tgl_mulai' => $validated['tgl_mulai'],
             'tgl_selesai' => $validated['tgl_selesai'],

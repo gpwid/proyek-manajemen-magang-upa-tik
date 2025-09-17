@@ -20,7 +20,6 @@ class Permohonan extends Model
         'id_institute',
         'nama_instansi',
         'tgl_surat',
-        'instansi',
         'tgl_mulai',
         'tgl_selesai',
         'pembimbing_sekolah',

@@ -24,7 +24,7 @@ class InternshipController extends Controller
 
         $internships = Internship::with([
             'participants:id,nama,nik',
-            'permohonan:id,instansi,tgl_mulai,tgl_selesai,jenis_magang',
+            'permohonan:id,tgl_mulai,tgl_selesai,jenis_magang',
             'supervisor:id,nama,nip',
         ])
             ->latest('created_at')
@@ -45,7 +45,7 @@ class InternshipController extends Controller
         // Endpoint untuk DataTables Yajra
         $query = Internship::query()->with([
             'supervisor:id,nama',
-            'permohonan:id,instansi,tgl_mulai,tgl_selesai,jenis_magang',
+            'permohonan:id,tgl_mulai,tgl_selesai,jenis_magang',
             'participants:id,nama',
         ]);
 
@@ -86,7 +86,10 @@ class InternshipController extends Controller
 
     public function create()
     {
-        $permohonan  = Permohonan::where('status', 'Aktif')->orderBy('instansi')->get();
+        $permohonan  = Permohonan::with('institute')
+        ->where('status', 'Aktif')
+        ->orderBy('tgl_surat', 'desc')
+        ->get();
         $supervisors = Supervisor::all();
         $participants = Participant::all();
         return view('admin.internship.create', compact('permohonan', 'supervisors', 'participants'));
@@ -125,7 +128,10 @@ class InternshipController extends Controller
 
     public function edit(Internship $internship)
     {
-        $permohonan  = Permohonan::where('status', 'Aktif')->orderBy('instansi')->get();
+        $permohonan  = Permohonan::with('institute')
+        ->where('status', 'Aktif')
+        ->orderBy('tgl_surat', 'desc')
+        ->get();
         $supervisors = Supervisor::orderBy('nama')->get();
         $participants = Participant::orderBy('nama')->get();
 

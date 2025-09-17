@@ -10,6 +10,7 @@ use Yajra\DataTables\Facades\DataTables;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\InstitutesExport;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Validation\Rule;
 use Illuminate\View\View;
 
 class InstituteController extends Controller
@@ -68,8 +69,8 @@ class InstituteController extends Controller
     public function update(Request $request, Institute $institute): RedirectResponse
     {
         $request->validate([
-            'nama_instansi' => 'required|string|max:50',
-            'alamat' => 'required|string|max:255|'.$institute->id,
+            'nama_instansi' => ['required', 'string', 'max:50', Rule::unique('institutes')->ignore($institute->id)],
+            'alamat' => 'required|string|max:255',
         ]);
 
         $institute->update($request->only([
