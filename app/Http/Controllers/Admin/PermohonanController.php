@@ -19,6 +19,9 @@ class PermohonanController extends Controller
     public function show(Permohonan $permohonan)
     {
         // Menampilkan detail permohonan
+        // return view('admin.permohonan.show', compact('permohonan'));
+
+        $permohonan->load(['institute', 'participants']);
         return view('admin.permohonan.show', compact('permohonan'));
     }
 
@@ -109,6 +112,10 @@ class PermohonanController extends Controller
                 ->orWhere('pembimbing_sekolah', 'like', "%$q%");
         }
 
+        if ($request->filled('id_institute')) {
+            $query->where('id_institute', $request->id_institute);
+        }
+
         if ($request->filled('status')) {
             $query->where('status', $request->status);
         }
@@ -175,6 +182,7 @@ class PermohonanController extends Controller
     {
         // Validasi input
         $validated = $request->validate([
+            'no_surat'          => 'required|string|max:100|unique:permohonan,no_surat',
             'tgl_surat'          => 'required|date',
             'id_institute'        => 'required|exists:institutes,id',
             'tgl_mulai'          => 'required|date',
@@ -202,6 +210,7 @@ class PermohonanController extends Controller
         // Update data permohonan
         $permohonan->update([
             'id_institute'        => $institute->id,
+            'no_surat'          => $validated['no_surat'],
             'tgl_surat'          => $validated['tgl_surat'],
             'tgl_mulai'          => $validated['tgl_mulai'],
             'tgl_selesai'        => $validated['tgl_selesai'],
@@ -222,6 +231,7 @@ class PermohonanController extends Controller
 
         $validated = $request->validate(
             [
+                'no_surat'          => 'required|string|max:100|unique:permohonan,no_surat',
                 'tgl_surat' => 'required|date',
                 'id_institute' => 'required|exists:institutes,id',
                 'tgl_mulai' => 'required|date',
@@ -233,6 +243,8 @@ class PermohonanController extends Controller
             ],
             [
                 // required
+                'no_surat.required'            => 'Nomor surat wajib diisi.',
+                'no_surat.unique'              => 'Nomor surat sudah ada dalam database.',
                 'tgl_surat.required'           => 'Tanggal surat wajib diisi.',
                 'id_institute.required'         => 'Silakan pilih instansi.',
                 'tgl_mulai.required'           => 'Tanggal mulai wajib diisi.',
@@ -258,6 +270,7 @@ class PermohonanController extends Controller
 
         Permohonan::create([
             'id_institute' => $institute->id,
+            'no_surat'     => $validated['no_surat'],
             'tgl_surat' => $validated['tgl_surat'],
             'tgl_mulai' => $validated['tgl_mulai'],
             'tgl_selesai' => $validated['tgl_selesai'],
@@ -308,6 +321,9 @@ class PermohonanController extends Controller
     {
         $filename = 'permohonan_' . now()->format('Ymd_His') . '.xlsx';
         return Excel::download(new PermohonanExport($request), $filename);
+        if ($request->filled('id_institute')) {
+            $q->where('id_institute', $request->id_institute);
+        }
     }
 
     public function exportPdf(Request $request)
@@ -321,6 +337,9 @@ class PermohonanController extends Controller
                 ->orWhere('pembimbing_sekolah', 'like', "%{$request->q}%");
         }
 
+        if ($request->filled('id_institute')) {
+            $q->where('id_institute', $request->id_institute);
+        }
 
         if ($request->filled('status')) {
             $q->where('status', $request->status);

@@ -26,7 +26,7 @@ class Internship extends Model
         return $this->belongsTo(Permohonan::class, 'id_permohonan');
     }
 
-    public function Participants()
+    public function participants()
     {
         return $this->belongsToMany(Participant::class, 'internship_participant');
     }

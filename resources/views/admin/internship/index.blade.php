@@ -2,128 +2,141 @@
 @section('internship-active', 'active')
 @section('content')
 
-    <div class="container-fluid">
+<div class="container-fluid">
 
-        <div class="d-sm-flex align-items-center justify-content-between mb-4">
-            <h1 class="h3 mb-0 text-gray-800">Kelola Data Magang</h1>
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+        <h1 class="h3 mb-0 text-gray-800">Kelola Data Magang</h1>
+    </div>
+
+    @if ($errors->any())
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <ul class="mb-0">
+            @foreach ($errors->all() as $e)
+            <li>{{ $e }}</li>
+            @endforeach
+        </ul>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    @endif
+
+    @if (session('success'))
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        Swal.fire({
+            position: 'center',
+            icon: 'success',
+            title: "{{ session('success') }}",
+            showConfirmButton: false,
+            timer: 1500
+        });
+
+    </script>
+    @endif
+
+    <div class="row">
+
+        <div class="col-xl-4 col-md-12 mb-4">
+            <div class="card card-hover border-left-success h-100 py-2 text-center">
+                <div class="card-body">
+                    <div class="mb-2">
+                        <span class="d-inline-flex align-items-center justify-content-center rounded-circle"><i
+                                class="fa-solid fa-circle-check fa-2x text-success"></i>
+                        </span>
+                    </div>
+                    <div class="h4 mb-1 font-weight-bold text-dark">{{ $totalAktif }}</div>
+                    <div class="text-muted">Aktif</div>
+                </div>
+            </div>
         </div>
 
-        @if ($errors->any())
-            <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                <ul class="mb-0">
-                    @foreach ($errors->all() as $e)
-                        <li>{{ $e }}</li>
-                    @endforeach
-                </ul>
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>
-        @endif
 
-        @if (session('success'))
-            <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-            <script>
-                Swal.fire({
-                    position: 'center',
-                    icon: 'success',
-                    title: "{{ session('success') }}",
-                    showConfirmButton: false,
-                    timer: 1500
-                });
-            </script>
-        @endif
-
-        <div class="row">
-
-            <div class="col-xl-4 col-md-12 mb-4">
-                <div class="card card-hover border-left-success h-100 py-2 text-center">
-                    <div class="card-body">
-                        <div class="mb-2">
-                            <span class="d-inline-flex align-items-center justify-content-center rounded-circle"><i
-                                    class="fa-solid fa-circle-check fa-2x text-success"></i>
-                            </span>
-                        </div>
-                        <div class="h4 mb-1 font-weight-bold text-dark">{{ $totalAktif }}</div>
-                        <div class="text-muted">Aktif</div>
+        <div class="col-xl-4 col-md-12 mb-4">
+            <div class="card card-hover border-left-secondary h-100 py-2 text-center">
+                <div class="card-body">
+                    <div class="mb-2">
+                        <span class="d-inline-flex align-items-center justify-content-center rounded-circle"><i
+                                class="fa-solid fa-user-xmark fa-2x text-secondary"></i>
+                        </span>
                     </div>
+                    <div class="h4 mb-1 font-weight-bold text-dark">{{ $totalNonaktif }}</div>
+                    <div class="text-muted">Nonaktif</div>
                 </div>
             </div>
-
-
-            <div class="col-xl-4 col-md-12 mb-4">
-                <div class="card card-hover border-left-secondary h-100 py-2 text-center">
-                    <div class="card-body">
-                        <div class="mb-2">
-                            <span class="d-inline-flex align-items-center justify-content-center rounded-circle"><i
-                                    class="fa-solid fa-user-xmark fa-2x text-secondary"></i>
-                            </span>
-                        </div>
-                        <div class="h4 mb-1 font-weight-bold text-dark">{{ $totalNonaktif }}</div>
-                        <div class="text-muted">Nonaktif</div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-xl-4 col-md-12 mb-4">
-                <div class="card card-hover border-left-primary h-100 py-2 text-center">
-                    <div class="card-body">
-                        <div class="mb-2">
-                            <span class="d-inline-flex align-items-center justify-content-center rounded-circle"><i
-                                    class="fas fa-file-invoice fa-2x text-primary"></i>
-                            </span>
-                        </div>
-                        <div class="h4 mb-1 font-weight-bold text-dark">{{ $totalSemua }}</div>
-                        <div class="text-muted">Total Data Magang</div>
-                    </div>
-                </div>
-            </div>
-
         </div>
 
-        <form id="filterForm" method="GET" action="{{ route('admin.internship.index') }}">
-            <div class="card mb-4">
-                <div class="row align-items-end p-3">
-                    <div class="col-md-6 mb-3">
-                        <label class="form-label">Status</label>
-                        <select name="status_magang" class="form-select">
-                            <option value="">Semua status…</option>
-                            @foreach (['Aktif', 'Nonaktif'] as $st)
-                                <option value="{{ $st }}" @selected(request('status_magang') === $st)>{{ $st }}
-                                </option>
-                            @endforeach
-                        </select>
+        <div class="col-xl-4 col-md-12 mb-4">
+            <div class="card card-hover border-left-primary h-100 py-2 text-center">
+                <div class="card-body">
+                    <div class="mb-2">
+                        <span class="d-inline-flex align-items-center justify-content-center rounded-circle"><i
+                                class="fas fa-file-invoice fa-2x text-primary"></i>
+                        </span>
                     </div>
-
-                </div>
-            </div>
-        </form>
-
-        <div class="d-flex justify-start gap-2 mb-4">
-            <a href="{{ route('admin.internship.create') }}"
-                class="d-none d-sm-inline-block btn btn-lg btn-primary rounded-3 shadow-sm"><i
-                    class="fa-solid fa-file-circle-plus text-white"></i> Data Magang Baru
-            </a>
-        </div>
-
-        <div class="card">
-            <div class="card-body">
-                <div class="table-responsive">
-                    <table id="internshipTable" class="table">
-                        <thead>
-                            <tr>
-                                <th>ID Magang</th>
-                                <th>Pembimbing</th>
-                                <th>ID Permohonan</th>
-                                <th>Status</th>
-                                <th>Tanggal Mulai</th>
-                                <th>Tanggal Selesai</th>
-                            </tr>
-                        </thead>
-                    </table>
+                    <div class="h4 mb-1 font-weight-bold text-dark">{{ $totalSemua }}</div>
+                    <div class="text-muted">Total Data Magang</div>
                 </div>
             </div>
         </div>
 
     </div>
+
+    {{-- Filter --}}
+    <form id="filterForm" method="GET" action="{{ route('admin.internship.index') }}">
+        <div class="card mb-4">
+            <div class="row align-items-end p-3">
+                <div class="col-md-4 mb-3">
+                    <label class="form-label">Status</label>
+                    <select name="status_magang" class="form-select">
+                        <option value="">Semua status…</option>
+                        @foreach (['Aktif','Nonaktif'] as $st)
+                        <option value="{{ $st }}" @selected(request('status_magang')===$st)>{{ $st }}</option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="col-md-8 mb-3">
+                    <label class="form-label">Instansi</label>
+                    <select name="id_institute" class="form-select">
+                        <option value="">Semua instansi…</option>
+                        @foreach ($searchinstitutes as $ins)
+                        <option value="{{ $ins->id }}" @selected(request('id_institute')==$ins->id)>
+                            {{ $ins->nama_instansi }}
+                        </option>
+                        @endforeach
+                    </select>
+                </div>
+            </div>
+        </div>
+    </form>
+
+    <div class="card">
+        <div class="card-body">
+            {{-- Tombol Export --}}
+            <div class="d-flex justify-content-start gap-2 mb-3">
+                <a href="{{ route('admin.internship.create') }}" class="btn btn-primary">
+                    <i class="fa-solid fa-file-circle-plus"></i> Data Magang Baru
+                </a>
+                <button id="btnExportExcel" class="btn btn-success"><i class="fas fa-file-excel"></i> Excel</button>
+                <button id="btnExportPdf" class="btn btn-danger"><i class="fas fa-file-pdf"></i> PDF</button>
+            </div>
+
+            <table id="internshipTable" class="table">
+                <thead>
+                    <tr>
+                        <th>No.</th>
+                        <th>No. Surat</th> {{-- ganti dari ID Permohonan --}}
+                        <th>Instansi</th> {{-- ganti dari ID Instansi --}}
+                        <th>Pembimbing</th>
+                        <th>Status</th>
+                        <th>Tanggal Mulai</th>
+                        <th>Tanggal Selesai</th>
+                        <th>Aksi</th>
+                    </tr>
+                </thead>
+            </table>
+
+        </div>
+    </div>
+</div>
 
 @endsection
 
@@ -317,71 +330,98 @@
         opacity: .55;
         cursor: default !important;
     }
+
 </style>
 
 
 @push('scripts')
-    <script>
-        $(function() {
-            const table = $('#internshipTable').DataTable({
-                responsive: true,
-                autoWidth: false,
-                processing: true,
-                serverSide: true,
-                ajax: {
-                    url: '{{ route('admin.internship.data') }}',
-                    data: function(d) {
-                        d.status_magang = $('select[name="status_magang"]').val();
+<script>
+    $(function () {
+        const table = $('#internshipTable').DataTable({
+            responsive: true,
+            autoWidth: false,
+            processing: true,
+            serverSide: true,
+            ajax: {
+                url: '{{ route("admin.internship.data") }}',
+                data: function (d) {
+                    d.status_magang = $('select[name="status_magang"]').val();
+                    d.id_institute = $('select[name="id_institute"]').val(); // ← filter instansi
+                }
+            },
+            columns: [{
+                    data: null,
+                    name: 'rownum',
+                    orderable: false,
+                    searchable: false,
+                    render: function (data, type, row, meta) {
+                        return meta.row + meta.settings._iDisplayStart + 1;
                     }
                 },
-                columns: [{
-                        data: 'id',
-                        name: 'id'
-                    },
-                    {
-                        data: 'pembimbing',
-                        name: 'pembimbing',
-                    },
-                    {
-                        data: 'permohonan',
-                        name: 'permohonan',
-                    },
-                    {
-                        data: 'status_magang',
-                        name: 'status_magang'
-                    },
-                    {
-                        data: 'tgl_mulai',
-                        name: 'tgl_mulai'
-                    },
-                    {
-                        data: 'tgl_selesai',
-                        name: 'tgl_selesai'
-                    },
-                    {
-                        data: 'aksi',
-                        name: 'aksi',
-                        orderable: false,
-                        searchable: false
-                    }
-                ],
-                order: [
-                    [3, 'desc']
-                ],
-                language: {
-                    url: 'https://cdn.datatables.net/plug-ins/1.13.8/i18n/id.json'
-                }
-            });
-
-            $('#filterForm').find('select, input, textarea').on('change input', function() {
-                table.ajax.reload();
-            });
-
-            $('#resetBtn').on('click', function(e) {
-                e.preventDefault();
-                $('#filterForm')[0].reset();
-                table.ajax.reload();
-            });
+                {
+                    data: 'no_surat',
+                    name: 'no_surat'
+                }, // ← No. Surat
+                {
+                    data: 'instansi',
+                    name: 'instansi'
+                }, // ← Nama Instansi
+                {
+                    data: 'pembimbing',
+                    name: 'pembimbing'
+                },
+                {
+                    data: 'status_magang',
+                    name: 'status_magang'
+                },
+                {
+                    data: 'tgl_mulai',
+                    name: 'tgl_mulai'
+                },
+                {
+                    data: 'tgl_selesai',
+                    name: 'tgl_selesai'
+                },
+                {
+                    data: 'aksi',
+                    name: 'aksi',
+                    orderable: false,
+                    searchable: false
+                },
+            ],
+            order: [
+                [0, 'desc']
+            ],
+            language: {
+                url: 'https://cdn.datatables.net/plug-ins/1.13.8/i18n/id.json'
+            }
         });
-    </script>
+
+        $('#filterForm').find('select').on('change', () => table.ajax.reload());
+
+        function buildQuery() {
+            const params = {
+                status_magang: $('select[name="status_magang"]').val(),
+                id_institute: $('select[name="id_institute"]').val(),
+            };
+            Object.keys(params).forEach(k => {
+                if (!params[k]) delete params[k];
+            });
+            return new URLSearchParams(params).toString();
+        }
+
+        $('#btnExportExcel').on('click', function (e) {
+            e.preventDefault();
+            const qs = buildQuery();
+            window.location.href = '{{ route("admin.internship.export.excel") }}' + (qs ? '?' + qs :
+                '');
+        });
+        $('#btnExportPdf').on('click', function (e) {
+            e.preventDefault();
+            const qs = buildQuery();
+            window.location.href = '{{ route("admin.internship.export.pdf") }}' + (qs ? '?' + qs : '');
+        });
+    });
+
+</script>
 @endpush

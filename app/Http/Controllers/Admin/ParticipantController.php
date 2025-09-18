@@ -37,11 +37,11 @@ class ParticipantController extends Controller
         // Filter Search Custom
         if ($request->searchbox) {
             $search = $request->searchbox;
-            $query->where(function($q) use ($search) {
+            $query->where(function ($q) use ($search) {
                 $q->where('nama', 'like', "%{$search}%")
-                  ->orWhere('nisnim', 'like', "%{$search}%")
-                  ->orWhere('jurusan', 'like', "%{$search}%")
-                  ->orWhere('kontak_peserta', 'like', "%{$search}%");
+                    ->orWhere('nisnim', 'like', "%{$search}%")
+                    ->orWhere('jurusan', 'like', "%{$search}%")
+                    ->orWhere('kontak_peserta', 'like', "%{$search}%");
             });
         }
 
@@ -66,7 +66,8 @@ class ParticipantController extends Controller
 
     public function store(Request $request): RedirectResponse
     {
-        $request->validate([
+        $data = $request->validate([
+            'permohonan_id' => 'nullable|exists:permohonan,id',
             'nama' => 'required|string|max:50',
             'nik' => 'required|string|max:16',
             'nisnim' => 'required|string|max:20',
@@ -76,11 +77,19 @@ class ParticipantController extends Controller
             'keterangan' => 'nullable|string|max:255',
         ]);
 
-        Participant::create($request->only([
-            'nama','nik','nisnim','jenis_kelamin','jurusan','kontak_peserta','keterangan'
-        ]));
+        Participant::create($data);
 
-        return redirect()->route('admin.peserta.index')->with('sukses', 'Data Disimpan');
+        // Kalau datang dari halaman detail permohonan, balikin ke sana biar langsung kelihatan di tabel
+        if (!empty($data['permohonan_id'])) {
+            return redirect()
+                ->route('admin.permohonan.show', $data['permohonan_id'])
+                ->with('success', 'Peserta berhasil ditambahkan.');
+        }
+
+        // Kalau tambah independen dari tab Peserta, balik ke index peserta
+        return redirect()
+            ->route('admin.peserta.index')
+            ->with('sukses', 'Peserta berhasil ditambahkan.');
     }
 
     public function edit(Participant $participant): View
@@ -101,7 +110,13 @@ class ParticipantController extends Controller
         ]);
 
         $participant->update($request->only([
-            'nama','nik','nisnim','jenis_kelamin','jurusan','kontak_peserta','keterangan'
+            'nama',
+            'nik',
+            'nisnim',
+            'jenis_kelamin',
+            'jurusan',
+            'kontak_peserta',
+            'keterangan'
         ]));
 
         return redirect()->route('admin.peserta.index')->with('sukses', 'Data berhasil diperbarui');
@@ -121,11 +136,11 @@ class ParticipantController extends Controller
             $q->where('jenis_kelamin', $gender);
         }
         if ($search = $request->get('search')) {
-            $q->where(function($x) use ($search) {
-                $x->where('nama','like',"%{$search}%")
-                  ->orWhere('nisnim','like',"%{$search}%")
-                  ->orWhere('jurusan','like',"%{$search}%")
-                  ->orWhere('kontak_peserta','like',"%{$search}%");
+            $q->where(function ($x) use ($search) {
+                $x->where('nama', 'like', "%{$search}%")
+                    ->orWhere('nisnim', 'like', "%{$search}%")
+                    ->orWhere('jurusan', 'like', "%{$search}%")
+                    ->orWhere('kontak_peserta', 'like', "%{$search}%");
             });
         }
 
@@ -135,9 +150,9 @@ class ParticipantController extends Controller
         if ($search) $subtitle[] = 'Pencarian: "' . $search . '"';
         $subtitle = implode(' · ', $subtitle);
 
-        $pdf = Pdf::loadView('admin.peserta.pdf', compact('data','subtitle'))
-                  ->setPaper('a4', 'portrait');
+        $pdf = Pdf::loadView('admin.peserta.pdf', compact('data', 'subtitle'))
+            ->setPaper('a4', 'portrait');
 
-        return $pdf->download('peserta_'.now()->format('Ymd_His').'.pdf');
+        return $pdf->download('peserta_' . now()->format('Ymd_His') . '.pdf');
     }
 }
