@@ -49,6 +49,21 @@ class DashboardController extends Controller
             'series' => $transformedGenderCounts->values(), // -> [10, 15]
         ];
 
-        return view('admin.dashboard.index', compact('totalPemagang', 'permohonanPending', 'totalPenugasan', 'totalPengguna', 'greeting', 'genderChartData'));
+        $permohonanCounts = Permohonan::query()
+            // Hubungkan tabel permohonan dengan institutes berdasarkan id_institute
+            ->join('institutes', 'permohonan.id_institute', '=', 'institutes.id')
+            ->select('institutes.nama_instansi', DB::raw('count(permohonan.id) as total'))
+            ->groupBy('institutes.nama_instansi')
+            ->orderBy('total', 'desc')
+            ->take(5) // Ambil 5 instansi dengan permohonan terbanyak
+            ->pluck('total', 'nama_instansi');
+
+        // Siapkan data agar mudah dibaca oleh ApexCharts
+        $permohonanChartData = [
+            'labels' => $permohonanCounts->keys(),
+            'series' => $permohonanCounts->values(),
+        ];
+
+        return view('admin.dashboard.index', compact('totalPemagang', 'permohonanPending', 'totalPenugasan', 'totalPengguna', 'greeting', 'genderChartData', 'permohonanChartData'));
     }
 }
