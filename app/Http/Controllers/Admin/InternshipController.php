@@ -144,12 +144,33 @@ class InternshipController extends Controller
                     });
                 }
             })
+            ->filter(function ($query) use ($request) {
+                if ($request->has('search') && $request->search['value'] != '') {
+                    $keyword = $request->search['value'];
+                    $query->where(function ($q) use ($keyword) {
+                        $q->where('id', 'like', "%{$keyword}%")
+                            ->orWhere('status_magang', 'like', "%{$keyword}%")
+                          // Mencari di dalam relasi participants
+                            ->orWhereHas('participants', function ($subQuery) use ($keyword) {
+                                $subQuery->where('nama', 'like', "%{$keyword}%");
+                            })
+                          // Mencari di dalam relasi supervisor
+                            ->orWhereHas('supervisor', function ($subQuery) use ($keyword) {
+                                $subQuery->where('nama', 'like', "%{$keyword}%");
+                            });
+                    });
+                }
+            })
             ->rawColumns(['status_magang', 'aksi'])
             ->make(true);
     }
 
     public function create()
     {
+        $permohonan = Permohonan::with('institute')
+            ->where('status', 'Aktif')
+            ->orderBy('tgl_surat', 'desc')
+            ->get();
         $permohonan = Permohonan::with('institute')
             ->where('status', 'Aktif')
             ->orderBy('tgl_surat', 'desc')
@@ -173,6 +194,7 @@ class InternshipController extends Controller
 
         $internship = Internship::create([
             'id_pembimbing' => $validated['id_pembimbing'],
+            'id_permohonan' => $validated['id_permohonan'],
             'id_permohonan' => $validated['id_permohonan'],
             'status_magang' => 'Aktif',
         ]);
@@ -201,6 +223,10 @@ class InternshipController extends Controller
 
     public function edit(Internship $internship)
     {
+        $permohonan = Permohonan::with('institute')
+            ->where('status', 'Aktif')
+            ->orderBy('tgl_surat', 'desc')
+            ->get();
         $permohonan = Permohonan::with('institute')
             ->where('status', 'Aktif')
             ->orderBy('tgl_surat', 'desc')
