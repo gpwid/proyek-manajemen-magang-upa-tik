@@ -141,24 +141,23 @@
 @endsection
 @push('scripts')
     <script>
-        // Ambil data yang kita kirim dari controller
         var genderData = @json($genderChartData);
 
         var options = {
-            // Tentukan data series (angka) dan labels (nama kategori)
+
             series: genderData.series,
             labels: genderData.labels,
 
-            // Tipe chart yang kita inginkan
+
             chart: {
                 type: 'pie',
-                height: 250 // Atur tinggi chart
+                height: 250
             },
 
-            // Atur warna untuk setiap bagian pie
-            colors: ['#d63384', '#4e73df'], // Biru untuk Laki-laki, Kuning untuk Perempuan
 
-            // Pengaturan tambahan agar terlihat bagus
+            colors: ['#4e73df', '#d63384'],
+
+
             responsive: [{
                 breakpoint: 480,
                 options: {
@@ -172,7 +171,6 @@
             }]
         };
 
-        // Buat instance chart baru dan render di dalam div #genderPieChart
         var chart = new ApexCharts(document.querySelector("#genderPieChart"), options);
         chart.render();
 
@@ -189,12 +187,12 @@
             },
             plotOptions: {
                 bar: {
-                    horizontal: true, // Membuatnya menjadi bar chart horizontal
+                    horizontal: true,
                     borderRadius: 4
                 }
             },
             dataLabels: {
-                enabled: true // Menampilkan angka di dalam batang
+                enabled: true
             },
             xaxis: {
                 categories: permohonanData.labels,

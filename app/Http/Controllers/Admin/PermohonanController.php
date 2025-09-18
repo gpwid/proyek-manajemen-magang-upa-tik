@@ -2,17 +2,17 @@
 
 namespace App\Http\Controllers\Admin;
 
-use Illuminate\View\View;
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use App\Models\Permohonan;
-use App\Models\Institute;
-use Carbon\Carbon;
-use Illuminate\Support\Facades\Storage;
-use Yajra\DataTables\Facades\DataTables;
-use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\PermohonanExport;
+use App\Http\Controllers\Controller;
+use App\Models\Institute;
+use App\Models\Permohonan;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Carbon\Carbon;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\View\View;
+use Maatwebsite\Excel\Facades\Excel;
+use Yajra\DataTables\Facades\DataTables;
 
 class PermohonanController extends Controller
 {
@@ -22,6 +22,7 @@ class PermohonanController extends Controller
         // return view('admin.permohonan.show', compact('permohonan'));
 
         $permohonan->load(['institute', 'participants']);
+
         return view('admin.permohonan.show', compact('permohonan'));
     }
 
@@ -42,6 +43,7 @@ class PermohonanController extends Controller
     public function indexTambah()
     {
         $data = \App\Models\Institute::all();
+
         return view('admin.permohonan.tambah', compact('data'));
     }
 
@@ -74,9 +76,9 @@ class PermohonanController extends Controller
             ->addColumn('instansi', function ($p) {
                 return $p->institute->nama_instansi ?? '-';
             })
-            ->editColumn('tgl_suratmasuk', fn($p) => $p->tgl_surat?->format('d-m-Y'))
-            ->editColumn('tgl_mulai', fn($p) => $p->tgl_mulai?->format('d-m-Y'))
-            ->editColumn('tgl_selesai', fn($p) => $p->tgl_selesai?->format('d-m-Y'))
+            ->editColumn('tgl_suratmasuk', fn ($p) => $p->tgl_surat?->format('d-m-Y'))
+            ->editColumn('tgl_mulai', fn ($p) => $p->tgl_mulai?->format('d-m-Y'))
+            ->editColumn('tgl_selesai', fn ($p) => $p->tgl_selesai?->format('d-m-Y'))
             ->editColumn('status', function ($p) {
                 $cls = match ($p->status) {
                     'Aktif' => 'bg-success text-white',
@@ -84,18 +86,19 @@ class PermohonanController extends Controller
                     'Selesai' => 'bg-primary',
                     default => 'bg-danger'
                 };
+
                 return "<span class='badge $cls'>$p->status</span>";
             })
             ->addColumn('aksi', function ($p) {
                 return "<div class='flex gap-2'>
-                <a href='" . route('admin.permohonan.edit', $p->id) . "'
+                <a href='".route('admin.permohonan.edit', $p->id)."'
                    class='btn btn-sm btn-primary text-white'
                    data-bs-toggle='tooltip'
                    data-bs-placement='top'
                    title='Edit'>
                     <i class='fa-solid fa-pen-to-square'></i> Edit
                 </a>
-                <a href='" . route('admin.permohonan.show', $p->id) . "'
+                <a href='".route('admin.permohonan.show', $p->id)."'
                    class='btn btn-sm btn-success text-white'
                    data-bs-toggle='tooltip'
                    data-bs-placement='top'
@@ -120,23 +123,23 @@ class PermohonanController extends Controller
     {
         // Form edit permohonan
         $searchinstitutes = Institute::orderBy('nama_instansi')->get();
+
         return view('admin.permohonan.edit', compact('permohonan', 'searchinstitutes'));
     }
-
 
     public function update(Request $request, Permohonan $permohonan)
     {
         // Validasi input
         $validated = $request->validate([
-            'no_surat'          => 'required|string|max:100|unique:permohonan,no_surat',
-            'tgl_surat'          => 'required|date',
-            'id_institute'        => 'required|exists:institutes,id',
-            'tgl_mulai'          => 'required|date',
-            'tgl_selesai'        => 'required|date|after_or_equal:tgl_mulai',
+            'no_surat' => 'required|string|max:100|unique:permohonan,no_surat',
+            'tgl_surat' => 'required|date',
+            'id_institute' => 'required|exists:institutes,id',
+            'tgl_mulai' => 'required|date',
+            'tgl_selesai' => 'required|date|after_or_equal:tgl_mulai',
             'pembimbing_sekolah' => 'required|string|max:255',
-            'kontak_pembimbing'  => 'required|string|max:13',
-            'jenis_magang'       => 'required|in:Mandiri,MBKM,Sekolah',
-            'file_permohonan'    => 'nullable|file|mimes:pdf|max:5120', // EDIT: tidak wajib
+            'kontak_pembimbing' => 'required|string|max:13',
+            'jenis_magang' => 'required|in:Mandiri,MBKM,Sekolah',
+            'file_permohonan' => 'nullable|file|mimes:pdf|max:5120', // EDIT: tidak wajib
         ]);
 
         // Cari institute terkait
@@ -155,16 +158,16 @@ class PermohonanController extends Controller
 
         // Update data permohonan
         $permohonan->update([
-            'id_institute'        => $institute->id,
-            'no_surat'          => $validated['no_surat'],
-            'tgl_surat'          => $validated['tgl_surat'],
-            'tgl_mulai'          => $validated['tgl_mulai'],
-            'tgl_selesai'        => $validated['tgl_selesai'],
+            'id_institute' => $institute->id,
+            'no_surat' => $validated['no_surat'],
+            'tgl_surat' => $validated['tgl_surat'],
+            'tgl_mulai' => $validated['tgl_mulai'],
+            'tgl_selesai' => $validated['tgl_selesai'],
             'pembimbing_sekolah' => $validated['pembimbing_sekolah'],
-            'kontak_pembimbing'  => $validated['kontak_pembimbing'],
-            'jenis_magang'       => $validated['jenis_magang'],
-            'status'             => $permohonan->status,
-            'file_permohonan'    => $path,
+            'kontak_pembimbing' => $validated['kontak_pembimbing'],
+            'jenis_magang' => $validated['jenis_magang'],
+            'status' => $permohonan->status,
+            'file_permohonan' => $path,
         ]);
 
         // Redirect dengan pesan sukses
@@ -177,7 +180,7 @@ class PermohonanController extends Controller
 
         $validated = $request->validate(
             [
-                'no_surat'          => 'required|string|max:100|unique:permohonan,no_surat',
+                'no_surat' => 'required|string|max:100|unique:permohonan,no_surat',
                 'tgl_surat' => 'required|date',
                 'id_institute' => 'required|exists:institutes,id',
                 'tgl_mulai' => 'required|date',
@@ -189,24 +192,24 @@ class PermohonanController extends Controller
             ],
             [
                 // required
-                'no_surat.required'            => 'Nomor surat wajib diisi.',
-                'no_surat.unique'              => 'Nomor surat sudah ada dalam database.',
-                'tgl_surat.required'           => 'Tanggal surat wajib diisi.',
-                'id_institute.required'         => 'Silakan pilih instansi.',
-                'tgl_mulai.required'           => 'Tanggal mulai wajib diisi.',
-                'tgl_selesai.required'         => 'Tanggal selesai wajib diisi.',
-                'pembimbing_sekolah.required'  => 'Nama pembimbing sekolah wajib diisi.',
-                'kontak_pembimbing.required'   => 'Kontak pembimbing wajib diisi.',
-                'tgl_suratmasuk.required'      => 'Tanggal surat masuk wajib diisi.',
-                'jenis_magang.required'        => 'Jenis magang wajib dipilih.',
-                'file_permohonan.required'     => 'File permohonan wajib diunggah.',
+                'no_surat.required' => 'Nomor surat wajib diisi.',
+                'no_surat.unique' => 'Nomor surat sudah ada dalam database.',
+                'tgl_surat.required' => 'Tanggal surat wajib diisi.',
+                'id_institute.required' => 'Silakan pilih instansi.',
+                'tgl_mulai.required' => 'Tanggal mulai wajib diisi.',
+                'tgl_selesai.required' => 'Tanggal selesai wajib diisi.',
+                'pembimbing_sekolah.required' => 'Nama pembimbing sekolah wajib diisi.',
+                'kontak_pembimbing.required' => 'Kontak pembimbing wajib diisi.',
+                'tgl_suratmasuk.required' => 'Tanggal surat masuk wajib diisi.',
+                'jenis_magang.required' => 'Jenis magang wajib dipilih.',
+                'file_permohonan.required' => 'File permohonan wajib diunggah.',
 
                 // rule lain (opsional)
-                'tgl_selesai.after_or_equal'   => 'Tanggal selesai tidak boleh sebelum tanggal mulai.',
-                'file_permohonan.mimes'        => 'File permohonan harus berformat PDF.',
-                'file_permohonan.max'          => 'Ukuran file maksimal 5 MB.',
-                'id_instansi.exists'           => 'Instansi yang dipilih tidak ditemukan.',
-                'tgl_surat.date'               => 'Format tanggal surat tidak valid.',
+                'tgl_selesai.after_or_equal' => 'Tanggal selesai tidak boleh sebelum tanggal mulai.',
+                'file_permohonan.mimes' => 'File permohonan harus berformat PDF.',
+                'file_permohonan.max' => 'Ukuran file maksimal 5 MB.',
+                'id_instansi.exists' => 'Instansi yang dipilih tidak ditemukan.',
+                'tgl_surat.date' => 'Format tanggal surat tidak valid.',
             ],
         );
 
@@ -216,7 +219,7 @@ class PermohonanController extends Controller
 
         Permohonan::create([
             'id_institute' => $institute->id,
-            'no_surat'     => $validated['no_surat'],
+            'no_surat' => $validated['no_surat'],
             'tgl_surat' => $validated['tgl_surat'],
             'tgl_mulai' => $validated['tgl_mulai'],
             'tgl_selesai' => $validated['tgl_selesai'],
@@ -253,19 +256,20 @@ class PermohonanController extends Controller
 
         // Cek apakah transisi status diizinkan (cari $to di dalam array $allowed)
         if (! in_array($to, $allowed, true)) {
-            return back()->withErrors('Transisi status tidak diizinkan dari ' . $permohonan->status . ' ke ' . $to);
+            return back()->withErrors('Transisi status tidak diizinkan dari '.$permohonan->status.' ke '.$to);
         }
 
         // Update status permohonan
         $permohonan->update(['status' => $to]);
 
         // Redirect dengan pesan sukses
-        return back()->with('success', 'Status permohonan berhasil diperbarui menjadi ' . $to);
+        return back()->with('success', 'Status permohonan berhasil diperbarui menjadi '.$to);
     }
 
     public function exportExcel(Request $request)
     {
-        $filename = 'permohonan_' . now()->format('Ymd_His') . '.xlsx';
+        $filename = 'permohonan_'.now()->format('Ymd_His').'.xlsx';
+
         return Excel::download(new PermohonanExport($request), $filename);
         if ($request->filled('id_institute')) {
             $q->where('id_institute', $request->id_institute);
@@ -300,19 +304,19 @@ class PermohonanController extends Controller
         // Build subtitle based on active filters
         $subtitle = [];
         if ($request->q) {
-            $subtitle[] = 'Pencarian: "' . $request->q . '"';
+            $subtitle[] = 'Pencarian: "'.$request->q.'"';
         }
         if ($request->status) {
-            $subtitle[] = 'Status: ' . $request->status;
+            $subtitle[] = 'Status: '.$request->status;
         }
         if ($request->jenis_magang) {
-            $subtitle[] = 'Jenis Magang: ' . $request->jenis_magang;
+            $subtitle[] = 'Jenis Magang: '.$request->jenis_magang;
         }
         $subtitle = implode(' · ', $subtitle);
 
         $pdf = Pdf::loadView('admin.permohonan.pdf', compact('data', 'subtitle'))
             ->setPaper('a4', 'landscape');
 
-        return $pdf->download('permohonan_' . now()->format('Ymd_His') . '.pdf');
+        return $pdf->download('permohonan_'.now()->format('Ymd_His').'.pdf');
     }
 }
