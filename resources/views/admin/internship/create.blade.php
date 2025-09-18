@@ -160,7 +160,7 @@
         $('.select2').select2({
             placeholder: "-- Pilih --",
             allowClear: true,
-            width: '100%' // supaya select2 ikut lebar form-control
+            width: '100%'
         });
     });
 
