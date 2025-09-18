@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\Instansi;
 use App\Models\Internship;
 use App\Models\Participant;
 use App\Models\Permohonan;
@@ -54,21 +53,22 @@ class InternshipController extends Controller
             $query->where('status_magang', $request->status_magang);
         }
 
-
         // Query untuk DataTables
         return DataTables::of($query)
-            ->editColumn('tgl_mulai', fn($p) => optional($p->permohonan->tgl_mulai)->format('d-m-Y'))
-            ->editColumn('tgl_selesai', fn($p) => optional($p->permohonan->tgl_selesai)->format('d-m-Y'))
-            ->addColumn('pembimbing', fn($p) => optional($p->supervisor)->nama ?? '-')
-            ->addColumn('permohonan', fn($p) => optional($p->permohonan)->id ?? '-')
-            ->addColumn('peserta',    fn($p) => optional($p->participant)->nama ?? '-')
+            ->editColumn('tgl_mulai', fn ($p) => optional($p->permohonan->tgl_mulai)->format('d-m-Y'))
+            ->editColumn('tgl_selesai', fn ($p) => optional($p->permohonan->tgl_selesai)->format('d-m-Y'))
+            ->addColumn('pembimbing', fn ($p) => optional($p->supervisor)->nama ?? '-')
+            ->addColumn('permohonan', fn ($p) => optional($p->permohonan)->id ?? '-')
+            ->addColumn('peserta', fn ($p) => optional($p->participant)->nama ?? '-')
             ->editColumn('status_magang', function ($p) {
-                $cls = $p->status_magang == 'Aktif' ? 'bg-success' : 'bg-secondary';
+                $cls = $p->status_magang == 'Aktif' ? 'bg-success text-white' : 'bg-secondary';
+
                 return "<span class='badge $cls'>$p->status_magang</span>";
             })
             ->addColumn('aksi', function ($p) {
                 $url1 = route('admin.internship.edit', $p->id);
                 $url2 = route('admin.internship.show', $p->id);
+
                 return "<div class='flex gap-2'>
                         <a href='$url1' class='btn btn-sm btn-primary text-white' data-bs-toggle='tooltip'
         data-bs-placement='top' title='Edit'>
@@ -80,18 +80,37 @@ class InternshipController extends Controller
                         </a>
                         </div>";
             })
+            ->filter(function ($query) use ($request) {
+                if ($request->has('search') && $request->search['value'] != '') {
+                    $keyword = $request->search['value'];
+                    // Grouping kondisi pencarian dengan where() closure
+                    $query->where(function ($q) use ($keyword) {
+                        $q->where('id', 'like', "%{$keyword}%")
+                            ->orWhere('status_magang', 'like', "%{$keyword}%")
+                          // Mencari di dalam relasi participants
+                            ->orWhereHas('participants', function ($subQuery) use ($keyword) {
+                                $subQuery->where('nama', 'like', "%{$keyword}%");
+                            })
+                          // Mencari di dalam relasi supervisor
+                            ->orWhereHas('supervisor', function ($subQuery) use ($keyword) {
+                                $subQuery->where('nama', 'like', "%{$keyword}%");
+                            });
+                    });
+                }
+            }, true)
             ->rawColumns(['status_magang', 'aksi'])
             ->make(true);
     }
 
     public function create()
     {
-        $permohonan  = Permohonan::with('institute')
-        ->where('status', 'Aktif')
-        ->orderBy('tgl_surat', 'desc')
-        ->get();
+        $permohonan = Permohonan::with('institute')
+            ->where('status', 'Aktif')
+            ->orderBy('tgl_surat', 'desc')
+            ->get();
         $supervisors = Supervisor::all();
         $participants = Participant::all();
+
         return view('admin.internship.create', compact('permohonan', 'supervisors', 'participants'));
     }
 
@@ -105,8 +124,8 @@ class InternshipController extends Controller
                     $query->where('status', 'Aktif');
                 })],
                 'id_pembimbing' => 'required|integer|exists:supervisors,id',
-                'id_peserta'    => 'required|array',
-                'id_peserta.*'  => 'integer|exists:participants,id',
+                'id_peserta' => 'required|array',
+                'id_peserta.*' => 'integer|exists:participants,id',
             ],
             [
                 // Menambahkan pesan error kustom agar lebih informatif
@@ -116,7 +135,7 @@ class InternshipController extends Controller
 
         $internship = Internship::create([
             'id_pembimbing' => $validated['id_pembimbing'],
-            'id_permohonan'  => $validated['id_permohonan'],
+            'id_permohonan' => $validated['id_permohonan'],
             'status_magang' => 'Aktif',
         ]);
 
@@ -128,10 +147,10 @@ class InternshipController extends Controller
 
     public function edit(Internship $internship)
     {
-        $permohonan  = Permohonan::with('institute')
-        ->where('status', 'Aktif')
-        ->orderBy('tgl_surat', 'desc')
-        ->get();
+        $permohonan = Permohonan::with('institute')
+            ->where('status', 'Aktif')
+            ->orderBy('tgl_surat', 'desc')
+            ->get();
         $supervisors = Supervisor::orderBy('nama')->get();
         $participants = Participant::orderBy('nama')->get();
 
@@ -143,7 +162,6 @@ class InternshipController extends Controller
         ));
     }
 
-
     public function update(Request $request, Internship $internship)
     {
         // Validasi input
@@ -154,8 +172,8 @@ class InternshipController extends Controller
                 })],
                 'id_pembimbing' => 'required|integer|exists:supervisors,id',
                 'status_magang' => ['required', Rule::in(['Aktif', 'Nonaktif'])],
-                'id_peserta'    => 'required|array',
-                'id_peserta.*'  => 'integer|exists:participants,id',
+                'id_peserta' => 'required|array',
+                'id_peserta.*' => 'integer|exists:participants,id',
             ],
             [
                 'id_permohonan.exists' => 'Permohonan yang dipilih harus memiliki status Aktif.',
@@ -164,10 +182,10 @@ class InternshipController extends Controller
 
         // Update data permohonan
         $internship->update([
-            'id_permohonan'        => $validated['id_permohonan'],
-            'id_peserta'           => $validated['id_peserta'],
-            'id_pembimbing'          => $validated['id_pembimbing'],
-            'status'             => $validated['status_magang'],
+            'id_permohonan' => $validated['id_permohonan'],
+            'id_peserta' => $validated['id_peserta'],
+            'id_pembimbing' => $validated['id_pembimbing'],
+            'status' => $validated['status_magang'],
         ]);
 
         $internship->participants()->sync($validated['id_peserta']);

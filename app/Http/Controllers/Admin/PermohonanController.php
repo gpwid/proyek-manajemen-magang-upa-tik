@@ -126,7 +126,7 @@ class PermohonanController extends Controller
             ->editColumn('tgl_selesai', fn($p) => $p->tgl_selesai?->format('d-m-Y'))
             ->editColumn('status', function ($p) {
                 $cls = match ($p->status) {
-                    'Aktif' => 'bg-success',
+                    'Aktif' => 'bg-success text-white',
                     'Proses' => 'bg-warning text-dark',
                     'Selesai' => 'bg-primary',
                     default => 'bg-danger'
