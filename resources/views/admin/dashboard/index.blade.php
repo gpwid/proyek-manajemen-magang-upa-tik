@@ -94,7 +94,44 @@
                 </div>
             </div>
             <div class="col-lg-6 mb-4">
-                {{-- Anda bisa menambahkan card lain di sini nanti --}}
+                <div class="card shadow h-100">
+                    <div class="card-header py-3">
+                        <h6 class="m-0 font-weight-bold text-primary"><i class="fa-solid fa-bolt"></i> Akses Cepat</h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="d-grid gap-3">
+                            {{-- Tombol 1: Tambah Permohonan Baru --}}
+                            <a href="{{ route('admin.permohonan.tambah') }}" class="btn btn-primary btn-lg btn-icon-split">
+                                <span class="text"><i class="fas fa-file-alt"></i> Buat Permohonan Baru</span>
+                            </a>
+
+                            {{-- Tombol 2: Tambah Peserta Baru --}}
+                            <a href="{{ route('admin.peserta.create') }}" class="btn btn-success btn-lg btn-icon-split">
+                                <span class="text"><i class="fas fa-user-plus"></i> Tambah Peserta Baru</span>
+                            </a>
+
+                            {{-- Tombol 3: Kelola Data Magang --}}
+                            <a href="{{ route('admin.internship.index') }}" class="btn btn-info btn-lg btn-icon-split">
+                                <span class="text"><i class="fas fa-tasks"></i> Kelola Penugasan Magang</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mt-1">
+            <div class="col-12 mb-4">
+                <div class="card shadow h-100">
+                    <div class="card-header py-3">
+                        <h6 class="m-0 font-weight-bold text-primary">
+                            <i class="fas fa-school"></i> 5 Instansi dengan Permohonan Terbanyak
+                        </h6>
+                    </div>
+                    <div class="card-body">
+                        <div id="permohonanBarChart"></div>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -138,5 +175,43 @@
         // Buat instance chart baru dan render di dalam div #genderPieChart
         var chart = new ApexCharts(document.querySelector("#genderPieChart"), options);
         chart.render();
+
+        var permohonanData = @json($permohonanChartData);
+
+        var barChartOptions = {
+            series: [{
+                name: 'Jumlah Pemagang',
+                data: permohonanData.series
+            }],
+            chart: {
+                type: 'bar',
+                height: 350
+            },
+            plotOptions: {
+                bar: {
+                    horizontal: true, // Membuatnya menjadi bar chart horizontal
+                    borderRadius: 4
+                }
+            },
+            dataLabels: {
+                enabled: true // Menampilkan angka di dalam batang
+            },
+            xaxis: {
+                categories: permohonanData.labels,
+                title: {
+                    text: 'Jumlah Permohonan'
+                }
+            },
+            tooltip: {
+                y: {
+                    formatter: function(val) {
+                        return val + " permohonan"
+                    }
+                }
+            }
+        };
+
+        var barChart = new ApexCharts(document.querySelector("#permohonanBarChart"), barChartOptions);
+        barChart.render();
     </script>
 @endpush
