@@ -130,7 +130,6 @@ class InternshipController extends Controller
             ->filter(function ($query) use ($request) {
                 if ($request->has('search') && $request->search['value'] != '') {
                     $keyword = $request->search['value'];
-                    // Grouping kondisi pencarian dengan where() closure
                     $query->where(function ($q) use ($keyword) {
                         $q->where('id', 'like', "%{$keyword}%")
                             ->orWhere('status_magang', 'like', "%{$keyword}%")
@@ -144,7 +143,7 @@ class InternshipController extends Controller
                             });
                     });
                 }
-            }, true)
+            })
             ->rawColumns(['status_magang', 'aksi'])
             ->make(true);
     }
