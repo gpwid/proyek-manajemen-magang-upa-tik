@@ -39,60 +39,6 @@ class PermohonanController extends Controller
         return view('admin.permohonan.index', compact('searchinstitutes', 'totalAktif', 'totalProses', 'totalSelesai', 'totalTolak', 'totalSemua'));
     }
 
-    // public function data(Request $request)
-    // {
-    //     // Endpoint untuk DataTables Yajra
-    //     $query = Permohonan::query();
-
-    //     // Filter berdasarkan query parameters
-    //     if ($request->filled('q')) {
-    //         $q = $request->q;
-    //         $query->where(function ($x) use ($q) {
-    //             $x->where('institute', 'like', "%$q%")
-    //                 ->orWhere('pembimbing_sekolah', 'like', "%$q%");
-    //         });
-    //     }
-    //     if ($request->filled('status')) {
-    //         $query->where('status', $request->status);
-    //     }
-    //     if ($request->filled('jenis_magang')) {
-    //         $query->where('jenis_magang', $request->jenis_magang);
-    //     }
-
-
-    //     // Query untuk DataTables
-    //     return DataTables::of($query)
-    //         ->editColumn('tgl_surat', fn($p) => optional($p->tgl_surat)->format('d-m-Y'))
-    //         ->editColumn('tgl_mulai', fn($p) => optional($p->tgl_mulai)->format('d-m-Y'))
-    //         ->editColumn('tgl_selesai', fn($p) => optional($p->tgl_selesai)->format('d-m-Y'))
-    //         ->editColumn('status', function ($p) {
-    //             $cls = $p->status == 'Aktif' ? 'bg-success' : ($p->status == 'Proses' ? 'bg-warning text-dark' : ($p->status == 'Selesai' ? 'bg-primary' : 'bg-danger'));
-    //             return "<span class='badge $cls'>$p->status</span>";
-    //         })
-    //         ->addColumn('aksi', function ($p) {
-    //             $url1 = route('admin.permohonan.edit', $p->id);
-    //             $url2 = route('admin.permohonan.show', $p->id);
-    //             return "<div class='flex gap-2'>
-    //                     <a href='$url1' class='btn btn-sm btn-primary text-white' data-bs-toggle='tooltip'
-    //     data-bs-placement='top' title='Edit'>
-    //                         <i class='fa-solid fa-pen-to-square'></i> Edit
-    //                     </a>
-    //                     <a href='$url2' class='btn btn-sm btn-success text-white' data-bs-toggle='tooltip'
-    //     data-bs-placement='top' title='Detail'>
-    //                         <i class='fa-solid fa-eye'></i> Detail
-    //                     </a>
-    //                     </div>";
-    //         })
-    //         ->setRowClass(function ($p) {
-    //             if ($p->status == 'Aktif') return 'table-success';
-    //             if ($p->status == 'Proses') return 'table-warning';
-    //             if ($p->status == 'Selesai') return 'table-primary';
-    //             return 'table-danger';
-    //         })
-    //         ->rawColumns(['status', 'aksi'])
-    //         ->make(true);
-    // }
-
     public function indexTambah()
     {
         $data = \App\Models\Institute::all();

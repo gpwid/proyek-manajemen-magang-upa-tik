@@ -123,8 +123,8 @@
                 <thead>
                     <tr>
                         <th>No.</th>
-                        <th>No. Surat</th> {{-- ganti dari ID Permohonan --}}
-                        <th>Instansi</th> {{-- ganti dari ID Instansi --}}
+                        <th>No. Surat</th>
+                        <th>Instansi</th>
                         <th>Pembimbing</th>
                         <th>Status</th>
                         <th>Tanggal Mulai</th>

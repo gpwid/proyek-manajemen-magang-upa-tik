@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Exports;
 
 use App\Models\Permohonan;
@@ -29,9 +30,9 @@ class PermohonanExport implements FromCollection, WithHeadings, WithMapping
             ]);
 
         if ($this->request->filled('q')) {
-            $query->where(function($q) {
+            $query->where(function ($q) {
                 $q->where('pembimbing_sekolah', 'like', "%{$this->request->q}%")
-                  ->orWhere('kontak_pembimbing', 'like', "%{$this->request->q}%");
+                    ->orWhere('kontak_pembimbing', 'like', "%{$this->request->q}%");
             });
         }
 
@@ -62,41 +63,22 @@ class PermohonanExport implements FromCollection, WithHeadings, WithMapping
         ];
     }
 
-    // public function map($permohonan): array
-    // {
-    //     static $no = 0;
-    //     $no++;
-
-    //     return [
-    //         $no,
-    //         $permohonan->tgl_surat?->format('d/m/Y'),
-    //         $permohonan->tgl_suratmasuk?->format('d/m/Y'),
-    //         $permohonan->institute?->nama ?? '-',
-    //         $permohonan->jenis_magang,
-    //         $permohonan->pembimbing_sekolah,
-    //         $permohonan->kontak_pembimbing,
-    //         $permohonan->tgl_mulai?->format('d/m/Y'),
-    //         $permohonan->tgl_selesai?->format('d/m/Y'),
-    //         $permohonan->status
-    //     ];
-    // }
-
     public function map($permohonan): array
-{
-    static $no = 0;
-    $no++;
+    {
+        static $no = 0;
+        $no++;
 
-    return [
-        $no,
-        $permohonan->tgl_surat?->format('d/m/Y'),
-        $permohonan->tgl_suratmasuk?->format('d/m/Y'),
-        $permohonan->institute->nama_instansi ?? '-', // Changed from nama to nama_instansi
-        $permohonan->jenis_magang,
-        $permohonan->pembimbing_sekolah,
-        $permohonan->kontak_pembimbing,
-        $permohonan->tgl_mulai?->format('d/m/Y'),
-        $permohonan->tgl_selesai?->format('d/m/Y'),
-        $permohonan->status
-    ];
-}
+        return [
+            $no,
+            $permohonan->tgl_surat?->format('d/m/Y'),
+            $permohonan->tgl_suratmasuk?->format('d/m/Y'),
+            $permohonan->institute->nama_instansi ?? '-', // Changed from nama to nama_instansi
+            $permohonan->jenis_magang,
+            $permohonan->pembimbing_sekolah,
+            $permohonan->kontak_pembimbing,
+            $permohonan->tgl_mulai?->format('d/m/Y'),
+            $permohonan->tgl_selesai?->format('d/m/Y'),
+            $permohonan->status
+        ];
+    }
 }

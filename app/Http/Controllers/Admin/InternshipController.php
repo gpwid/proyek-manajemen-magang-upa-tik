@@ -145,37 +145,6 @@ class InternshipController extends Controller
         return view('admin.internship.create', compact('permohonan', 'supervisors', 'participants'));
     }
 
-    // public function store(Request $request)
-    // {
-
-    //     $validated = $request->validate(
-    //         [
-    //             // Hanya izinkan permohonan yang ada di tabel 'permohonan' DAN statusnya 'Aktif'
-    //             'id_permohonan' => ['required', 'integer', Rule::exists('permohonan', 'id')->where(function ($query) {
-    //                 $query->where('status', 'Aktif');
-    //             })],
-    //             'id_pembimbing' => 'required|integer|exists:supervisors,id',
-    //             'id_peserta'    => 'required|array',
-    //             'id_peserta.*'  => 'integer|exists:participants,id',
-    //         ],
-    //         [
-    //             // Menambahkan pesan error kustom agar lebih informatif
-    //             'id_permohonan.exists' => 'Permohonan yang dipilih harus memiliki status Aktif.',
-    //         ]
-    //     );
-
-    //     $internship = Internship::create([
-    //         'id_pembimbing' => $validated['id_pembimbing'],
-    //         'id_permohonan'  => $validated['id_permohonan'],
-    //         'status_magang' => 'Aktif',
-    //     ]);
-
-    //     $internship->participants()->attach($validated['id_peserta']);
-
-    //     return redirect()->route('admin.internship.index')
-    //         ->with('success', 'Data magang berhasil ditambahkan.');
-    // }
-
     public function store(Request $request)
     {
         $validated = $request->validate([
@@ -203,7 +172,17 @@ class InternshipController extends Controller
             ->with('success', 'Data magang berhasil ditambahkan.');
     }
 
+    public function show(Internship $internship): \Illuminate\View\View
+    {
+        $internship->load([
+            'permohonan:id,id_institute,no_surat,tgl_mulai,tgl_selesai,jenis_magang',
+            'permohonan.institute:id,nama_instansi',
+            'supervisor:id,nama,nip',
+            'participants:id,nama,nik,nisnim,jenis_kelamin,jurusan,kontak_peserta',
+        ]);
 
+        return view('admin.internship.detail', compact('internship'));
+    }
 
     public function edit(Internship $internship)
     {
@@ -221,78 +200,6 @@ class InternshipController extends Controller
             'participants'
         ));
     }
-
-
-    // public function update(Request $request, Internship $internship)
-    // {
-    //     // Validasi input
-    //     $validated = $request->validate(
-    //         [
-    //             'id_permohonan' => ['required', 'integer', Rule::exists('permohonan', 'id')->where(function ($query) {
-    //                 $query->where('status', 'Aktif');
-    //             })],
-    //             'id_pembimbing' => 'required|integer|exists:supervisors,id',
-    //             'status_magang' => ['required', Rule::in(['Aktif', 'Nonaktif'])],
-    //             'id_peserta'    => 'required|array',
-    //             'id_peserta.*'  => 'integer|exists:participants,id',
-    //         ],
-    //         [
-    //             'id_permohonan.exists' => 'Permohonan yang dipilih harus memiliki status Aktif.',
-    //         ]
-    //     );
-
-    //     // Update data permohonan
-    //     $internship->update([
-    //         'id_permohonan'        => $validated['id_permohonan'],
-    //         'id_peserta'           => $validated['id_peserta'],
-    //         'id_pembimbing'          => $validated['id_pembimbing'],
-    //         'status'             => $validated['status_magang'],
-    //     ]);
-
-    //     $internship->participants()->sync($validated['id_peserta']);
-
-    //     // Redirect dengan pesan sukses
-    //     return redirect()->route('admin.internship.index')
-    //         ->with('success', 'Data magang berhasil diperbarui.');
-    // }
-
-    // public function update(Request $request, Internship $internship)
-    // {
-    //     $validated = $request->validate([
-    //         'id_permohonan' => ['required', 'integer', Rule::exists('permohonan', 'id')->where(fn($q) => $q->where('status', 'Aktif'))],
-    //         'id_pembimbing' => 'required|integer|exists:supervisors,id',
-    //         'status_magang' => ['required', Rule::in(['Aktif', 'Nonaktif'])],
-    //         'id_peserta'    => 'required|array',
-    //         'id_peserta.*'  => 'integer|exists:participants,id',
-    //     ], [
-    //         'id_permohonan.exists' => 'Permohonan yang dipilih harus memiliki status Aktif.',
-    //     ]);
-
-    //     $oldPermohonanId = $internship->id_permohonan;
-    //     $beforeIds = $internship->participants()->pluck('participants.id')->all();
-
-    //     $internship->update([
-    //         'id_permohonan' => $validated['id_permohonan'],
-    //         'id_pembimbing' => $validated['id_pembimbing'],
-    //         'status_magang' => $validated['status_magang'],
-    //     ]);
-
-    //     $internship->participants()->sync($validated['id_peserta']);
-
-    //     // Set permohonan_id untuk peserta terpilih
-    //     \App\Models\Participant::whereIn('id', $validated['id_peserta'])
-    //         ->update(['permohonan_id' => $validated['id_permohonan']]);
-
-    //     // Lepaskan dari permohonan lama jika dikeluarkan
-    //     $removed = array_diff($beforeIds, $validated['id_peserta']);
-    //     if (!empty($removed)) {
-    //         \App\Models\Participant::whereIn('id', $removed)
-    //             ->where('permohonan_id', $oldPermohonanId)
-    //             ->update(['permohonan_id' => null]);
-    //     }
-
-    //     return redirect()->route('admin.internship.index')->with('success', 'Data magang berhasil diperbarui.');
-    // }
 
     public function update(Request $request, Internship $internship)
     {
