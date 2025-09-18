@@ -3,12 +3,52 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
+use App\Models\Participant;
+use App\Models\Permohonan;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
+use Illuminate\View\View;
 
 class DashboardController extends Controller
 {
-    public function index()
+    public function index(): View
     {
-        return view('admin.dashboard.index');
+
+        $totalPemagang = Participant::count();
+        $permohonanPending = Permohonan::where('status', 'Proses')->count();
+        $totalPenugasan = 12;
+        $totalPengguna = 133;
+
+        $hour = Carbon::now()->setTimezone('Asia/Jakarta')->hour;
+        $greeting = '';
+
+        if ($hour >= 5 && $hour < 12) {
+            $greeting = 'Selamat Pagi';
+        } elseif ($hour >= 12 && $hour < 15) {
+            $greeting = 'Selamat Siang';
+        } elseif ($hour >= 15 && $hour < 18) {
+            $greeting = 'Selamat Sore';
+        } else {
+            $greeting = 'Selamat Malam';
+        }
+
+        $genderCounts = Participant::query()
+            ->select('jenis_kelamin', DB::raw('count(*) as total'))
+            ->groupBy('jenis_kelamin')
+            ->pluck('total', 'jenis_kelamin'); // Hasilnya: ['Laki-laki' => 10, 'Perempuan' => 15]
+
+        $transformedGenderCounts = $genderCounts->mapWithKeys(function ($total, $gender) {
+            $label = ($gender === 'L') ? 'Laki-laki' : 'Perempuan';
+
+            return [$label => $total];
+        }); // Hasilnya: collect(['Laki-laki' => 10, 'Perempuan' => 15])
+
+        // Siapkan data agar mudah dibaca oleh ApexCharts
+        $genderChartData = [
+            'labels' => $transformedGenderCounts->keys(), // -> ['Laki-laki', 'Perempuan']
+            'series' => $transformedGenderCounts->values(), // -> [10, 15]
+        ];
+
+        return view('admin.dashboard.index', compact('totalPemagang', 'permohonanPending', 'totalPenugasan', 'totalPengguna', 'greeting', 'genderChartData'));
     }
 }
