@@ -18,6 +18,7 @@ class Permohonan extends Model
 
     protected $fillable = [
         'id_institute',
+        'no_surat',
         'nama_instansi',
         'tgl_surat',
         'tgl_mulai',
@@ -33,8 +34,13 @@ class Permohonan extends Model
         'file_permohonan_mime',
     ];
 
-    public function Institute()
+    public function participants()
     {
-        return $this->belongsTo(Institute::class, 'id_institute');
+        return $this->hasMany(\App\Models\Participant::class, 'permohonan_id');
+    }
+
+    public function institute()
+    {
+        return $this->belongsTo(\App\Models\Institute::class, 'id_institute');
     }
 }

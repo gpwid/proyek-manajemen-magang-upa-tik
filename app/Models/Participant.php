@@ -9,6 +9,7 @@ class Participant extends Model
     protected $guarded = ['id'];
 
     protected $fillable = [
+        'permohonan_id',
         'nama',
         'nik',
         'nisnim',
@@ -17,4 +18,9 @@ class Participant extends Model
         'kontak_peserta',
         'keterangan',
     ];
+
+    public function permohonan()
+    {
+        return $this->belongsTo(\App\Models\Permohonan::class, 'permohonan_id');
+    }
 }

@@ -19,6 +19,9 @@ class PermohonanController extends Controller
     public function show(Permohonan $permohonan)
     {
         // Menampilkan detail permohonan
+        // return view('admin.permohonan.show', compact('permohonan'));
+
+        $permohonan->load(['institute', 'participants']);
         return view('admin.permohonan.show', compact('permohonan'));
     }
 
@@ -35,60 +38,6 @@ class PermohonanController extends Controller
 
         return view('admin.permohonan.index', compact('searchinstitutes', 'totalAktif', 'totalProses', 'totalSelesai', 'totalTolak', 'totalSemua'));
     }
-
-    // public function data(Request $request)
-    // {
-    //     // Endpoint untuk DataTables Yajra
-    //     $query = Permohonan::query();
-
-    //     // Filter berdasarkan query parameters
-    //     if ($request->filled('q')) {
-    //         $q = $request->q;
-    //         $query->where(function ($x) use ($q) {
-    //             $x->where('institute', 'like', "%$q%")
-    //                 ->orWhere('pembimbing_sekolah', 'like', "%$q%");
-    //         });
-    //     }
-    //     if ($request->filled('status')) {
-    //         $query->where('status', $request->status);
-    //     }
-    //     if ($request->filled('jenis_magang')) {
-    //         $query->where('jenis_magang', $request->jenis_magang);
-    //     }
-
-
-    //     // Query untuk DataTables
-    //     return DataTables::of($query)
-    //         ->editColumn('tgl_surat', fn($p) => optional($p->tgl_surat)->format('d-m-Y'))
-    //         ->editColumn('tgl_mulai', fn($p) => optional($p->tgl_mulai)->format('d-m-Y'))
-    //         ->editColumn('tgl_selesai', fn($p) => optional($p->tgl_selesai)->format('d-m-Y'))
-    //         ->editColumn('status', function ($p) {
-    //             $cls = $p->status == 'Aktif' ? 'bg-success' : ($p->status == 'Proses' ? 'bg-warning text-dark' : ($p->status == 'Selesai' ? 'bg-primary' : 'bg-danger'));
-    //             return "<span class='badge $cls'>$p->status</span>";
-    //         })
-    //         ->addColumn('aksi', function ($p) {
-    //             $url1 = route('admin.permohonan.edit', $p->id);
-    //             $url2 = route('admin.permohonan.show', $p->id);
-    //             return "<div class='flex gap-2'>
-    //                     <a href='$url1' class='btn btn-sm btn-primary text-white' data-bs-toggle='tooltip'
-    //     data-bs-placement='top' title='Edit'>
-    //                         <i class='fa-solid fa-pen-to-square'></i> Edit
-    //                     </a>
-    //                     <a href='$url2' class='btn btn-sm btn-success text-white' data-bs-toggle='tooltip'
-    //     data-bs-placement='top' title='Detail'>
-    //                         <i class='fa-solid fa-eye'></i> Detail
-    //                     </a>
-    //                     </div>";
-    //         })
-    //         ->setRowClass(function ($p) {
-    //             if ($p->status == 'Aktif') return 'table-success';
-    //             if ($p->status == 'Proses') return 'table-warning';
-    //             if ($p->status == 'Selesai') return 'table-primary';
-    //             return 'table-danger';
-    //         })
-    //         ->rawColumns(['status', 'aksi'])
-    //         ->make(true);
-    // }
 
     public function indexTambah()
     {
@@ -107,6 +56,10 @@ class PermohonanController extends Controller
                 $query->where('nama_instansi', 'like', "%$q%");
             })
                 ->orWhere('pembimbing_sekolah', 'like', "%$q%");
+        }
+
+        if ($request->filled('id_institute')) {
+            $query->where('id_institute', $request->id_institute);
         }
 
         if ($request->filled('status')) {
@@ -175,6 +128,7 @@ class PermohonanController extends Controller
     {
         // Validasi input
         $validated = $request->validate([
+            'no_surat'          => 'required|string|max:100|unique:permohonan,no_surat',
             'tgl_surat'          => 'required|date',
             'id_institute'        => 'required|exists:institutes,id',
             'tgl_mulai'          => 'required|date',
@@ -202,6 +156,7 @@ class PermohonanController extends Controller
         // Update data permohonan
         $permohonan->update([
             'id_institute'        => $institute->id,
+            'no_surat'          => $validated['no_surat'],
             'tgl_surat'          => $validated['tgl_surat'],
             'tgl_mulai'          => $validated['tgl_mulai'],
             'tgl_selesai'        => $validated['tgl_selesai'],
@@ -222,6 +177,7 @@ class PermohonanController extends Controller
 
         $validated = $request->validate(
             [
+                'no_surat'          => 'required|string|max:100|unique:permohonan,no_surat',
                 'tgl_surat' => 'required|date',
                 'id_institute' => 'required|exists:institutes,id',
                 'tgl_mulai' => 'required|date',
@@ -233,6 +189,8 @@ class PermohonanController extends Controller
             ],
             [
                 // required
+                'no_surat.required'            => 'Nomor surat wajib diisi.',
+                'no_surat.unique'              => 'Nomor surat sudah ada dalam database.',
                 'tgl_surat.required'           => 'Tanggal surat wajib diisi.',
                 'id_institute.required'         => 'Silakan pilih instansi.',
                 'tgl_mulai.required'           => 'Tanggal mulai wajib diisi.',
@@ -258,6 +216,7 @@ class PermohonanController extends Controller
 
         Permohonan::create([
             'id_institute' => $institute->id,
+            'no_surat'     => $validated['no_surat'],
             'tgl_surat' => $validated['tgl_surat'],
             'tgl_mulai' => $validated['tgl_mulai'],
             'tgl_selesai' => $validated['tgl_selesai'],
@@ -308,6 +267,9 @@ class PermohonanController extends Controller
     {
         $filename = 'permohonan_' . now()->format('Ymd_His') . '.xlsx';
         return Excel::download(new PermohonanExport($request), $filename);
+        if ($request->filled('id_institute')) {
+            $q->where('id_institute', $request->id_institute);
+        }
     }
 
     public function exportPdf(Request $request)
@@ -321,6 +283,9 @@ class PermohonanController extends Controller
                 ->orWhere('pembimbing_sekolah', 'like', "%{$request->q}%");
         }
 
+        if ($request->filled('id_institute')) {
+            $q->where('id_institute', $request->id_institute);
+        }
 
         if ($request->filled('status')) {
             $q->where('status', $request->status);

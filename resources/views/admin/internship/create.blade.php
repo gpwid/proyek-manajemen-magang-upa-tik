@@ -2,83 +2,82 @@
 @section('internship-active', 'active')
 
 @section('content')
-    <div class="container-fluid">
-        <div class="d-sm-flex align-items-center justify-content-between mb-2">
-            <h1 class="h3 mb-3 text-gray-800">Form Tambah Data Magang</h1>
-        </div>
-
-        <div class="card shadow col-12 p-4">
-            @if ($errors->any())
-                <div class="alert alert-danger">
-                    <ul class="mb-0">
-                        @foreach ($errors->all() as $e)
-                            <li>{{ $e }}</li>
-                        @endforeach
-                    </ul>
-                </div>
-            @endif
-            <form action="{{ route('admin.internship.store') }}" method="POST">
-                @csrf
-
-                {{-- Permohonan --}}
-                <div class="mb-3">
-                    <label class="form-label">Permohonan <span class="text-danger">*</span></label>
-                    <select name="id_permohonan" class="form-control select2 @error('id_permohonan') is-invalid @enderror"
-                        data-live-search="true">
-                        <option value="">-- Pilih Permohonan --</option>
-                        @foreach ($permohonan as $pm)
-                            <option value="{{ $pm->id }}" {{ old('id_permohonan') == $pm->id ? 'selected' : '' }}>
-                                {{ $pm->id }} - {{ $pm->institute->nama_instansi ?? 'Nama Instansi Tidak Ditemukan' }}
-                                ({{ $pm->tgl_surat->format('d-m-Y') }})
-                            </option>
-                        @endforeach
-                    </select>
-                    @error('id_permohonan')
-                        <div class="invalid-feedback">{{ $message }}</div>
-                    @enderror
-                </div>
-
-                {{-- Pembimbing --}}
-                <div class="mb-3">
-                    <label class="form-label">Pembimbing <span class="text-danger">*</span></label>
-                    <select name="id_pembimbing" class="form-control select2 @error('id_pembimbing') is-invalid @enderror">
-                        <option value="">-- Pilih Pembimbing --</option>
-                        @foreach ($supervisors as $sup)
-                            <option value="{{ $sup->id }}" {{ old('id_pembimbing') == $sup->id ? 'selected' : '' }}>
-                                {{ $sup->nama }} ({{ $sup->nip }})
-                            </option>
-                        @endforeach
-                    </select>
-                    @error('id_pembimbing')
-                        <div class="invalid-feedback">{{ $message }}</div>
-                    @enderror
-                </div>
-
-                {{-- Peserta --}}
-                <div class="mb-3">
-                    <label class="form-label">Peserta <span class="text-danger">*</span></label>
-                    <select name="id_peserta[]" class="form-control select2 @error('id_peserta') is-invalid @enderror"
-                        multiple required>
-                        @foreach ($participants as $peserta)
-                            <option value="{{ $peserta->id }}"
-                                {{ in_array($peserta->id, old('id_peserta', [])) ? 'selected' : '' }}>
-                                {{ $peserta->nama }} ({{ $peserta->nik }})
-                            </option>
-                        @endforeach
-                    </select>
-                    @error('id_peserta')
-                        <div class="invalid-feedback">{{ $message }}</div>
-                    @enderror
-                </div>
-
-                {{-- Tombol --}}
-                <div class="d-flex justify-content-end">
-                    <a class="btn btn-secondary mr-2" href="{{ route('admin.internship.index') }}">Kembali</a>
-                    <button type="submit" class="btn btn-primary">Tambah</button>
-                </div>
-            </form>
-        </div>
+<div class="container-fluid">
+    <div class="d-sm-flex align-items-center justify-content-between mb-2">
+        <h1 class="h3 mb-3 text-gray-800">Form Tambah Data Magang</h1>
     </div>
+
+    <div class="card shadow col-12 p-4">
+        @if ($errors->any())
+        <div class="alert alert-danger">
+            <ul class="mb-0">
+                @foreach ($errors->all() as $e)
+                <li>{{ $e }}</li>
+                @endforeach
+            </ul>
+        </div>
+        @endif
+        <form action="{{ route('admin.internship.store') }}" method="POST">
+            @csrf
+
+            {{-- Permohonan --}}
+            <div class="mb-3">
+                <label class="form-label">Permohonan <span class="text-danger">*</span></label>
+                <select name="id_permohonan" class="form-control select2 @error('id_permohonan') is-invalid @enderror"
+                    data-live-search="true">
+                    <option value="">-- Pilih Permohonan --</option>
+                    @foreach ($permohonan as $pm)
+                    <option value="{{ $pm->id }}" {{ old('id_permohonan')==$pm->id?'selected':'' }}>
+                        {{ $pm->no_surat }} — {{ $pm->institute->nama_instansi ?? 'Instansi?' }}
+                        ({{ $pm->tgl_surat->format('d-m-Y') }})
+                    </option>
+
+                    @endforeach
+                </select>
+                @error('id_permohonan')
+                <div class="invalid-feedback">{{ $message }}</div>
+                @enderror
+            </div>
+
+            {{-- Pembimbing --}}
+            <div class="mb-3">
+                <label class="form-label">Pembimbing <span class="text-danger">*</span></label>
+                <select name="id_pembimbing" class="form-control select2 @error('id_pembimbing') is-invalid @enderror">
+                    <option value="">-- Pilih Pembimbing --</option>
+                    @foreach ($supervisors as $sup)
+                    <option value="{{ $sup->id }}" {{ old('id_pembimbing') == $sup->id ? 'selected' : '' }}>
+                        {{ $sup->nama }} ({{ $sup->nip }})
+                    </option>
+                    @endforeach
+                </select>
+                @error('id_pembimbing')
+                <div class="invalid-feedback">{{ $message }}</div>
+                @enderror
+            </div>
+
+            {{-- Peserta --}}
+            <div class="mb-3">
+                <label class="form-label">Peserta <span class="text-danger">*</span></label>
+                <select name="id_peserta[]" class="form-control select2 @error('id_peserta') is-invalid @enderror"
+                    multiple required>
+                    @foreach ($participants as $peserta)
+                    <option value="{{ $peserta->id }}"
+                        {{ in_array($peserta->id, old('id_peserta', [])) ? 'selected' : '' }}>
+                        {{ $peserta->nama }} ({{ $peserta->nik }})
+                    </option>
+                    @endforeach
+                </select>
+                @error('id_peserta') <div class="invalid-feedback">{{ $message }}</div> @enderror
+            </div>
+
+            {{-- Tombol --}}
+            <div class="d-flex justify-content-end">
+                <a class="btn btn-secondary mr-2" href="{{ route('admin.internship.index') }}">Kembali</a>
+                <button type="submit" class="btn btn-primary">Tambah</button>
+            </div>
+        </form>
+    </div>
+</div>
 @endsection
 
 <style>
@@ -152,16 +151,18 @@
     .select2-container .select2-selection__placeholder {
         color: #9ca3af !important;
     }
+
 </style>
 
 @push('scripts')
-    <script>
-        $(document).ready(function() {
-            $('.select2').select2({
-                placeholder: "-- Pilih --",
-                allowClear: true,
-                width: '100%' // supaya select2 ikut lebar form-control
-            });
+<script>
+    $(document).ready(function () {
+        $('.select2').select2({
+            placeholder: "-- Pilih --",
+            allowClear: true,
+            width: '100%'
         });
-    </script>
+    });
+
+</script>
 @endpush

@@ -12,12 +12,14 @@
         <form action="{{ route('admin.peserta.store') }}" method="POST">
             @csrf
 
+            {{-- Hidden input permohonan --}}
+            <input type="hidden" name="permohonan_id" value="{{ old('permohonan_id', request('permohonan_id')) }}">
+
             {{-- Nama --}}
             <div class="mb-3">
                 <label class="form-label">Nama <span class="text-danger">*</span></label>
                 <input value="{{ old('nama') }}" type="text" name="nama"
-                       class="form-control @error('nama') is-invalid @enderror"
-                       placeholder="Masukkan nama lengkap">
+                    class="form-control @error('nama') is-invalid @enderror" placeholder="Masukkan nama lengkap">
                 @error('nama') <div class="invalid-feedback">{{ $message }}</div> @enderror
             </div>
 
@@ -25,8 +27,7 @@
             <div class="mb-3">
                 <label class="form-label">NIK <span class="text-danger">*</span></label>
                 <input value="{{ old('nik') }}" type="text" name="nik"
-                       class="form-control @error('nik') is-invalid @enderror"
-                       placeholder="Masukkan NIK">
+                    class="form-control @error('nik') is-invalid @enderror" placeholder="Masukkan NIK">
                 @error('nik') <div class="invalid-feedback">{{ $message }}</div> @enderror
             </div>
 
@@ -34,33 +35,25 @@
             <div class="mb-3">
                 <label class="form-label">NISN/NIM <span class="text-danger">*</span></label>
                 <input value="{{ old('nisnim') }}" type="text" name="nisnim"
-                       class="form-control @error('nisnim') is-invalid @enderror"
-                       placeholder="Masukkan NISN/NIM">
+                    class="form-control @error('nisnim') is-invalid @enderror" placeholder="Masukkan NISN/NIM">
                 @error('nisnim') <div class="invalid-feedback">{{ $message }}</div> @enderror
             </div>
 
             <div class="mb-3">
-                <label for="">Jenis Kelamin</label>
-                <select name="jenis_kelamin" id="" class="form-control @error('jenis_kelamin')
-                is-invalid
-            @enderror">
+                <label>Jenis Kelamin <span class="text-danger">*</span></label>
+                <select name="jenis_kelamin" class="form-control @error('jenis_kelamin') is-invalid @enderror">
                     <option value="">--Jenis Kelamin--</option>
-                    <option value="L">Laki-laki</option>
-                    <option value="P">Perempuan</option>
+                    <option value="L" {{ old('jenis_kelamin') === 'L' ? 'selected' : '' }}>Laki-laki</option>
+                    <option value="P" {{ old('jenis_kelamin') === 'P' ? 'selected' : '' }}>Perempuan</option>
                 </select>
-                @error('jenis_kelamin')
-                <div class="invalid-feedback">
-                    {{ $message }}
-                </div>
-                @enderror
+                @error('jenis_kelamin') <div class="invalid-feedback">{{ $message }}</div> @enderror
             </div>
 
             {{-- Jurusan --}}
             <div class="mb-3">
                 <label class="form-label">Jurusan <span class="text-danger">*</span></label>
                 <input value="{{ old('jurusan') }}" type="text" name="jurusan"
-                       class="form-control @error('jurusan') is-invalid @enderror"
-                       placeholder="Masukkan jurusan">
+                    class="form-control @error('jurusan') is-invalid @enderror" placeholder="Masukkan jurusan">
                 @error('jurusan') <div class="invalid-feedback">{{ $message }}</div> @enderror
             </div>
 
@@ -68,8 +61,8 @@
             <div class="mb-3">
                 <label class="form-label">Kontak Peserta <span class="text-danger">*</span></label>
                 <input value="{{ old('kontak_peserta') }}" type="text" name="kontak_peserta"
-                       class="form-control @error('kontak_peserta') is-invalid @enderror"
-                       placeholder="Masukkan nomor HP/WA">
+                    class="form-control @error('kontak_peserta') is-invalid @enderror"
+                    placeholder="Masukkan nomor HP/WA">
                 @error('kontak_peserta') <div class="invalid-feedback">{{ $message }}</div> @enderror
             </div>
 
@@ -77,14 +70,17 @@
             <div class="mb-3">
                 <label class="form-label">Keterangan</label>
                 <input value="{{ old('keterangan') }}" type="text" name="keterangan"
-                       class="form-control @error('keterangan') is-invalid @enderror"
-                       placeholder="Tambahkan keterangan (opsional)">
+                    class="form-control @error('keterangan') is-invalid @enderror"
+                    placeholder="Tambahkan keterangan (opsional)">
                 @error('keterangan') <div class="invalid-feedback">{{ $message }}</div> @enderror
             </div>
 
             {{-- Tombol --}}
             <div class="d-flex justify-content-end">
-                <a class="btn btn-secondary mr-2" href="/peserta">Kembali</a>
+                <a class="btn btn-secondary mr-2"
+                    href="{{ old('permohonan_id', request('permohonan_id')) ? route('admin.permohonan.show', old('permohonan_id', request('permohonan_id'))) : route('admin.peserta.index') }}">
+                    Kembali
+                </a>
                 <button type="submit" class="btn btn-primary">Tambah</button>
             </div>
         </form>

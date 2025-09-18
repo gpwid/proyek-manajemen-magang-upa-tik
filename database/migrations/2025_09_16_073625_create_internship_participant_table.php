@@ -10,9 +10,19 @@ return new class extends Migration
     {
         Schema::create('internship_participant', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('internship_id')->constrained()->onDelete('cascade');
-            $table->foreignId('participant_id')->constrained()->onDelete('cascade');
+
+            $table->foreignId('internship_id')
+                ->constrained('internship')
+                ->cascadeOnDelete();
+
+            $table->foreignId('participant_id')
+                ->constrained('participants')
+                ->cascadeOnDelete();
+
             $table->timestamps();
+
+            // opsional: cegah duplikasi
+            $table->unique(['internship_id', 'participant_id']);
         });
     }
 

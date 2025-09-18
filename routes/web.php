@@ -44,8 +44,9 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::get('/peserta/export/pdf', [ParticipantController::class, 'exportPdf'])
         ->name('peserta.export.pdf');
 
-    
+
     Route::get('/penugasan', [TasksController::class, 'index'])->name('penugasan.index');
+
     // Pembimbing
     Route::get('/pembimbing', [SupervisorController::class, 'index'])->name('pembimbing.index');
     Route::get('/pembimbing/data', [SupervisorController::class, 'data'])->name('pembimbing.data'); // <- endpoint DataTables
@@ -78,8 +79,9 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::post('/magang/store', [InternshipController::class, 'store'])->name('internship.store');
     Route::get('/magang/{internship}/edit', [InternshipController::class, 'edit'])->name('internship.edit');
     Route::put('/magang/{internship}', [InternshipController::class, 'update'])->name('internship.update');
+    Route::get('/magang/export/excel', [InternshipController::class, 'exportExcel'])->name('internship.export.excel');
+    Route::get('/magang/export/pdf',   [InternshipController::class, 'exportPdf'])->name('internship.export.pdf');
 
-    
     Route::get('/penugasan', [TasksController::class, 'index'])->name('penugasan.index');
 });
 
