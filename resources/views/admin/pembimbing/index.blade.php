@@ -14,7 +14,7 @@
             <div class="row align-items-end g-3 mb-3">
 
                 {{-- Search --}}
-                <div class="col-md-5 pe-lg-3">
+                <div class="col-md-9 pe-lg-3">
                     <label class="form-label">Pencarian</label>
                     <div class="search-wrapper">
                         <span class="search-icon" aria-hidden="true">
