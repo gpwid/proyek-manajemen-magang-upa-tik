@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Permohonan extends Model
 {
     protected $guarded = ['id'];
+
     protected $table = 'permohonan';
 
     protected $casts = [
@@ -19,7 +20,6 @@ class Permohonan extends Model
     protected $fillable = [
         'id_institute',
         'no_surat',
-        'nama_instansi',
         'tgl_surat',
         'tgl_mulai',
         'tgl_selesai',
