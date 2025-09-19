@@ -76,7 +76,15 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::get('/magang/export/excel', [InternshipController::class, 'exportExcel'])->name('internship.export.excel');
     Route::get('/magang/export/pdf', [InternshipController::class, 'exportPdf'])->name('internship.export.pdf');
 
+    // Penugasan
     Route::get('/penugasan', [TaskController::class, 'index'])->name('penugasan.index');
+    Route::get('/penugasan/data', [TaskController::class, 'data'])->name('penugasan.data');
+    Route::get('/penugasan/show/{task}', [TaskController::class, 'show'])->name('penugasan.show');
+    Route::get('/penugasan/create', [TaskController::class, 'create'])->name('penugasan.create');
+    Route::post('/penugasan/store', [TaskController::class, 'store'])->name('penugasan.store');
+    Route::get('/penugasan/{task}/edit', [TaskController::class, 'edit'])->name('penugasan.edit');
+    Route::put('/penugasan/{task}', [TaskController::class, 'update'])->name('penugasan.update');
+
 });
 
 require __DIR__.'/auth.php';

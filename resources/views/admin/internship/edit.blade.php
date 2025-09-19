@@ -1,6 +1,6 @@
 @extends('admin.layoutsadmin.main')
 @section('internship-active', 'active')
-
+@section('title', 'Edit Data Magang')
 @section('content')
     <div class="container-fluid">
         <div class="d-sm-flex align-items-center justify-content-between mb-2">

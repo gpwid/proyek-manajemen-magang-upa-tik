@@ -1,4 +1,6 @@
 @extends('admin.layoutsadmin.main')
+
+@section('title', 'Data Magang')
 @section('internship-active', 'active')
 @section('content')
 
