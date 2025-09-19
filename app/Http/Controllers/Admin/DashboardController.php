@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Participant;
 use App\Models\Permohonan;
+use App\Models\Task;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
@@ -16,7 +17,7 @@ class DashboardController extends Controller
 
         $totalPemagang = Participant::count();
         $permohonanPending = Permohonan::where('status', 'Proses')->count();
-        $totalPenugasan = 12;
+        $totalPenugasan = Task::count();
         $totalPengguna = 133;
 
         $hour = Carbon::now()->setTimezone('Asia/Jakarta')->hour;

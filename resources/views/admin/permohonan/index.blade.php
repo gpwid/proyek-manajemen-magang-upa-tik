@@ -1,4 +1,5 @@
 @extends('admin.layoutsadmin.main')
+@section('title', 'Permohonan')
 @section('permohonan-active', 'active')
 @section('title', 'Permohonan')
 
