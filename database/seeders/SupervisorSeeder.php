@@ -2,22 +2,13 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
+use App\Models\Supervisor;
 
 class SupervisorSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
     public function run(): void
     {
-        DB::table('supervisors')->insert([
-            [
-                'nama' => 'Supervisor 1',
-                'nip' => '123123998847',
-            ]
-            ]);
+        Supervisor::factory()->count(15)->create();
     }
 }
