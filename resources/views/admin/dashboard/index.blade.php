@@ -111,8 +111,12 @@
                             </a>
 
                             {{-- Tombol 3: Kelola Data Magang --}}
-                            <a href="{{ route('admin.internship.index') }}" class="btn btn-info btn-lg btn-icon-split">
+                            <a href="{{ route('admin.penugasan.index') }}" class="btn btn-info btn-lg btn-icon-split">
                                 <span class="text"><i class="fas fa-tasks"></i> Kelola Penugasan Magang</span>
+                            </a>
+
+                            <a href="{{ route('admin.internship.index') }}" class="btn btn-primary btn-lg btn-icon-split">
+                                <span class="text"><i class="fas fa-tasks"></i> Kelola Magang</span>
                             </a>
                         </div>
                     </div>
