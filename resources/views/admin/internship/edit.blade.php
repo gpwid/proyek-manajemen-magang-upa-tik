@@ -29,7 +29,7 @@
                         <option value="">-- Pilih Permohonan --</option>
                         @foreach ($permohonan as $pm)
                             <option value="{{ $pm->id }}" {{ old('id_permohonan') == $pm->id ? 'selected' : '' }}>
-                                {{ $pm->id }} - {{ $pm->institute->nama_instansi ?? 'Nama Instansi Tidak Ditemukan' }}
+                                {{ $pm->no_surat }} - {{ $pm->institute->nama_instansi ?? 'Nama Instansi Tidak Ditemukan' }}
                                 ({{ $pm->tgl_surat->format('d-m-Y') }})
                             </option>
                         @endforeach
