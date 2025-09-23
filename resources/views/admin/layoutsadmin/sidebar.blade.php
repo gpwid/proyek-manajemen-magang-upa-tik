@@ -1,6 +1,7 @@
 <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion sticky-top" id="accordionSidebar"
     style="
     height: 100vh;
+    z-index: 2000;
 ">
 
     <!-- Sidebar - Brand -->
