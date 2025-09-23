@@ -81,6 +81,17 @@
             </div>
 
             <div class="mb-3">
+                <label for="tahun_aktif" class="form-label fw-semibold">Tahun Aktif <span class="text-danger">*</span></label>
+                <input id="tahun_aktif" type="text" name="tahun_aktif"
+                    value="{{ old('tahun_aktif', $participant->tahun_aktif) }}"
+                    class="form-control @error('tahun_aktif') is-invalid @enderror"
+                    required>
+                @error('tahun_aktif')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                @enderror
+            </div>
+
+            <div class="mb-3">
                 <label for="keterangan" class="form-label fw-semibold">Keterangan</label>
                 <input id="keterangan" type="text" name="keterangan"
                     value="{{ old('keterangan', $participant->keterangan) }}"

@@ -28,6 +28,7 @@ class ParticipantsExport implements FromCollection, WithHeadings, WithMapping
                   ->orWhere('nisnim','like',"%{$search}%")
                   ->orWhere('jurusan','like',"%{$search}%")
                   ->orWhere('kontak_peserta','like',"%{$search}%")
+                  ->orWhere('tahun_aktif','like',"%{$search}%")
                   ->orWhere('keterangan','like',"%{$search}%");
             });
         }
@@ -37,7 +38,7 @@ class ParticipantsExport implements FromCollection, WithHeadings, WithMapping
 
     public function headings(): array
     {
-        return ['No', 'Nama', 'NIK', 'NISN/NIM', 'Jenis Kelamin', 'Jurusan', 'Kontak', 'Keterangan'];
+        return ['No', 'Nama', 'NIK', 'NISN/NIM', 'Jenis Kelamin', 'Jurusan', 'Kontak', 'Tahun Aktif', 'Keterangan'];
     }
 
     public function map($p): array
@@ -51,6 +52,7 @@ class ParticipantsExport implements FromCollection, WithHeadings, WithMapping
             $p->jenis_kelamin === 'L' ? 'Laki-laki' : 'Perempuan',
             $p->jurusan,
             $p->kontak_peserta,
+            $p->tahun_aktif,
             $p->keterangan,
         ];
     }

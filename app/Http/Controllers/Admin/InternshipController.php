@@ -24,6 +24,7 @@ class InternshipController extends Controller
     {
         $totalAktif = Internship::where('status_magang', 'Aktif')->count();
         $totalNonaktif = Internship::where('status_magang', 'Nonaktif')->count();
+        $totalTidakSelesai = Internship::where('status_magang', 'Tidak Selesai')->count();
         $totalSemua = Internship::count();
 
         $searchinstitutes = Institute::orderBy('nama_instansi')->get();
@@ -38,54 +39,12 @@ class InternshipController extends Controller
         return view('admin.internship.index', compact(
             'totalAktif',
             'totalNonaktif',
+            'totalTidakSelesai',
             'totalSemua',
             'internships',
             'searchinstitutes'
         ));
     }
-
-    // public function data(Request $request)
-    // {
-    //     // Endpoint untuk DataTables Yajra
-    //     $query = Internship::query()->with([
-    //         'supervisor:id,nama',
-    //         'permohonan:id,tgl_mulai,tgl_selesai,jenis_magang',
-    //         'participants:id,nama',
-    //     ]);
-
-    //     // Filter berdasarkan query parameters
-    //     if ($request->filled('status_magang')) {
-    //         $query->where('status_magang', $request->status_magang);
-    //     }
-
-    //     // Query untuk DataTables
-    //     return DataTables::of($query)
-    //         ->editColumn('tgl_mulai', fn($p) => optional($p->permohonan->tgl_mulai)->format('d-m-Y'))
-    //         ->editColumn('tgl_selesai', fn($p) => optional($p->permohonan->tgl_selesai)->format('d-m-Y'))
-    //         ->addColumn('pembimbing', fn($p) => optional($p->supervisor)->nama ?? '-')
-    //         ->addColumn('permohonan', fn($p) => optional($p->permohonan)->id ?? '-')
-    //         ->addColumn('peserta',    fn($p) => optional($p->participant)->nama ?? '-')
-    //         ->editColumn('status_magang', function ($p) {
-    //             $cls = $p->status_magang == 'Aktif' ? 'bg-success' : 'bg-secondary';
-    //             return "<span class='badge $cls'>$p->status_magang</span>";
-    //         })
-    //         ->addColumn('aksi', function ($p) {
-    //             $url1 = route('admin.internship.edit', $p->id);
-    //             $url2 = route('admin.internship.show', $p->id);
-    //             return "<div class='flex gap-2'>
-    //                     <a href='$url1' class='btn btn-sm btn-primary text-white' data-bs-toggle='tooltip'
-    //     data-bs-placement='top' title='Edit'>
-    //                         <i class='fa-solid fa-pen-to-square'></i> Edit
-    //                     </a>
-    //                     <a href='$url2' class='btn btn-sm btn-success text-white' data-bs-toggle='tooltip'
-    //     data-bs-placement='top' title='Detail'>
-    //                         <i class='fa-solid fa-eye'></i> Detail
-    //                     </a>
-    //                     </div>";
-    //         })
-    //         ->rawColumns(['status_magang', 'aksi'])
-    //         ->make(true);
-    // }
 
     public function data(Request $request)
     {
@@ -102,19 +61,22 @@ class InternshipController extends Controller
         if ($request->filled('id_institute')) { // ← filter Instansi
             $query->whereHas(
                 'permohonan',
-                fn ($q) => $q->where('id_institute', $request->id_institute)
+                fn($q) => $q->where('id_institute', $request->id_institute)
             );
         }
 
         return DataTables::of($query)
-            ->addColumn('instansi', fn ($i) => $i->permohonan?->institute?->nama_instansi ?? '-')
-            ->addColumn('no_surat', fn ($i) => $i->permohonan?->no_surat ?? '-')
-            ->addColumn('pembimbing', fn ($i) => $i->supervisor?->nama ?? '-')
-            ->editColumn('tgl_mulai', fn ($i) => optional($i->permohonan?->tgl_mulai)->format('d-m-Y'))
-            ->editColumn('tgl_selesai', fn ($i) => optional($i->permohonan?->tgl_selesai)->format('d-m-Y'))
-            ->addColumn('peserta', fn ($i) => $i->participants->pluck('nama')->join(', '))
+            ->addColumn('instansi', fn($i) => $i->permohonan?->institute?->nama_instansi ?? '-')
+            ->addColumn('no_surat', fn($i) => $i->permohonan?->no_surat ?? '-')
+            ->addColumn('pembimbing', fn($i) => $i->supervisor?->nama ?? '-')
+            ->editColumn('tgl_mulai', fn($i) => optional($i->permohonan?->tgl_mulai)->format('d-m-Y'))
+            ->editColumn('tgl_selesai', fn($i) => optional($i->permohonan?->tgl_selesai)->format('d-m-Y'))
+            ->addColumn('peserta', fn($i) => $i->participants->pluck('nama')->join(', '))
             ->editColumn('status_magang', function ($i) {
-                $cls = $i->status_magang == 'Aktif' ? 'bg-success' : 'bg-secondary';
+                $cls = $i->status_magang === 'Aktif'
+                    ? 'bg-success'
+                    : ($i->status_magang === 'Tidak Selesai' ? 'bg-danger text-white' : 'bg-secondary');
+
 
                 return "<span class='badge {$cls}'>{$i->status_magang}</span>";
             })
@@ -133,11 +95,11 @@ class InternshipController extends Controller
                     $query->where(function ($q) use ($keyword) {
                         $q->where('id', 'like', "%{$keyword}%")
                             ->orWhere('status_magang', 'like', "%{$keyword}%")
-                          // Mencari di dalam relasi participants
+                            // Mencari di dalam relasi participants
                             ->orWhereHas('participants', function ($subQuery) use ($keyword) {
                                 $subQuery->where('nama', 'like', "%{$keyword}%");
                             })
-                          // Mencari di dalam relasi supervisor
+                            // Mencari di dalam relasi supervisor
                             ->orWhereHas('supervisor', function ($subQuery) use ($keyword) {
                                 $subQuery->where('nama', 'like', "%{$keyword}%");
                             });
@@ -150,11 +112,11 @@ class InternshipController extends Controller
                     $query->where(function ($q) use ($keyword) {
                         $q->where('id', 'like', "%{$keyword}%")
                             ->orWhere('status_magang', 'like', "%{$keyword}%")
-                          // Mencari di dalam relasi participants
+                            // Mencari di dalam relasi participants
                             ->orWhereHas('participants', function ($subQuery) use ($keyword) {
                                 $subQuery->where('nama', 'like', "%{$keyword}%");
                             })
-                          // Mencari di dalam relasi supervisor
+                            // Mencari di dalam relasi supervisor
                             ->orWhereHas('supervisor', function ($subQuery) use ($keyword) {
                                 $subQuery->where('nama', 'like', "%{$keyword}%");
                             });
@@ -184,7 +146,7 @@ class InternshipController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'id_permohonan' => ['required', 'integer', Rule::exists('permohonan', 'id')->where(fn ($q) => $q->where('status', 'Aktif'))],
+            'id_permohonan' => ['required', 'integer', Rule::exists('permohonan', 'id')->where(fn($q) => $q->where('status', 'Aktif'))],
             'id_pembimbing' => 'required|integer|exists:supervisors,id',
             'id_peserta' => 'required|array',
             'id_peserta.*' => 'integer|exists:participants,id',
@@ -245,9 +207,9 @@ class InternshipController extends Controller
     public function update(Request $request, Internship $internship)
     {
         $validated = $request->validate([
-            'id_permohonan' => ['required', 'integer', Rule::exists('permohonan', 'id')->where(fn ($q) => $q->where('status', 'Aktif'))],
+            'id_permohonan' => ['required', 'integer', Rule::exists('permohonan', 'id')->where(fn($q) => $q->where('status', 'Aktif'))],
             'id_pembimbing' => 'required|integer|exists:supervisors,id',
-            'status_magang' => ['required', Rule::in(['Aktif', 'Nonaktif'])],
+            'status_magang' => ['required', Rule::in(['Aktif', 'Nonaktif', 'Tidak Selesai'])],
             'id_peserta' => 'required|array',
             'id_peserta.*' => 'integer|exists:participants,id',
         ], [
@@ -287,7 +249,7 @@ class InternshipController extends Controller
     // Export
     public function exportExcel(Request $request)
     {
-        $filename = 'internships_'.now()->format('Ymd_His').'.xlsx';
+        $filename = 'internships_' . now()->format('Ymd_His') . '.xlsx';
 
         return Excel::download(new InternshipsExport($request), $filename);
     }
@@ -300,22 +262,22 @@ class InternshipController extends Controller
             $q->where('status_magang', $request->status_magang);
         }
         if ($request->filled('id_institute')) {
-            $q->whereHas('permohonan', fn ($x) => $x->where('id_institute', $request->id_institute));
+            $q->whereHas('permohonan', fn($x) => $x->where('id_institute', $request->id_institute));
         }
 
         $data = $q->latest('created_at')->get();
         $subtitle = [];
         if ($request->status_magang) {
-            $subtitle[] = 'Status: '.$request->status_magang;
+            $subtitle[] = 'Status: ' . $request->status_magang;
         }
         if ($request->id_institute) {
-            $subtitle[] = 'Instansi: '.$data->first()?->permohonan?->institute?->nama_instansi;
+            $subtitle[] = 'Instansi: ' . $data->first()?->permohonan?->institute?->nama_instansi;
         }
         $subtitle = implode(' · ', array_filter($subtitle));
 
         $pdf = Pdf::loadView('admin.internship.pdf', compact('data', 'subtitle'))
             ->setPaper('a4', 'landscape');
 
-        return $pdf->download('internships_'.now()->format('Ymd_His').'.pdf');
+        return $pdf->download('internships_' . now()->format('Ymd_His') . '.pdf');
     }
 }

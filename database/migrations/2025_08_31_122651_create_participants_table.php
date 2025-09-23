@@ -16,6 +16,7 @@ return new class extends Migration
             $table->enum('jenis_kelamin', ['L', 'P']);
             $table->string('jurusan', 50);
             $table->string('kontak_peserta', 13);
+            $table->year('tahun_aktif', 4);
             $table->string('keterangan', 255)->nullable();
             $table->timestamps();
         });

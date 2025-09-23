@@ -20,8 +20,8 @@ class ParticipantFactory extends Factory
             'nisnim'         => $this->faker->numerify(str_repeat('#', 10)),
             'jenis_kelamin'  => $jk,
             'jurusan'        => $jur,
-            // No HP format Indonesia 08xxxxxxxxxx (11–13 digit)
             'kontak_peserta' => '08' . $this->faker->numerify(str_repeat('#', $this->faker->numberBetween(9,11))),
+            'tahun_aktif'    => $this->faker->year(),
             'keterangan'     => $this->faker->optional()->sentence(6),
         ];
     }

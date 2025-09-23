@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('id_permohonan')->constrained('permohonan')->onDelete('cascade');
             $table->foreignId('id_pembimbing')->constrained('supervisors')->onDelete('cascade');
-            $table->enum('status_magang', ['Aktif', 'Nonaktif'])->default('Aktif');
+            $table->enum('status_magang', ['Aktif', 'Nonaktif', 'Tidak Selesai'])->default('Aktif');
             $table->timestamps();
         });
     }

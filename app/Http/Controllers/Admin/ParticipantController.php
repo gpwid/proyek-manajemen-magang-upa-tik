@@ -17,12 +17,19 @@ class ParticipantController extends Controller
     public function index(): View
     {
         $stats = [
-            'total' => Participant::count(),
-            'laki_laki' => Participant::where('jenis_kelamin', 'L')->count(),
-            'perempuan' => Participant::where('jenis_kelamin', 'P')->count(),
+            'total'      => Participant::count(),
+            'laki_laki'  => Participant::where('jenis_kelamin', 'L')->count(),
+            'perempuan'  => Participant::where('jenis_kelamin', 'P')->count(),
         ];
 
-        return view('admin.peserta.index', compact('stats'));
+        // daftar tahun untuk dropdown (distinct & desc)
+        $years = Participant::whereNotNull('tahun_aktif')
+            ->select('tahun_aktif')
+            ->distinct()
+            ->orderByDesc('tahun_aktif')
+            ->pluck('tahun_aktif');
+
+        return view('admin.peserta.index', compact('stats', 'years'));
     }
 
     public function data(Request $request)
@@ -30,18 +37,24 @@ class ParticipantController extends Controller
         $query = Participant::query();
 
         // Filter Jenis Kelamin
-        if ($request->jenis_kelamin) {
+        if ($request->filled('jenis_kelamin')) {
             $query->where('jenis_kelamin', $request->jenis_kelamin);
         }
 
+        // Filter Tahun Aktif
+        if ($request->filled('tahun_aktif')) {
+            $query->where('tahun_aktif', (int) $request->tahun_aktif);
+        }
+
         // Filter Search Custom
-        if ($request->searchbox) {
+        if ($request->filled('searchbox')) {
             $search = $request->searchbox;
             $query->where(function ($q) use ($search) {
                 $q->where('nama', 'like', "%{$search}%")
-                    ->orWhere('nisnim', 'like', "%{$search}%")
-                    ->orWhere('jurusan', 'like', "%{$search}%")
-                    ->orWhere('kontak_peserta', 'like', "%{$search}%");
+                  ->orWhere('nisnim', 'like', "%{$search}%")
+                  ->orWhere('jurusan', 'like', "%{$search}%")
+                  ->orWhere('kontak_peserta', 'like', "%{$search}%")
+                  ->orWhere('tahun_aktif', 'like', "%{$search}%");
             });
         }
 
@@ -67,26 +80,25 @@ class ParticipantController extends Controller
     public function store(Request $request): RedirectResponse
     {
         $data = $request->validate([
-            'permohonan_id' => 'nullable|exists:permohonan,id',
-            'nama' => 'required|string|max:50',
-            'nik' => 'required|string|max:16',
-            'nisnim' => 'required|string|max:20',
-            'jenis_kelamin' => 'required|in:L,P',
-            'jurusan' => 'required|string|max:50',
+            'permohonan_id'  => 'nullable|exists:permohonan,id',
+            'nama'           => 'required|string|max:50',
+            'nik'            => 'required|string|max:16',
+            'nisnim'         => 'required|string|max:20',
+            'jenis_kelamin'  => 'required|in:L,P',
+            'jurusan'        => 'required|string|max:50',
             'kontak_peserta' => 'required|string|max:13',
-            'keterangan' => 'nullable|string|max:255',
+            'tahun_aktif'    => 'required|digits:4',
+            'keterangan'     => 'nullable|string|max:255',
         ]);
 
         Participant::create($data);
 
-        // Kalau datang dari halaman detail permohonan, balikin ke sana biar langsung kelihatan di tabel
         if (!empty($data['permohonan_id'])) {
             return redirect()
                 ->route('admin.permohonan.show', $data['permohonan_id'])
                 ->with('success', 'Peserta berhasil ditambahkan.');
         }
 
-        // Kalau tambah independen dari tab Peserta, balik ke index peserta
         return redirect()
             ->route('admin.peserta.index')
             ->with('sukses', 'Peserta berhasil ditambahkan.');
@@ -100,23 +112,18 @@ class ParticipantController extends Controller
     public function update(Request $request, Participant $participant): RedirectResponse
     {
         $request->validate([
-            'nama' => 'required|string|max:50',
-            'nik' => 'required|string|max:16',
-            'nisnim' => 'required|string|max:20',
-            'jenis_kelamin' => 'required|in:L,P',
-            'jurusan' => 'required|string|max:50',
+            'nama'           => 'required|string|max:50',
+            'nik'            => 'required|string|max:16',
+            'nisnim'         => 'required|string|max:20',
+            'jenis_kelamin'  => 'required|in:L,P',
+            'jurusan'        => 'required|string|max:50',
             'kontak_peserta' => 'required|string|max:13',
-            'keterangan' => 'nullable|string|max:255',
+            'tahun_aktif'    => 'required|digits:4',
+            'keterangan'     => 'nullable|string|max:255',
         ]);
 
         $participant->update($request->only([
-            'nama',
-            'nik',
-            'nisnim',
-            'jenis_kelamin',
-            'jurusan',
-            'kontak_peserta',
-            'keterangan'
+            'nama','nik','nisnim','jenis_kelamin','jurusan','kontak_peserta','tahun_aktif','keterangan'
         ]));
 
         return redirect()->route('admin.peserta.index')->with('sukses', 'Data berhasil diperbarui');
@@ -124,6 +131,8 @@ class ParticipantController extends Controller
 
     public function exportExcel(Request $request)
     {
+        // ParticipantsExport kamu sudah menerima $request → biarkan
+        // (pastikan di export memperhatikan 'tahun_aktif' juga)
         $filename = 'peserta_' . now()->format('Ymd_His') . '.xlsx';
         return Excel::download(new ParticipantsExport($request), $filename);
     }
@@ -132,21 +141,31 @@ class ParticipantController extends Controller
     {
         $q = Participant::query();
 
-        if ($gender = $request->get('jenis_kelamin')) {
+        $gender = $request->get('jenis_kelamin');
+        $year   = $request->get('tahun_aktif');
+        $search = $request->get('search');
+
+        if ($gender) {
             $q->where('jenis_kelamin', $gender);
         }
-        if ($search = $request->get('search')) {
+        if ($year) {
+            $q->where('tahun_aktif', (int) $year);
+        }
+        if ($search) {
             $q->where(function ($x) use ($search) {
                 $x->where('nama', 'like', "%{$search}%")
-                    ->orWhere('nisnim', 'like', "%{$search}%")
-                    ->orWhere('jurusan', 'like', "%{$search}%")
-                    ->orWhere('kontak_peserta', 'like', "%{$search}%");
+                  ->orWhere('nisnim', 'like', "%{$search}%")
+                  ->orWhere('jurusan', 'like', "%{$search}%")
+                  ->orWhere('kontak_peserta', 'like', "%{$search}%")
+                  ->orWhere('tahun_aktif', 'like', "%{$search}%");
             });
         }
 
         $data = $q->orderBy('nama')->get();
+
         $subtitle = [];
         if ($gender) $subtitle[] = 'Jenis kelamin: ' . ($gender === 'L' ? 'Laki-laki' : 'Perempuan');
+        if ($year)   $subtitle[] = 'Tahun aktif: ' . $year;
         if ($search) $subtitle[] = 'Pencarian: "' . $search . '"';
         $subtitle = implode(' · ', $subtitle);
 
