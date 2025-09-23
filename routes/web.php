@@ -2,89 +2,85 @@
 
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\InstituteController;
-use App\Http\Controllers\admin\InternshipController;
+// Admin Controllers
+use App\Http\Controllers\Admin\InternshipController;
 use App\Http\Controllers\Admin\ParticipantController;
 use App\Http\Controllers\Admin\PermohonanController;
 use App\Http\Controllers\Admin\SupervisorController;
-use App\Http\Controllers\admin\TaskController;
+use App\Http\Controllers\Admin\TaskController;
+use App\Http\Controllers\ProfileController;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
-Route::redirect('/', '/admin/dashboard'); // root diarahkan ke dashboard admin
+/*
+|--------------------------------------------------------------------------
+| Web Routes
+|--------------------------------------------------------------------------
+*/
 
-Route::prefix('admin')->name('admin.')->group(function () {
-    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
+// Halaman utama sekarang akan menampilkan halaman login jika pengguna belum masuk
+Route::get('/', function () {
+    if (Auth::check()) { // <-- Memanggil Auth::check()
+        return redirect()->route('admin.dashboard.index');
+    }
 
-    // Permohonan
-    Route::get('/permohonan', [PermohonanController::class, 'index'])->name('permohonan.index');
-    Route::get('/permohonan/data', [PermohonanController::class, 'data'])->name('permohonan.data'); // endpoint JSON Yajra
-    Route::get('/permohonan/tambah', [PermohonanController::class, 'indexTambah'])->name('permohonan.tambah');
-    Route::post('/permohonan/store', [PermohonanController::class, 'store'])->name('permohonan.store');
-    Route::get('/permohonan/{permohonan}/edit', [PermohonanController::class, 'edit'])->name('permohonan.edit');
-    Route::put('/permohonan/{permohonan}', [PermohonanController::class, 'update'])->name('permohonan.update');
-    Route::get('/permohonan/detail/{permohonan}', [PermohonanController::class, 'show'])->name('permohonan.show');
-    Route::patch('/permohonan/{permohonan}/status', [PermohonanController::class, 'updateStatus'])->name('permohonan.status');
-    Route::get('/permohonan/export/excel', [PermohonanController::class, 'exportExcel'])
-        ->name('permohonan.export.excel');
-    Route::get('/permohonan/export/pdf', [PermohonanController::class, 'exportPdf'])
-        ->name('permohonan.export.pdf');
-
-    // Peserta
-    Route::get('/peserta', [ParticipantController::class, 'index'])->name('peserta.index');
-    Route::get('/peserta/data', [ParticipantController::class, 'data'])->name('peserta.data'); // <- endpoint DataTables
-    Route::get('/peserta/show/{participant}', [ParticipantController::class, 'show'])->name('peserta.show');
-    Route::get('/peserta/create', [ParticipantController::class, 'create'])->name('peserta.create');
-    Route::post('/peserta/store', [ParticipantController::class, 'store'])->name('peserta.store');
-    Route::get('/peserta/{participant}/edit', [ParticipantController::class, 'edit'])->name('peserta.edit');
-    Route::put('/peserta/{participant}', [ParticipantController::class, 'update'])->name('peserta.update');
-    Route::get('/peserta/export/excel', [ParticipantController::class, 'exportExcel'])
-        ->name('peserta.export.excel');
-    Route::get('/peserta/export/pdf', [ParticipantController::class, 'exportPdf'])
-        ->name('peserta.export.pdf');
-
-    // Pembimbing
-    Route::get('/pembimbing', [SupervisorController::class, 'index'])->name('pembimbing.index');
-    Route::get('/pembimbing/data', [SupervisorController::class, 'data'])->name('pembimbing.data'); // <- endpoint DataTables
-    Route::get('/pembimbing/create', [SupervisorController::class, 'create'])->name('pembimbing.create');
-    Route::post('/pembimbing', [SupervisorController::class, 'store'])->name('pembimbing.store');
-    Route::get('/pembimbing/{supervisor}/edit', [SupervisorController::class, 'edit'])->name('pembimbing.edit');
-    Route::put('/pembimbing/{supervisor}', [SupervisorController::class, 'update'])->name('pembimbing.update');
-    Route::get('/pembimbing/export/excel', [SupervisorController::class, 'exportExcel'])
-        ->name('pembimbing.export.excel');
-    Route::get('/pembimbing/export/pdf', [SupervisorController::class, 'exportPdf'])
-        ->name('pembimbing.export.pdf');
-
-    // Instansi
-    Route::get('/instansi', [InstituteController::class, 'index'])->name('instansi.index');
-    Route::get('/instansi/data', [InstituteController::class, 'data'])->name('instansi.data'); // <- endpoint DataTables
-    Route::get('/instansi/create', [InstituteController::class, 'create'])->name('instansi.create');
-    Route::post('/instansi', [InstituteController::class, 'store'])->name('instansi.store');
-    Route::get('/instansi/{institute}/edit', [InstituteController::class, 'edit'])->name('instansi.edit');
-    Route::put('/instansi/{institute}', [InstituteController::class, 'update'])->name('instansi.update');
-    Route::get('/instansi/export/excel', [InstituteController::class, 'exportExcel'])
-        ->name('instansi.export.excel');
-    Route::get('/instansi/export/pdf', [InstituteController::class, 'exportPdf'])
-        ->name('instansi.export.pdf');
-
-    // Internship/Magang
-    Route::get('/magang', [InternshipController::class, 'index'])->name('internship.index');
-    Route::get('/magang/data', [InternshipController::class, 'data'])->name('internship.data');
-    Route::get('/magang/show/{internship}', [InternshipController::class, 'show'])->name('internship.show');
-    Route::get('/magang/create', [InternshipController::class, 'create'])->name('internship.create');
-    Route::post('/magang/store', [InternshipController::class, 'store'])->name('internship.store');
-    Route::get('/magang/{internship}/edit', [InternshipController::class, 'edit'])->name('internship.edit');
-    Route::put('/magang/{internship}', [InternshipController::class, 'update'])->name('internship.update');
-    Route::get('/magang/export/excel', [InternshipController::class, 'exportExcel'])->name('internship.export.excel');
-    Route::get('/magang/export/pdf', [InternshipController::class, 'exportPdf'])->name('internship.export.pdf');
-
-    // Penugasan
-    Route::get('/penugasan', [TaskController::class, 'index'])->name('penugasan.index');
-    Route::get('/penugasan/data', [TaskController::class, 'data'])->name('penugasan.data');
-    Route::get('/penugasan/show/{task}', [TaskController::class, 'show'])->name('penugasan.show');
-    Route::get('/penugasan/create', [TaskController::class, 'create'])->name('penugasan.create');
-    Route::post('/penugasan/store', [TaskController::class, 'store'])->name('penugasan.store');
-    Route::get('/penugasan/{task}/edit', [TaskController::class, 'edit'])->name('penugasan.edit');
-    Route::put('/penugasan/{task}', [TaskController::class, 'update'])->name('penugasan.update');
-
+    return view('auth.login');
 });
 
+// Route default '/dashboard' dari Breeze kita arahkan ke dashboard admin
+Route::get('/dashboard', function () {
+    return redirect()->route('admin.dashboard.index');
+})->middleware(['auth', 'verified'])->name('dashboard');
+
+// BUNGKUS SEMUA ROUTE ADMIN DI DALAM MIDDLEWARE 'auth'
+Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
+
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
+
+    // -- Permohonan --
+    Route::get('/permohonan/data', [PermohonanController::class, 'data'])->name('permohonan.data');
+    Route::resource('permohonan', PermohonanController::class)->names('permohonan')->parameters(['permohonan' => 'application']);
+    Route::patch('/permohonan/{application}/status', [PermohonanController::class, 'updateStatus'])->name('permohonan.status');
+    Route::get('/permohonan/export/excel', [PermohonanController::class, 'exportExcel'])->name('permohonan.export.excel');
+    Route::get('/permohonan/export/pdf', [PermohonanController::class, 'exportPdf'])->name('permohonan.export.pdf');
+
+    // -- Peserta --
+    Route::get('/peserta/data', [ParticipantController::class, 'data'])->name('peserta.data');
+    Route::resource('peserta', ParticipantController::class)->names('peserta')->parameters(['peserta' => 'participant']);
+    Route::get('/peserta/export/excel', [ParticipantController::class, 'exportExcel'])->name('peserta.export.excel');
+    Route::get('/peserta/export/pdf', [ParticipantController::class, 'exportPdf'])->name('peserta.export.pdf');
+
+    // -- Pembimbing --
+    Route::get('/pembimbing/data', [SupervisorController::class, 'data'])->name('pembimbing.data');
+    Route::resource('pembimbing', SupervisorController::class)
+        ->names('pembimbing')
+        ->parameters(['pembimbing' => 'supervisor']);
+    Route::get('/pembimbing/export/excel', [SupervisorController::class, 'exportExcel'])->name('pembimbing.export.excel');
+    Route::get('/pembimbing/export/pdf', [SupervisorController::class, 'exportPdf'])->name('pembimbing.export.pdf');
+
+    // -- Instansi --
+    Route::get('/instansi/data', [InstituteController::class, 'data'])->name('instansi.data');
+    Route::resource('instansi', InstituteController::class)
+        ->names('instansi')
+        ->parameters(['instansi' => 'institute']);
+    Route::get('/instansi/export/excel', [InstituteController::class, 'exportExcel'])->name('instansi.export.excel');
+    Route::get('/instansi/export/pdf', [InstituteController::class, 'exportPdf'])->name('instansi.export.pdf');
+
+    // -- Magang / Internship --
+    Route::get('/internship/data', [InternshipController::class, 'data'])->name('internship.data');
+    Route::resource('internship', InternshipController::class);
+    Route::get('/internship/export/excel', [InternshipController::class, 'exportExcel'])->name('internship.export.excel');
+    Route::get('/internship/export/pdf', [InternshipController::class, 'exportPdf'])->name('internship.export.pdf');
+
+    // -- Penugasan / Tasks --
+    Route::get('/penugasan/data', [TaskController::class, 'data'])->name('penugasan.data');
+    Route::resource('penugasan', TaskController::class)->names('penugasan')->parameters(['penugasan' => 'task']);
+
+    // -- Profil Pengguna (dari Breeze) --
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+});
+
+// Memuat route-route autentikasi dari Breeze
 require __DIR__.'/auth.php';
