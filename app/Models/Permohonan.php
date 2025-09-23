@@ -32,6 +32,11 @@ class Permohonan extends Model
         'file_permohonan_nama_asli',
         'file_permohonan_size',
         'file_permohonan_mime',
+        'file_suratbalasan',
+        'file_suratbalasan_nama_asli',
+        'file_suratbalasan_size',
+        'file_suratbalasan_mime',
+        'catatan',
     ];
 
     public function participants()

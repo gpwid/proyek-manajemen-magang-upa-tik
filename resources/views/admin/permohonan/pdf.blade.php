@@ -36,6 +36,7 @@
                 <th>Mulai</th>
                 <th>Selesai</th>
                 <th>Status</th>
+                <th>Catatan</th>
             </tr>
         </thead>
         <tbody>
@@ -55,6 +56,7 @@
                         {{ $p->status }}
                     </span>
                 </td>
+                <td>{{ $p->catatan ?? '-' }}</td>
             </tr>
             @endforeach
         </tbody>

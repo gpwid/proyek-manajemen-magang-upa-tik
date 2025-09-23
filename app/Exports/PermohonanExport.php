@@ -59,7 +59,8 @@ class PermohonanExport implements FromCollection, WithHeadings, WithMapping
             'Kontak Pembimbing',
             'Tanggal Mulai',
             'Tanggal Selesai',
-            'Status'
+            'Status',
+            'Catatan'
         ];
     }
 
@@ -79,6 +80,12 @@ class PermohonanExport implements FromCollection, WithHeadings, WithMapping
             $permohonan->tgl_mulai?->format('d/m/Y'),
             $permohonan->tgl_selesai?->format('d/m/Y'),
             $permohonan->status
+                ? ($permohonan->status == 'Aktif' ? 'Aktif'
+                    : ($permohonan->status == 'Proses' ? 'Proses'
+                        : ($permohonan->status == 'Selesai' ? 'Selesai'
+                            : ($permohonan->status == 'Ditolak' ? 'Ditolak' : '-'))))
+                : '-',
+            $permohonan->catatan ?? '-'
         ];
     }
 }

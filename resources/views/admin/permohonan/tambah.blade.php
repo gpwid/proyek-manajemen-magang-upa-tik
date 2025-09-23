@@ -125,6 +125,24 @@
                         </div>
                     @enderror
                 </div>
+                <div class="mb-3">
+                    <input value="{{ old('file_suratbalasan') }}" type="hidden" name="file_suratbalasan" id=""
+                        class="form-control @error('file_suratbalasan') is-invalid @enderror">
+                    @error('file_suratbalasan')
+                        <div class="invalid-feedback">
+                            {{ $message }}
+                        </div>
+                    @enderror
+                </div>
+                <div class="mb-3">
+                    <input value="{{ old('catatan') }}" type="hidden" name="catatan" id=""
+                        class="form-control @error('catatan') is-invalid @enderror">
+                    @error('catatan')
+                        <div class="invalid-feedback">
+                            {{ $message }}
+                        </div>
+                    @enderror
+                </div>
                 <div class="mb-3 d-inline float-end">
                     <a class="btn btn-secondary" href="{{ route('admin.permohonan.index') }}">Kembali</a>
                     <button type="submit" class="btn btn-primary"><i class="fa-solid fa-user-plus"></i> Tambah</button>

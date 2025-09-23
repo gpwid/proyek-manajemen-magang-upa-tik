@@ -27,6 +27,11 @@ return new class extends Migration
             $table->string('file_permohonan_nama_asli')->nullable();
             $table->unsignedBigInteger('file_permohonan_size')->nullable();
             $table->string('file_permohonan_mime')->nullable();
+            $table->string('file_suratbalasan')->nullable();
+            $table->string('file_suratbalasan_nama_asli')->nullable();
+            $table->unsignedBigInteger('file_suratbalasan_size')->nullable();
+            $table->string('file_suratbalasan_mime')->nullable();
+            $table->string('catatan', 255)->nullable();
             $table->timestamps();
         });
     }
