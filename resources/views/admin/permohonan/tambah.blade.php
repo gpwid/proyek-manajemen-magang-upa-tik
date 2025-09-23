@@ -96,8 +96,9 @@
                             >
                                 <option value="">-- Pilih Instansi --</option>
                                 @forelse ($data as $x)
-                                    <option value="{{ $x->id }}" @if (old('id_institute') == $x->id) selected @endif>
-                                {{ $x->nama_instansi }}</option>
+                                    <option value="{{ $x->id }}" {{ old('id_institute') == $x->id ? 'selected' : '' }}>
+                                        {{ $x->nama_instansi }}
+                                    </option>
                                 @empty
                                     <option value="">Tidak Ada Instansi</option>
                                 @endforelse
