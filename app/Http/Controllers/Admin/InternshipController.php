@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\admin;
+namespace App\Http\Controllers\Admin;
 
 use App\Exports\InternshipsExport;
 use App\Http\Controllers\Controller;
@@ -185,10 +185,6 @@ class InternshipController extends Controller
 
     public function edit(Internship $internship)
     {
-        $permohonan = Permohonan::with('institute')
-            ->where('status', 'Aktif')
-            ->orderBy('tgl_surat', 'desc')
-            ->get();
         $permohonan = Permohonan::with('institute')
             ->where('status', 'Aktif')
             ->orderBy('tgl_surat', 'desc')
