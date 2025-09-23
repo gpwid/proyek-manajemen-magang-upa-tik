@@ -19,6 +19,7 @@ class Participant extends Model
         'jenis_kelamin',
         'jurusan',
         'kontak_peserta',
+        'tahun_aktif',
         'keterangan',
     ];
 

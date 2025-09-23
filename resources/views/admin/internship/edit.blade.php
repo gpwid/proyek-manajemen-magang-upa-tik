@@ -89,6 +89,9 @@
                         <option value="Nonaktif"
                             {{ old('status_magang', $internship->status_magang) == 'Nonaktif' ? 'selected' : '' }}>Nonaktif
                         </option>
+                        <option value="Tidak Selesai"
+                            {{ old('status_magang', $internship->status_magang) == 'Tidak Selesai' ? 'selected' : '' }}>Tidak Selesai
+                        </option>
                     </select>
                     @error('status_magang')
                         <div class="invalid-feedback">{{ $message }}</div>

@@ -25,6 +25,7 @@
                 <th>Jenis Kelamin</th>
                 <th>Jurusan</th>
                 <th>Kontak</th>
+                <th>Tahun Aktif</th>
                 <th>Keterangan</th>
             </tr>
         </thead>
@@ -38,6 +39,7 @@
                 <td>{{ $p->jenis_kelamin === 'L' ? 'Laki-laki' : 'Perempuan' }}</td>
                 <td>{{ $p->jurusan }}</td>
                 <td>{{ $p->kontak_peserta }}</td>
+                <td>{{ $p->tahun_aktif }}</td>
                 <td>{{ $p->keterangan }}</td>
             </tr>
             @endforeach

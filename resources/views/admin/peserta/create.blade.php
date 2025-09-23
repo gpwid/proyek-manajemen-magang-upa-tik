@@ -66,6 +66,15 @@
                 @error('kontak_peserta') <div class="invalid-feedback">{{ $message }}</div> @enderror
             </div>
 
+            {{-- Tahun Aktif --}}
+            <div class="mb-3">
+                <label class="form-label">Tahun Aktif <span class="text-danger">*</span></label>
+                <input value="{{ old('tahun_aktif') }}" type="text" name="tahun_aktif"
+                    class="form-control @error('tahun_aktif') is-invalid @enderror"
+                    placeholder="Masukkan tahun aktif">
+                @error('tahun_aktif') <div class="invalid-feedback">{{ $message }}</div> @enderror
+            </div>
+
             {{-- Keterangan (opsional) --}}
             <div class="mb-3">
                 <label class="form-label">Keterangan</label>

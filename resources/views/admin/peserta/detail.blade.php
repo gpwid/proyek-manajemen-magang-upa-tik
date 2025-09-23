@@ -70,6 +70,16 @@
                             </div>
                         </div>
 
+                        <!-- Tahun Aktif -->
+                        <div class="col-md-6">
+                            <div class="info-item">
+                                <label class="info-label">Tahun Aktif</label>
+                                <div class="info-value">
+                                    {{ $participant->tahun_aktif ?? '-' }}
+                                </div>
+                            </div>
+                        </div>
+
                         <!-- Keterangan -->
                         <div class="col-12">
                             <div class="info-item">

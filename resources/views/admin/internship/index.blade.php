@@ -39,7 +39,7 @@
                     <label class="form-label">Status</label>
                     <select name="status_magang" class="form-select select2-filter">
                         <option value="">Semua status…</option>
-                        @foreach (['Aktif','Nonaktif'] as $st)
+                        @foreach (['Aktif','Nonaktif', 'Tidak Selesai'] as $st)
                         <option value="{{ $st }}" @selected(request('status_magang')===$st)>{{ $st }}</option>
                         @endforeach
                     </select>
