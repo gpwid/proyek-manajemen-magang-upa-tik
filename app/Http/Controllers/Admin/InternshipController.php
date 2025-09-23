@@ -189,10 +189,6 @@ class InternshipController extends Controller
             ->where('status', 'Aktif')
             ->orderBy('tgl_surat', 'desc')
             ->get();
-        $permohonan = Permohonan::with('institute')
-            ->where('status', 'Aktif')
-            ->orderBy('tgl_surat', 'desc')
-            ->get();
         $supervisors = Supervisor::orderBy('nama')->get();
         $participants = Participant::orderBy('nama')->get();
 

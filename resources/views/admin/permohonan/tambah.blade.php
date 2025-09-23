@@ -34,17 +34,18 @@
                     @enderror
                 </div>
                 <div class="mb-3">
-                    <label for="">Instansi <label class="text-danger">*</label></label></label>
+                    <label for="id_institute">Instansi <span class="text-danger">*</span></label>
                     <select name="id_institute" class="form-control @error('id_institute') is-invalid @enderror"
-                        id="">
+                        id="id_institute">
                         <option value="">--Pilih Instansi--</option>
                         @forelse ($data as $x)
-                            <option value="{{ $x->id }}">{{ $x->nama_instansi }}</option>
+                            <option value="{{ $x->id }}" @if (old('id_institute') == $x->id) selected @endif>
+                                {{ $x->nama_instansi }}</option>
                         @empty
                             <option value="">Tidak Ada Instansi</option>
                         @endforelse
                     </select>
-                    @error('id_instansi')
+                    @error('id_institute')
                         <div class="invalid-feedback">
                             {{ $message }}
                         </div>
@@ -99,15 +100,13 @@
                     @enderror
                 </div>
                 <div class="mb-3">
-                    <label for="">Jenis Magang <label class="text-danger">*</label></label></label>
-                    <select name="jenis_magang" id=""
-                        class="form-control @error('jenis_magang')
-                is-invalid
-            @enderror">
-                        <option value="{{ old('jenis_magang') }}">--Jenis Magang--</option>
-                        <option value="Mandiri">Mandiri</option>
-                        <option value="MBKM">MBKM</option>
-                        <option value="Sekolah">Sekolah</option>
+                    <label for="jenis_magang">Jenis Magang <span class="text-danger">*</span></label>
+                    <select name="jenis_magang" id="jenis_magang"
+                        class="form-control @error('jenis_magang') is-invalid @enderror">
+                        <option value="">--Jenis Magang--</option>
+                        <option value="Mandiri" @if (old('jenis_magang') == 'Mandiri') selected @endif>Mandiri</option>
+                        <option value="MBKM" @if (old('jenis_magang') == 'MBKM') selected @endif>MBKM</option>
+                        <option value="Sekolah" @if (old('jenis_magang') == 'Sekolah') selected @endif>Sekolah</option>
                     </select>
                     @error('jenis_magang')
                         <div class="invalid-feedback">
@@ -116,8 +115,8 @@
                     @enderror
                 </div>
                 <div class="mb-3">
-                    <label for="">File Permohonan <label class="text-danger">*</label></label></label>
-                    <input value="{{ old('file_permohonan') }}" type="file" name="file_permohonan" id=""
+                    <label for="file_permohonan">File Permohonan <span class="text-danger">*</span></label>
+                    <input type="file" name="file_permohonan" id="file_permohonan"
                         class="form-control @error('file_permohonan') is-invalid @enderror">
                     @error('file_permohonan')
                         <div class="invalid-feedback">
