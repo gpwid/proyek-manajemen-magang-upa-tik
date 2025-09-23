@@ -44,49 +44,6 @@ class InternshipController extends Controller
         ));
     }
 
-    // public function data(Request $request)
-    // {
-    //     // Endpoint untuk DataTables Yajra
-    //     $query = Internship::query()->with([
-    //         'supervisor:id,nama',
-    //         'permohonan:id,tgl_mulai,tgl_selesai,jenis_magang',
-    //         'participants:id,nama',
-    //     ]);
-
-    //     // Filter berdasarkan query parameters
-    //     if ($request->filled('status_magang')) {
-    //         $query->where('status_magang', $request->status_magang);
-    //     }
-
-    //     // Query untuk DataTables
-    //     return DataTables::of($query)
-    //         ->editColumn('tgl_mulai', fn($p) => optional($p->permohonan->tgl_mulai)->format('d-m-Y'))
-    //         ->editColumn('tgl_selesai', fn($p) => optional($p->permohonan->tgl_selesai)->format('d-m-Y'))
-    //         ->addColumn('pembimbing', fn($p) => optional($p->supervisor)->nama ?? '-')
-    //         ->addColumn('permohonan', fn($p) => optional($p->permohonan)->id ?? '-')
-    //         ->addColumn('peserta',    fn($p) => optional($p->participant)->nama ?? '-')
-    //         ->editColumn('status_magang', function ($p) {
-    //             $cls = $p->status_magang == 'Aktif' ? 'bg-success' : 'bg-secondary';
-    //             return "<span class='badge $cls'>$p->status_magang</span>";
-    //         })
-    //         ->addColumn('aksi', function ($p) {
-    //             $url1 = route('admin.internship.edit', $p->id);
-    //             $url2 = route('admin.internship.show', $p->id);
-    //             return "<div class='flex gap-2'>
-    //                     <a href='$url1' class='btn btn-sm btn-primary text-white' data-bs-toggle='tooltip'
-    //     data-bs-placement='top' title='Edit'>
-    //                         <i class='fa-solid fa-pen-to-square'></i> Edit
-    //                     </a>
-    //                     <a href='$url2' class='btn btn-sm btn-success text-white' data-bs-toggle='tooltip'
-    //     data-bs-placement='top' title='Detail'>
-    //                         <i class='fa-solid fa-eye'></i> Detail
-    //                     </a>
-    //                     </div>";
-    //         })
-    //         ->rawColumns(['status_magang', 'aksi'])
-    //         ->make(true);
-    // }
-
     public function data(Request $request)
     {
         $query = Internship::query()->with([

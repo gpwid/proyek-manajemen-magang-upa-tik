@@ -2,16 +2,16 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Models\Institute;
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use Illuminate\Http\RedirectResponse;
-use Yajra\DataTables\Facades\DataTables;
-use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\InstitutesExport;
+use App\Http\Controllers\Controller;
+use App\Models\Institute;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Illuminate\View\View;
+use Maatwebsite\Excel\Facades\Excel;
+use Yajra\DataTables\Facades\DataTables;
 
 class InstituteController extends Controller
 {
@@ -27,9 +27,9 @@ class InstituteController extends Controller
         // Filter Search Custom
         if ($request->searchbox) {
             $search = $request->searchbox;
-            $query->where(function($q) use ($search) {
+            $query->where(function ($q) use ($search) {
                 $q->where('nama_instansi', 'like', "%{$search}%")
-                  ->orWhere('alamat', 'like', "%{$search}%");
+                    ->orWhere('alamat', 'like', "%{$search}%");
             });
         }
 
@@ -55,7 +55,7 @@ class InstituteController extends Controller
         ]);
 
         Institute::create($request->only([
-            'nama_instansi','alamat'
+            'nama_instansi', 'alamat',
         ]));
 
         return redirect()->route('admin.instansi.index')->with('sukses', 'Data Disimpan');
@@ -74,7 +74,7 @@ class InstituteController extends Controller
         ]);
 
         $institute->update($request->only([
-            'nama_instansi','alamat'
+            'nama_instansi', 'alamat',
         ]));
 
         return redirect()->route('admin.instansi.index')->with('sukses', 'Data berhasil diperbarui');
@@ -82,7 +82,8 @@ class InstituteController extends Controller
 
     public function exportExcel(Request $request)
     {
-        $filename = 'institute_' . now()->format('Ymd_His') . '.xlsx';
+        $filename = 'institute_'.now()->format('Ymd_His').'.xlsx';
+
         return Excel::download(new InstitutesExport($request), $filename);
     }
 
@@ -91,20 +92,20 @@ class InstituteController extends Controller
         $q = Institute::query();
 
         if ($search = $request->get('search')) {
-            $q->where(function($x) use ($search) {
-                $x->where('nama_instansi','like',"%{$search}%")
-                  ->orWhere('alamat','like',"%{$search}%");
+            $q->where(function ($x) use ($search) {
+                $x->where('nama_instansi', 'like', "%{$search}%")
+                    ->orWhere('alamat', 'like', "%{$search}%");
             });
         }
 
         $data = $q->orderBy('nama_instansi')->get();
         $subtitle = '';
         if ($search) {
-            $subtitle = 'Hasil pencarian untuk: "' . $search . '"';
+            $subtitle = 'Hasil pencarian untuk: "'.$search.'"';
         }
 
-        $pdf = Pdf::loadView('admin.instansi.pdf', compact('data','subtitle'))
-                  ->setPaper('a4', 'portrait');
+        $pdf = Pdf::loadView('admin.instansi.pdf', compact('data', 'subtitle'))
+            ->setPaper('a4', 'portrait');
 
         return $pdf->download('institute_'.now()->format('Ymd_His').'.pdf');
     }

@@ -101,7 +101,7 @@
                     <div class="card-body">
                         <div class="d-grid gap-3">
                             {{-- Tombol 1: Tambah Permohonan Baru --}}
-                            <a href="{{ route('admin.permohonan.tambah') }}" class="btn btn-primary btn-lg btn-icon-split">
+                            <a href="{{ route('admin.permohonan.create') }}" class="btn btn-primary btn-lg btn-icon-split">
                                 <span class="text"><i class="fas fa-file-alt"></i> Buat Permohonan Baru</span>
                             </a>
 

@@ -16,14 +16,14 @@ use Yajra\DataTables\Facades\DataTables;
 
 class PermohonanController extends Controller
 {
-    public function show(Permohonan $permohonan)
+    public function show(Permohonan $application)
     {
         // Menampilkan detail permohonan
         // return view('admin.permohonan.show', compact('permohonan'));
 
-        $permohonan->load(['institute', 'participants']);
+        $application->load(['institute', 'participants']);
 
-        return view('admin.permohonan.show', compact('permohonan'));
+        return view('admin.permohonan.show', compact('application'));
     }
 
     public function index(Request $request): View
@@ -40,7 +40,7 @@ class PermohonanController extends Controller
         return view('admin.permohonan.index', compact('searchinstitutes', 'totalAktif', 'totalProses', 'totalSelesai', 'totalTolak', 'totalSemua'));
     }
 
-    public function indexTambah()
+    public function create()
     {
         $data = \App\Models\Institute::all();
 
@@ -119,19 +119,19 @@ class PermohonanController extends Controller
             ->make(true);
     }
 
-    public function edit(Permohonan $permohonan)
+    public function edit(Permohonan $application)
     {
         // Form edit permohonan
         $searchinstitutes = Institute::orderBy('nama_instansi')->get();
 
-        return view('admin.permohonan.edit', compact('permohonan', 'searchinstitutes'));
+        return view('admin.permohonan.edit', compact('application', 'searchinstitutes'));
     }
 
-    public function update(Request $request, Permohonan $permohonan)
+    public function update(Request $request, Permohonan $application)
     {
         // Validasi input
         $validated = $request->validate([
-            'no_surat' => 'required|string|max:100|unique:permohonan,no_surat',
+            'no_surat' => 'required|string|max:100|unique:permohonan,no_surat,'.$application->id,
             'tgl_surat' => 'required|date',
             'id_institute' => 'required|exists:institutes,id',
             'tgl_mulai' => 'required|date',
@@ -148,16 +148,16 @@ class PermohonanController extends Controller
         // Proses upload file jika ada
         if ($request->hasFile('file_permohonan')) {
             // hapus file lama (jika ada)
-            if ($permohonan->file_permohonan) {
-                Storage::disk('public')->delete($permohonan->file_permohonan);
+            if ($application->file_permohonan) {
+                Storage::disk('public')->delete($application->file_permohonan);
             }
             $path = $request->file('file_permohonan')->store('permohonan', 'public');
         } else {
-            $path = $permohonan->file_permohonan; // tetap pakai yang lama
+            $path = $application->file_permohonan; // tetap pakai yang lama
         }
 
         // Update data permohonan
-        $permohonan->update([
+        $application->update([
             'id_institute' => $institute->id,
             'no_surat' => $validated['no_surat'],
             'tgl_surat' => $validated['tgl_surat'],
@@ -166,7 +166,7 @@ class PermohonanController extends Controller
             'pembimbing_sekolah' => $validated['pembimbing_sekolah'],
             'kontak_pembimbing' => $validated['kontak_pembimbing'],
             'jenis_magang' => $validated['jenis_magang'],
-            'status' => $permohonan->status,
+            'status' => $application->status,
             'file_permohonan' => $path,
         ]);
 
@@ -238,7 +238,7 @@ class PermohonanController extends Controller
             ->with('success', 'Data permohonan berhasil ditambahkan.');
     }
 
-    public function updateStatus(Request $request, Permohonan $permohonan)
+    public function updateStatus(Request $request, Permohonan $application)
     {
         // Validasi input status
         $data = $request->validate([
@@ -248,7 +248,7 @@ class PermohonanController extends Controller
         $to = $data['to'];
 
         // Transisi status sesuai aturan
-        $allowed = match ($permohonan->status) {
+        $allowed = match ($application->status) {
             'Aktif' => ['Selesai', 'Ditolak'],
             'Proses' => ['Aktif', 'Ditolak'],
             default => [],
@@ -256,11 +256,11 @@ class PermohonanController extends Controller
 
         // Cek apakah transisi status diizinkan (cari $to di dalam array $allowed)
         if (! in_array($to, $allowed, true)) {
-            return back()->withErrors('Transisi status tidak diizinkan dari '.$permohonan->status.' ke '.$to);
+            return back()->withErrors('Transisi status tidak diizinkan dari '.$application->status.' ke '.$to);
         }
 
         // Update status permohonan
-        $permohonan->update(['status' => $to]);
+        $application->update(['status' => $to]);
 
         // Redirect dengan pesan sukses
         return back()->with('success', 'Status permohonan berhasil diperbarui menjadi '.$to);

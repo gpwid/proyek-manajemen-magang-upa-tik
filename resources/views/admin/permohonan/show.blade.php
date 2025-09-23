@@ -7,18 +7,18 @@
         <div class="d-sm-flex align-items-center justify-content-between mb-3">
             <h1 class="h3 text-gray-800">Detail Permohonan</h1>
             <div class="d-flex flex-wrap gap-2">
-                <a href="{{ route('admin.permohonan.edit', $permohonan->id) }}" class="btn btn-primary"><i
+                <a href="{{ route('admin.permohonan.edit', $application->id) }}" class="btn btn-primary"><i
                         class="fa-solid fa-pen-to-square"></i> Edit</a>
                 <a href="{{ route('admin.permohonan.index') }}" class="btn btn-secondary">Kembali</a>
-                @if ($permohonan->status === 'Proses')
-                    <form method="POST" action="{{ route('admin.permohonan.status', $permohonan) }}"
+                @if ($application->status === 'Proses')
+                    <form method="POST" action="{{ route('admin.permohonan.status', $application) }}"
                         onsubmit="return confirm('Ubah status menjadi Aktif?');">
                         @csrf @method('PATCH')
                         <input type="hidden" name="to" value="Aktif">
                         <button class="btn btn-success"><i class="fa-solid fa-circle-check"></i> Set Aktif</button>
                     </form>
 
-                    <form method="POST" action="{{ route('admin.permohonan.status', $permohonan) }}"
+                    <form method="POST" action="{{ route('admin.permohonan.status', $application) }}"
                         onsubmit="return confirm('Tolak permohonan ini?');">
                         @csrf @method('PATCH')
                         <input type="hidden" name="to" value="Ditolak">
@@ -26,15 +26,15 @@
                     </form>
                 @endif
 
-                @if ($permohonan->status === 'Aktif')
-                    <form method="POST" action="{{ route('admin.permohonan.status', $permohonan) }}"
+                @if ($application->status === 'Aktif')
+                    <form method="POST" action="{{ route('admin.permohonan.status', $application) }}"
                         onsubmit="return confirm('Tandai selesai?');">
                         @csrf @method('PATCH')
                         <input type="hidden" name="to" value="Selesai">
                         <button class="btn btn-primary">Tandai Selesai</button>
                     </form>
 
-                    <form method="POST" action="{{ route('admin.permohonan.status', $permohonan) }}"
+                    <form method="POST" action="{{ route('admin.permohonan.status', $application) }}"
                         onsubmit="return confirm('Tolak permohonan ini?');">
                         @csrf @method('PATCH')
                         <input type="hidden" name="to" value="Ditolak">
@@ -42,7 +42,7 @@
                     </form>
                 @endif
 
-                @if (in_array($permohonan->status, ['Selesai', 'Ditolak']))
+                @if (in_array($application->status, ['Selesai', 'Ditolak']))
                     <span class="text-muted">Tidak ada aksi status tersedia.</span>
                 @endif
             </div>
@@ -81,21 +81,21 @@
                                 <div class="info-item">
                                     <label class="info-label text-body-secondary my-0">Asal Instansi Surat</label>
                                     <div class="info-value" style="font-weight: 700">
-                                        {{ $permohonan->institute->nama_instansi ?? '-' }}
+                                        {{ $application->institute->nama_instansi ?? '-' }}
                                     </div>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="info-item">
                                     <label class="info-label text-body-secondary my-0">No. Surat</label>
-                                    <div class="info-value" style="font-weight:700">{{ $permohonan->no_surat }}</div>
+                                    <div class="info-value" style="font-weight:700">{{ $application->no_surat }}</div>
                                 </div>
                             </div>
 
                             <div class="col-md-6">
                                 <div class="info-item">
                                     <label class="info-label text-body-secondary my-0">Jenis Magang</label>
-                                    <div class="info-value" style="font-weight: 700">{{ $permohonan->jenis_magang }}</div>
+                                    <div class="info-value" style="font-weight: 700">{{ $application->jenis_magang }}</div>
                                 </div>
                             </div>
 
@@ -104,14 +104,14 @@
                                 <div class="info-item">
                                     <label class="info-label text-body-secondary my-0">Tanggal Surat dibuat</label>
                                     <div class="info-value" style="font-weight: 700">
-                                        {{ $permohonan->tgl_surat->format('d-m-Y') }}</div>
+                                        {{ $application->tgl_surat->format('d-m-Y') }}</div>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="info-item">
                                     <label class="info-label text-body-secondary my-0">Tanggal Surat Masuk</label>
                                     <div class="info-value" style="font-weight: 700">
-                                        {{ $permohonan->tgl_suratmasuk->format('d-m-Y') }}</div>
+                                        {{ $application->tgl_suratmasuk->format('d-m-Y') }}</div>
                                 </div>
                             </div>
 
@@ -119,14 +119,14 @@
                                 <div class="info-item">
                                     <label class="info-label text-body-secondary my-0">Status</label>
                                     <div class="info-value" style="font-weight: 700">
-                                        @if ($permohonan->status === 'Aktif')
-                                            <span class='badge bg-success'>{{ $permohonan->status }}</span>
-                                        @elseif($permohonan->status === 'Proses')
-                                            <span class='badge bg-warning text-dark'>{{ $permohonan->status }}</span>
-                                        @elseif($permohonan->status === 'Selesai')
-                                            <span class='badge bg-primary'>{{ $permohonan->status }}</span>
-                                        @elseif($permohonan->status === 'Ditolak')
-                                            <span class='badge bg-danger'>{{ $permohonan->status }}</span>
+                                        @if ($application->status === 'Aktif')
+                                            <span class='badge bg-success'>{{ $application->status }}</span>
+                                        @elseif($application->status === 'Proses')
+                                            <span class='badge bg-warning text-dark'>{{ $application->status }}</span>
+                                        @elseif($application->status === 'Selesai')
+                                            <span class='badge bg-primary'>{{ $application->status }}</span>
+                                        @elseif($application->status === 'Ditolak')
+                                            <span class='badge bg-danger'>{{ $application->status }}</span>
                                         @else
                                             <span class="text-muted">-</span>
                                         @endif
@@ -137,7 +137,7 @@
                                 <div class="info-item">
                                     <label class="info-label text-body-secondary my-0">Tanggal Mulai Magang</label>
                                     <div class="info-value" style="font-weight: 700">
-                                        {{ $permohonan->tgl_mulai->format('d-m-Y') }}</div>
+                                        {{ $application->tgl_mulai->format('d-m-Y') }}</div>
                                 </div>
                             </div>
 
@@ -146,7 +146,7 @@
                                 <div class="info-item">
                                     <label class="info-label text-body-secondary my-0">Tanggal Selesai Magang</label>
                                     <div class="info-value" style="font-weight: 700">
-                                        {{ $permohonan->tgl_selesai->format('d-m-Y') }}
+                                        {{ $application->tgl_selesai->format('d-m-Y') }}
                                     </div>
                                 </div>
                             </div>
@@ -155,7 +155,7 @@
                                 <div class="info-item">
                                     <label class="info-label text-body-secondary my-0">Pembimbing dari Instansi</label>
                                     <div class="info-value" style="font-weight: 700">
-                                        {{ $permohonan->pembimbing_sekolah }}
+                                        {{ $application->pembimbing_sekolah }}
                                     </div>
                                 </div>
                             </div>
@@ -164,14 +164,14 @@
                                 <div class="info-item">
                                     <label class="info-label text-body-secondary my-0">Kontak Pembimbing</label>
                                     <div class="info-value" style="font-weight: 700">
-                                        {{ $permohonan->kontak_pembimbing }}
+                                        {{ $application->kontak_pembimbing }}
                                     </div>
                                 </div>
                             </div>
 
                             {{-- Tambah Peserta --}}
                             <div class="col-12 rounded-top">
-                                <a href="{{ route('admin.peserta.create', ['permohonan_id' => $permohonan->id]) }}"
+                                <a href="{{ route('admin.peserta.create', ['permohonan_id' => $application->id]) }}"
                                     class="btn btn-sm btn-primary mb-2">
                                     <i class="fa fa-plus"></i> Tambah Peserta
                                 </a>
@@ -182,7 +182,7 @@
                                         <i class="fa-solid fa-users me-2"></i> Peserta pada Surat Permohonan
                                     </h5>
                                     <span class="badge bg-secondary">Total:
-                                        {{ $permohonan->participants->count() }}</span>
+                                        {{ $application->participants->count() }}</span>
                                 </div>
                                 <div class="card-body p-0">
                                     <div class="table-responsive">
@@ -200,7 +200,7 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                @forelse($permohonan->participants as $i => $ps)
+                                                @forelse($application->participants as $i => $ps)
                                                     <tr>
                                                         <td>{{ $i + 1 }}</td>
                                                         <td>{{ $ps->nama }}</td>
@@ -232,13 +232,13 @@
                                     </div>
                                     <div>
                                         <a download class="btn btn-success me-2 my-2"
-                                            href="{{ Storage::url($permohonan->file_permohonan) }}"><i
+                                            href="{{ Storage::url($application->file_permohonan) }}"><i
                                                 class="fa-solid fa-file-arrow-down"></i> Unduh file</a>
                                     </div>
                                 </div>
 
                                 <div class="col-12 ratio ratio-16x9">
-                                    <iframe src="{{ Storage::url($permohonan->file_permohonan) }}" title="PDF Reader"
+                                    <iframe src="{{ Storage::url($application->file_permohonan) }}" title="PDF Reader"
                                         style="border:0; width:100%; height:70vh"></iframe>
                                 </div>
                             </div>

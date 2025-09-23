@@ -52,7 +52,7 @@
                 </div>
                 <div class="mb-3">
                     <label>No. Surat <span class="text-danger">*</span></label>
-                    <input type="text" name="no_surat" value="{{ old('no_surat', $permohonan->no_surat ?? '') }}"
+                    <input type="text" name="no_surat" value="{{ old('no_surat', $application->no_surat ?? '') }}"
                         class="form-control @error('no_surat') is-invalid @enderror">
                     @error('no_surat')
                         <div class="invalid-feedback">{{ $message }}</div>

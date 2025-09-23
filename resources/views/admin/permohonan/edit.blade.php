@@ -17,7 +17,7 @@
             @endif
 
             <div class="product-card shadow col-12 p-3">
-                <form action="{{ route('admin.permohonan.update', $permohonan->id) }}" method="POST"
+                <form action="{{ route('admin.permohonan.update', $application->id) }}" method="POST"
                     enctype="multipart/form-data">
                     @csrf
                     @method('PUT')
@@ -25,7 +25,7 @@
                     <div class="mb-3">
                         <label>Tanggal Surat <span class="text-danger">*</span></label>
                         <input type="date" name="tgl_surat"
-                            value="{{ old('tgl_surat', optional($permohonan->tgl_surat)->format('Y-m-d')) }}"
+                            value="{{ old('tgl_surat', optional($application->tgl_surat)->format('Y-m-d')) }}"
                             class="form-control @error('tgl_surat') is-invalid @enderror">
                         @error('tgl_surat')
                             <div class="invalid-feedback">{{ $message }}</div>
@@ -38,7 +38,7 @@
                             <option value="">--Pilih Instansi--</option>
                             @foreach ($searchinstitutes as $x)
                                 <option value="{{ $x->id }}"
-                                    {{ old('id_institute', $permohonan->id_institute) == $x->id ? 'selected' : '' }}>
+                                    {{ old('id_institute', $application->id_institute) == $x->id ? 'selected' : '' }}>
                                     {{ $x->nama_instansi }}
                                 </option>
                             @endforeach
@@ -49,7 +49,7 @@
                     </div>
                     <div class="mb-3">
                         <label>No. Surat <span class="text-danger">*</span></label>
-                        <input type="text" name="no_surat" value="{{ old('no_surat', $permohonan->no_surat ?? '') }}"
+                        <input type="text" name="no_surat" value="{{ old('no_surat', $application->no_surat ?? '') }}"
                             class="form-control @error('no_surat') is-invalid @enderror">
                         @error('no_surat')
                             <div class="invalid-feedback">{{ $message }}</div>
@@ -58,7 +58,7 @@
                     <div class="mb-3">
                         <label>Tanggal Mulai <span class="text-danger">*</span></label>
                         <input type="date" name="tgl_mulai"
-                            value="{{ old('tgl_mulai', optional($permohonan->tgl_mulai)->format('Y-m-d')) }}"
+                            value="{{ old('tgl_mulai', optional($application->tgl_mulai)->format('Y-m-d')) }}"
                             class="form-control @error('tgl_mulai') is-invalid @enderror">
                         @error('tgl_mulai')
                             <div class="invalid-feedback">{{ $message }}</div>
@@ -68,7 +68,7 @@
                     <div class="mb-3">
                         <label>Tanggal Selesai <span class="text-danger">*</span></label>
                         <input type="date" name="tgl_selesai"
-                            value="{{ old('tgl_selesai', optional($permohonan->tgl_selesai)->format('Y-m-d')) }}"
+                            value="{{ old('tgl_selesai', optional($application->tgl_selesai)->format('Y-m-d')) }}"
                             class="form-control @error('tgl_selesai') is-invalid @enderror">
                         @error('tgl_selesai')
                             <div class="invalid-feedback">{{ $message }}</div>
@@ -78,7 +78,7 @@
                     <div class="mb-3">
                         <label>Pembimbing Sekolah <span class="text-danger">*</span></label>
                         <input type="text" name="pembimbing_sekolah"
-                            value="{{ old('pembimbing_sekolah', $permohonan->pembimbing_sekolah) }}"
+                            value="{{ old('pembimbing_sekolah', $application->pembimbing_sekolah) }}"
                             class="form-control @error('pembimbing_sekolah') is-invalid @enderror">
                         @error('pembimbing_sekolah')
                             <div class="invalid-feedback">{{ $message }}</div>
@@ -88,7 +88,7 @@
                     <div class="mb-3">
                         <label>Kontak Pembimbing <span class="text-danger">*</span></label>
                         <input type="text" name="kontak_pembimbing"
-                            value="{{ old('kontak_pembimbing', $permohonan->kontak_pembimbing) }}"
+                            value="{{ old('kontak_pembimbing', $application->kontak_pembimbing) }}"
                             class="form-control @error('kontak_pembimbing') is-invalid @enderror">
                         @error('kontak_pembimbing')
                             <div class="invalid-feedback">{{ $message }}</div>
@@ -100,7 +100,7 @@
                         <select name="jenis_magang" class="form-control @error('jenis_magang') is-invalid @enderror">
                             @foreach (['Mandiri', 'MBKM', 'Sekolah'] as $jm)
                                 <option value="{{ $jm }}"
-                                    {{ old('jenis_magang', $permohonan->jenis_magang) == $jm ? 'selected' : '' }}>
+                                    {{ old('jenis_magang', $application->jenis_magang) == $jm ? 'selected' : '' }}>
                                     {{ $jm }}
                                 </option>
                             @endforeach
@@ -115,7 +115,7 @@
                         <select name="status" class="form-control @error('status') is-invalid @enderror">
                             @foreach (['Proses', 'Aktif', 'Selesai', 'Ditolak'] as $st)
                                 <option value="{{ $st }}"
-                                    {{ old('status', $permohonan->status) == $st ? 'selected' : '' }}>
+                                    {{ old('status', $application->status) == $st ? 'selected' : '' }}>
                                     {{ $st }}</option>
                             @endforeach
                         </select>
@@ -126,9 +126,9 @@
 
                     <div class="mb-3">
                         <label>File Permohonan (opsional ganti)</label>
-                        @if ($permohonan->file_permohonan)
+                        @if ($application->file_permohonan)
                             <div class="mb-2">
-                                <a target="_blank" href="{{ Storage::url($permohonan->file_permohonan) }}">Lihat file saat
+                                <a target="_blank" href="{{ Storage::url($application->file_permohonan) }}">Lihat file saat
                                     ini</a>
                             </div>
                         @endif
