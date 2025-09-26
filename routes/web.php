@@ -2,12 +2,12 @@
 
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\InstituteController;
-// Admin Controllers
 use App\Http\Controllers\Admin\InternshipController;
 use App\Http\Controllers\Admin\ParticipantController;
 use App\Http\Controllers\Admin\PermohonanController;
 use App\Http\Controllers\Admin\SupervisorController;
 use App\Http\Controllers\Admin\TaskController;
+use App\Http\Controllers\Admin\UsersController;
 use App\Http\Controllers\Pemagang\DashboardController as PemagangDashboardController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RedirectController;
@@ -78,6 +78,10 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
     // -- Penugasan / Tasks --
     Route::get('/penugasan/data', [TaskController::class, 'data'])->name('penugasan.data');
     Route::resource('penugasan', TaskController::class)->names('penugasan')->parameters(['penugasan' => 'task']);
+
+    // Pengguna
+    Route::get('/users/data', [UsersController::class, 'data'])->name('users.data');
+    Route::resource('users', UsersController::class)->names('users');
 
     // -- Profil Pengguna (dari Breeze) --
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

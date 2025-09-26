@@ -80,6 +80,13 @@
                 <span>Kelola Instansi</span>
             </a>
         </li>
+
+        <li class="nav-item @yield('users-active')">
+            <a class="nav-link" href="{{ route('admin.users.index') }}">
+                <i class="fa-solid fa-users-gear"></i>
+                <span>Kelola Pengguna</span>
+            </a>
+        </li>
     @endif
 
     {{-- =================================================== --}}
