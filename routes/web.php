@@ -8,7 +8,9 @@ use App\Http\Controllers\Admin\ParticipantController;
 use App\Http\Controllers\Admin\PermohonanController;
 use App\Http\Controllers\Admin\SupervisorController;
 use App\Http\Controllers\Admin\TaskController;
+use App\Http\Controllers\Pemagang\DashboardController as PemagangDashboardController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\RedirectController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -20,20 +22,21 @@ use Illuminate\Support\Facades\Route;
 
 // Halaman utama sekarang akan menampilkan halaman login jika pengguna belum masuk
 Route::get('/', function () {
-    if (Auth::check()) { // <-- Memanggil Auth::check()
-        return redirect()->route('admin.dashboard.index');
+    if (Auth::check()) {
+        return redirect()->route('dashboard');
     }
 
+    // Jika belum, tampilkan halaman login
     return view('auth.login');
 });
 
-// Route default '/dashboard' dari Breeze kita arahkan ke dashboard admin
-Route::get('/dashboard', function () {
-    return redirect()->route('admin.dashboard.index');
-})->middleware(['auth', 'verified'])->name('dashboard');
+// Route '/dashboard'
+Route::get('/dashboard', [RedirectController::class, 'dashboard'])
+    ->middleware(['auth', 'verified'])
+    ->name('dashboard');
 
 // BUNGKUS SEMUA ROUTE ADMIN DI DALAM MIDDLEWARE 'auth'
-Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
+Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->group(function () {
 
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
 
@@ -75,6 +78,17 @@ Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
     // -- Penugasan / Tasks --
     Route::get('/penugasan/data', [TaskController::class, 'data'])->name('penugasan.data');
     Route::resource('penugasan', TaskController::class)->names('penugasan')->parameters(['penugasan' => 'task']);
+
+    // -- Profil Pengguna (dari Breeze) --
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+});
+
+// BUNGKUS SEMUA ROUTE PEMAGANG DALAM MIDDLEWARE AUTH
+Route::middleware(['auth', 'role:pemagang'])->prefix('pemagang')->name('pemagang.')->group(function () {
+
+    Route::get('/dashboard', [PemagangDashboardController::class, 'index'])->name('dashboard.index');
 
     // -- Profil Pengguna (dari Breeze) --
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
