@@ -43,7 +43,7 @@ class UsersController extends Controller
                     <i class='fa-solid fa-pen-to-square'></i> Edit
                 </a>
                 <a href='".route('admin.permohonan.show', $p->id)."'
-                   class='btn btn-sm btn-success text-white'
+                   class='btn btn-sm btn-info text-white'
                    data-bs-toggle='tooltip'
                    data-bs-placement='top'
                    title='Detail'>

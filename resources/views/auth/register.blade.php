@@ -24,8 +24,8 @@
         </div>
 
         <div class="form-group">
-            <input type="text" class="form-control form-control-user" id="nisnim" name="nisnim"
-                value="{{ old('nisnim') }}" required autofocus placeholder="NISN/NIM">
+            <input type="text" class="form-control form-control-user" id="nomor_unik" name="nomor_unik"
+                value="{{ old('nomor_unik') }}" required autofocus placeholder="NISN/NIM">
         </div>
 
         <div class="form-group">

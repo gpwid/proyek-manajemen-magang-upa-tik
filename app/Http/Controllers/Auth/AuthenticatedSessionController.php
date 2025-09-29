@@ -24,11 +24,11 @@ class AuthenticatedSessionController extends Controller
     public function store(Request $request): RedirectResponse
     {
         $request->validate([
-            'nisnim' => ['required', 'string'],
+            'nomor_unik' => ['required', 'string'],
             'password' => ['required', 'string'],
         ]);
 
-        if (Auth::attempt(['nisnim' => $request->nisnim, 'password' => $request->password])) {
+        if (Auth::attempt(['nomor_unik' => $request->nomor_unik, 'password' => $request->password])) {
             $request->session()->regenerate();
 
             return redirect()->intended(route('dashboard', absolute: false));

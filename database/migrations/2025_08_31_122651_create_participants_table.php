@@ -10,9 +10,11 @@ return new class extends Migration
     {
         Schema::create('participants', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('user_id')->nullable()->constrained('users')->onDelete('set null')->after('id');
             $table->string('nama', 50);
             $table->string('nik', 16)->unique();
             $table->string('nisnim', 20)->unique();
+            $table->string('email')->unique()->nullable();
             $table->enum('jenis_kelamin', ['L', 'P']);
             $table->string('jurusan', 50);
             $table->string('kontak_peserta', 13);

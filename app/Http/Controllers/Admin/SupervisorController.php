@@ -2,15 +2,17 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Models\Supervisor;
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use Illuminate\Http\RedirectResponse;
-use Yajra\DataTables\Facades\DataTables;
-use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\SupervisorsExport;
+use App\Http\Controllers\Controller;
+use App\Http\Requests\StoreSupervisorRequest;
+use App\Http\Requests\UpdateSupervisorRequest;
+use App\Models\Supervisor;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\View\View;
+use Maatwebsite\Excel\Facades\Excel;
+use Yajra\DataTables\Facades\DataTables;
 
 class SupervisorController extends Controller
 {
@@ -26,16 +28,31 @@ class SupervisorController extends Controller
         // Filter Search Custom
         if ($request->searchbox) {
             $search = $request->searchbox;
-            $query->where(function($q) use ($search) {
+            $query->where(function ($q) use ($search) {
                 $q->where('nama', 'like', "%{$search}%")
-                  ->orWhere('nip', 'like', "%{$search}%");
+                    ->orWhere('nip', 'like', "%{$search}%");
             });
         }
 
         return DataTables::of($query)
             ->addIndexColumn()
             ->addColumn('actions', function ($p) {
-                return view('admin.pembimbing.actions', compact('p'))->render();
+                return "<div class='flex gap-2'>
+                <a href='".route('admin.pembimbing.edit', $p->id)."'
+                   class='btn btn-sm btn-primary text-white'
+                   data-bs-toggle='tooltip'
+                   data-bs-placement='top'
+                   title='Edit'>
+                    <i class='fa-solid fa-pen-to-square'></i> Edit
+                </a>
+                <a href='".route('admin.pembimbing.show', $p->id)."'
+                   class='btn btn-sm btn-info text-white'
+                   data-bs-toggle='tooltip'
+                   data-bs-placement='top'
+                   title='Detail'>
+                    <i class='fa-solid fa-eye'></i> Detail
+                </a>
+            </div>";
             })
             ->rawColumns(['actions'])
             ->make(true);
@@ -46,16 +63,9 @@ class SupervisorController extends Controller
         return view('admin.pembimbing.create');
     }
 
-    public function store(Request $request): RedirectResponse
+    public function store(StoreSupervisorRequest $request): RedirectResponse
     {
-        $request->validate([
-            'nama' => 'required|string|max:50',
-            'nip' => 'required|string|max:30|unique:supervisors,nip',
-        ]);
-
-        Supervisor::create($request->only([
-            'nama','nip'
-        ]));
+        Supervisor::create($request->validated());
 
         return redirect()->route('admin.pembimbing.index')->with('sukses', 'Data Disimpan');
     }
@@ -65,23 +75,17 @@ class SupervisorController extends Controller
         return view('admin.pembimbing.edit', compact('supervisor'));
     }
 
-    public function update(Request $request, Supervisor $supervisor): RedirectResponse
+    public function update(UpdateSupervisorRequest $request, Supervisor $supervisor): RedirectResponse
     {
-        $request->validate([
-            'nama' => 'required|string|max:50',
-            'nip' => 'required|string|max:30|unique:supervisors,nip,'.$supervisor->id,
-        ]);
-
-        $supervisor->update($request->only([
-            'nama','nip'
-        ]));
+        $supervisor->update($request->validated());
 
         return redirect()->route('admin.pembimbing.index')->with('sukses', 'Data berhasil diperbarui');
     }
 
     public function exportExcel(Request $request)
     {
-        $filename = 'pembimbing_' . now()->format('Ymd_His') . '.xlsx';
+        $filename = 'pembimbing_'.now()->format('Ymd_His').'.xlsx';
+
         return Excel::download(new SupervisorsExport($request), $filename);
     }
 
@@ -90,20 +94,20 @@ class SupervisorController extends Controller
         $q = Supervisor::query();
 
         if ($search = $request->get('search')) {
-            $q->where(function($x) use ($search) {
-                $x->where('nama','like',"%{$search}%")
-                  ->orWhere('nip','like',"%{$search}%");
+            $q->where(function ($x) use ($search) {
+                $x->where('nama', 'like', "%{$search}%")
+                    ->orWhere('nip', 'like', "%{$search}%");
             });
         }
 
         $data = $q->orderBy('nama')->get();
         $subtitle = '';
         if ($search) {
-            $subtitle = 'Hasil pencarian untuk: "' . $search . '"';
+            $subtitle = 'Hasil pencarian untuk: "'.$search.'"';
         }
 
-        $pdf = Pdf::loadView('admin.pembimbing.pdf', compact('data','subtitle'))
-                  ->setPaper('a4', 'portrait');
+        $pdf = Pdf::loadView('admin.pembimbing.pdf', compact('data', 'subtitle'))
+            ->setPaper('a4', 'portrait');
 
         return $pdf->download('supervisor_'.now()->format('Ymd_His').'.pdf');
     }
