@@ -11,12 +11,13 @@ return new class extends Migration
         Schema::create('participants', function (Blueprint $table) {
             $table->id();
             $table->string('nama', 50);
-            $table->string('nik', 16);
-            $table->string('nisnim', 20);
+            $table->string('nik', 16)->unique();
+            $table->string('nisnim', 20)->unique();
             $table->enum('jenis_kelamin', ['L', 'P']);
             $table->string('jurusan', 50);
             $table->string('kontak_peserta', 13);
             $table->year('tahun_aktif', 4);
+            $table->enum('status', ['pending', 'approved', 'rejected'])->default('pending');
             $table->string('keterangan', 255)->nullable();
             $table->timestamps();
         });

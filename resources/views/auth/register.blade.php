@@ -24,8 +24,13 @@
         </div>
 
         <div class="form-group">
+            <input type="text" class="form-control form-control-user" id="nisnim" name="nisnim"
+                value="{{ old('nisnim') }}" required autofocus placeholder="NISN/NIM">
+        </div>
+
+        <div class="form-group">
             <input type="email" class="form-control form-control-user" id="email" name="email"
-                value="{{ old('email') }}" required placeholder="Alamat Email">
+                value="{{ old('email') }}" placeholder="Alamat Email (opsional)">
         </div>
 
         <div class="form-group row">

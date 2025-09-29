@@ -25,8 +25,8 @@
         @csrf
 
         <div class="form-group">
-            <input type="email" class="form-control form-control-user" id="email" name="email"
-                value="{{ old('email') }}" required autofocus placeholder="Masukkan Alamat Email...">
+            <input type="text" class="form-control form-control-user" id="nisnim" name="nisnim"
+                value="{{ old('nisnim') }}" required autofocus placeholder="Masukkan NIM/NIS...">
         </div>
 
         <div class="form-group">
