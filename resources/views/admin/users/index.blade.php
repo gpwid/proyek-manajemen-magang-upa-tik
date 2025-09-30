@@ -47,6 +47,16 @@
                             @endforeach
                         </select>
                     </div>
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label">Status Akun</label>
+                        <select name="status" class="form-select">
+                            <option value="">-- Status... --</option>
+                            @foreach (['active', 'inactive'] as $st)
+                                <option value="{{ $st }}" @selected(request('status') === $st)>{{ $st }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
                 </div>
             </div>
         </form>
@@ -262,6 +272,7 @@
                     url: '{{ route('admin.users.data') }}',
                     data: d => {
                         d.role = $('select[name="role"]').val();
+                        d.status = $('select[name="status"]').val();
                         d.email = $('select[name="email"]').val();
                         d.name = $('select[name="name"]').val();
                     }

@@ -28,6 +28,10 @@ class UsersController extends Controller
             $query->where('role', $request->role);
         }
 
+        if ($request->filled('status')) {
+            $query->where('status', $request->status);
+        }
+
         // Filter Search Custom
         if ($request->filled('searchbox')) {
             $search = $request->searchbox;
