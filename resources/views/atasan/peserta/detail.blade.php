@@ -98,7 +98,6 @@
                     </div>
 
                     <div class="mt-4 text-end">
-                        <a href="{{ route('atasan.peserta.edit', $participant->id) }}" class="btn btn-primary me-2">Edit</a>
                         <a href="{{ route('atasan.peserta.index') }}" class="btn btn-secondary">Kembali</a>
                     </div>
 

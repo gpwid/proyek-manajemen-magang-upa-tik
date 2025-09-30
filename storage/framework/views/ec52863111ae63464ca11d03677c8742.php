@@ -1,19 +1,18 @@
-@extends('atasan.layoutsatasan.main')
-@section('pembimbing-active', 'active')
-@section('title', 'Pembimbing')
+<?php $__env->startSection('instansi-active', 'active'); ?>
+<?php $__env->startSection('title', 'Instansi'); ?>
 
-@section('content')
+<?php $__env->startSection('content'); ?>
 <div class="container-fluid">
     <div class="d-sm-flex align-items-center justify-content-between mb-2">
-        <h1 class="h3 mb-3 text-gray-800">Pembimbing</h1>
+        <h1 class="h3 mb-3 text-gray-800">Instansi</h1>
     </div>
 
     <div class="card">
         <div class="card-body">
-            {{-- Search + Tambah --}}
+            
             <div class="row align-items-end g-3 mb-3">
 
-                {{-- Search --}}
+                
                 <div class="col-md pe-lg-3">
                     <label class="form-label">Pencarian</label>
                     <div class="search-wrapper">
@@ -33,7 +32,7 @@
                 </div>
             </div>
 
-            {{-- Export Button --}}
+            
             <div class="d-flex flex-wrap gap-3 mb-2">
                 <button id="btnExportExcel" type="button" class="btn btn-success">
                     <i class="fas fa-file-excel me-1"></i> Excel
@@ -44,12 +43,12 @@
             </div>
 
             <!-- Tabel -->
-            <table id="pembimbing-table" class="display table table-striped table-hover align-middle" style="width:100%">
+            <table id="institute-table" class="display table table-striped table-hover align-middle" style="width:100%">
                 <thead>
                     <tr>
                         <th>No.</th>
-                        <th>Nama</th>
-                        <th>NIP</th>
+                        <th>Nama Instansi</th>
+                        <th>Alamat</th>
                     </tr>
                 </thead>
             </table>
@@ -57,12 +56,12 @@
     </div>
 
 </div>
-@endsection
+<?php $__env->stopSection(); ?>
 
-{{-- ====== STYLE ====== --}}
+
 <style>
     .card .card-body { padding: 1.25rem 1.25rem 1rem; }
-    #pembimbing-table_wrapper .row { align-items: center; }
+    #institute-table_wrapper .row { align-items: center; }
 
     /* Searchbar */
     .search-wrapper { position: relative; }
@@ -88,10 +87,10 @@
     @media (max-width:768px){ .dataTables_length:after { display:none; } }
 
     /* Table polish */
-    #pembimbing-table { border-radius: 14px; overflow: hidden; }
-    #pembimbing-table thead th { background: #f8fafc; font-weight: 700; border-bottom: 1px solid #e9ecef; }
-    #pembimbing-table tbody td { vertical-align: middle; }
-    #pembimbing-table.table-hover tbody tr:hover { background: #f6f9ff; }
+    #institute-table { border-radius: 14px; overflow: hidden; }
+    #institute-table thead th { background: #f8fafc; font-weight: 700; border-bottom: 1px solid #e9ecef; }
+    #institute-table tbody td { vertical-align: middle; }
+    #institute-table.table-hover tbody tr:hover { background: #f6f9ff; }
     .text-nowrap { white-space: nowrap; }
 
     /* Info & Pagination */
@@ -112,32 +111,32 @@
     .dataTables_paginate .paginate_button.disabled { opacity: .55; cursor: default !important; }
 </style>
 
-{{-- ====== SCRIPTS ====== --}}
-@section('scripts')
-@if (session('sukses'))
+
+<?php $__env->startSection('scripts'); ?>
+<?php if(session('sukses')): ?>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
     Swal.fire({
         position: 'center',
         icon: 'success',
-        title: "{{ session('sukses') }}",
+        title: "<?php echo e(session('sukses')); ?>",
         showConfirmButton: false,
         timer: 1500
     });
 </script>
-@endif
+<?php endif; ?>
 
 <script>
 $(function () {
-    if ($.fn.DataTable.isDataTable('#pembimbing-table')) {
-        $('#pembimbing-table').DataTable().destroy();
+    if ($.fn.DataTable.isDataTable('#institute-table')) {
+        $('#institute-table').DataTable().destroy();
     }
 
-    const table = $('#pembimbing-table').DataTable({
+    const table = $('#institute-table').DataTable({
         processing: true,
         serverSide: true,
         ajax: {
-            url: '{!! route("atasan.pembimbing.data") !!}',
+            url: '<?php echo route("atasan.instansi.data"); ?>',
             data: d => {
                 d.searchbox = $('#searchbox').val();
             }
@@ -149,18 +148,18 @@ $(function () {
                 orderable: false,
                 searchable: false
             },
-            { // Nama
-                data: 'nama',
-                name: 'nama'
+            { // Nama Instansi
+                data: 'nama_instansi',
+                name: 'nama_instansi'
             },
-            { // NIP
-                data: 'nip',
-                name: 'nip',
+            { // Alamat
+                data: 'alamat',
+                name: 'alamat',
                 className: 'text-nowrap'
-            },
+            }
         ],
 
-        // Default order: kolom Nama ASC (index 1)
+        // Default order: kolom Nama Instansi ASC (index 1)
         order: [[1, 'asc']],
 
         pageLength: 10,
@@ -181,14 +180,17 @@ $(function () {
         autoWidth: false,
 
         initComplete: function () {
-            // Length menu → biarkan native (stabil), atau aktifkan Select2 kalau mau
-            // Contoh jika ingin Select2:
+            // (Opsional) aktifkan Select2 untuk length menu:
             // $('.dataTables_length select').select2({ minimumResultsForSearch: Infinity, width: 'style' });
         }
     });
 
-    // Search + tombol clear
-    $('#searchbox').on('keyup', () => table.ajax.reload());
+    // === Search + tombol clear ===
+    const debounce = (fn, ms=300) => {
+        let t; return (...args) => { clearTimeout(t); t=setTimeout(()=>fn.apply(this,args), ms); };
+    };
+
+    $('#searchbox').on('keyup', debounce(() => table.ajax.reload()));
     $('#searchbox').on('input', function () {
         $('#clearSearch').toggle(this.value.length > 0);
     });
@@ -197,6 +199,12 @@ $(function () {
         $(this).hide();
         table.ajax.reload();
     }).hide();
+
+    // Tooltip (jika pakai Bootstrap)
+    if (typeof bootstrap !== 'undefined') {
+        const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+        tooltipTriggerList.map(el => new bootstrap.Tooltip(el));
+    }
 
     // ===== Export buttons =====
     function buildQuery() {
@@ -207,13 +215,15 @@ $(function () {
 
     $('#btnExportExcel').on('click', function () {
         const qs = buildQuery();
-        window.location = "{{ route('atasan.pembimbing.export.excel') }}" + (qs ? ('?' + qs) : '');
+        window.location = "<?php echo e(route('atasan.instansi.export.excel')); ?>" + (qs ? ('?' + qs) : '');
     });
 
     $('#btnExportPdf').on('click', function () {
         const qs = buildQuery();
-        window.location = "{{ route('atasan.pembimbing.export.pdf') }}" + (qs ? ('?' + qs) : '');
+        window.location = "<?php echo e(route('atasan.instansi.export.pdf')); ?>" + (qs ? ('?' + qs) : '');
     });
 });
 </script>
-@endsection
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('atasan.layoutsatasan.main', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\laragon\www\magang\resources\views/atasan/instansi/index.blade.php ENDPATH**/ ?>

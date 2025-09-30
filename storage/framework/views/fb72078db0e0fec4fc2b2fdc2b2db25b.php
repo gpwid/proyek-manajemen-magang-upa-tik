@@ -1,57 +1,55 @@
-@extends('atasan.layoutsatasan.main')
+<?php $__env->startSection('title', 'Data Magang'); ?>
+<?php $__env->startSection('internship-active', 'active'); ?>
+<?php $__env->startSection('title', 'Data Magang'); ?>
 
-@section('title', 'Data Magang')
-@section('internship-active', 'active')
-@section('title', 'Data Magang')
-
-@section('content')
+<?php $__env->startSection('content'); ?>
 <div class="container-fluid">
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
         <h1 class="h3 mb-0 text-gray-800">Kelola Data Magang</h1>
     </div>
 
-    @if ($errors->any())
+    <?php if($errors->any()): ?>
     <div class="alert alert-danger alert-dismissible fade show" role="alert">
-        <ul class="mb-0">@foreach ($errors->all() as $e)<li>{{ $e }}</li>@endforeach</ul>
+        <ul class="mb-0"><?php $__currentLoopData = $errors->all(); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $e): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?><li><?php echo e($e); ?></li><?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?></ul>
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
-    @endif
+    <?php endif; ?>
 
-    @if (session('success'))
+    <?php if(session('success')): ?>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
         Swal.fire({
             position: 'center',
             icon: 'success',
-            title: "{{ session('success') }}",
+            title: "<?php echo e(session('success')); ?>",
             showConfirmButton: false,
             timer: 1500
         });
 
     </script>
-    @endif
+    <?php endif; ?>
 
-    {{-- Filter --}}
-    <form id="filterForm" method="GET" action="{{ route('atasan.internship.index') }}">
+    
+    <form id="filterForm" method="GET" action="<?php echo e(route('admin.internship.index')); ?>">
         <div class="card mb-4">
             <div class="row align-items-end p-3">
                 <div class="col-md-4 mb-3">
                     <label class="form-label">Status</label>
                     <select name="status_magang" class="form-select select2-filter">
                         <option value="">Semua status…</option>
-                        @foreach (['Aktif','Nonaktif', 'Tidak Selesai'] as $st)
-                        <option value="{{ $st }}" @selected(request('status_magang')===$st)>{{ $st }}</option>
-                        @endforeach
+                        <?php $__currentLoopData = ['Aktif','Nonaktif', 'Tidak Selesai']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $st): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                        <option value="<?php echo e($st); ?>" <?php if(request('status_magang')===$st): echo 'selected'; endif; ?>><?php echo e($st); ?></option>
+                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                     </select>
                 </div>
                 <div class="col-md-8 mb-3">
                     <label class="form-label">Instansi</label>
                     <select name="id_institute" class="form-select select2-filter">
                         <option value="">Semua instansi…</option>
-                        @foreach ($searchinstitutes as $ins)
-                        <option value="{{ $ins->id }}" @selected(request('id_institute')==$ins->
-                            id)>{{ $ins->nama_instansi }}</option>
-                        @endforeach
+                        <?php $__currentLoopData = $searchinstitutes; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $ins): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                        <option value="<?php echo e($ins->id); ?>" <?php if(request('id_institute')==$ins->
+                            id): echo 'selected'; endif; ?>><?php echo e($ins->nama_instansi); ?></option>
+                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                     </select>
                 </div>
             </div>
@@ -61,8 +59,11 @@
     <div class="card">
         <div class="card-body">
 
-            {{-- Actions --}}
+            
             <div class="d-flex flex-wrap gap-2 mb-3">
+                <a href="<?php echo e(route('admin.internship.create')); ?>" class="btn btn-primary">
+                    <i class="fa-solid fa-file-circle-plus"></i> Data Magang Baru
+                </a>
                 <button id="btnExportExcel" class="btn btn-success"><i class="fas fa-file-excel"></i> Excel</button>
                 <button id="btnExportPdf" class="btn btn-danger"><i class="fas fa-file-pdf"></i> PDF</button>
             </div>
@@ -85,9 +86,9 @@
         </div>
     </div>
 </div>
-@endsection
+<?php $__env->stopSection(); ?>
 
-{{-- ==== STYLE (bersih & konsisten) ==== --}}
+
 <style>
     .card .card-body {
         padding: 1.25rem 1.25rem 1rem;
@@ -225,7 +226,7 @@
 
 </style>
 
-@push('scripts')
+<?php $__env->startPush('scripts'); ?>
 <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
@@ -272,7 +273,7 @@
             processing: true,
             serverSide: true,
             ajax: {
-                url: '{{ route("atasan.internship.data") }}',
+                url: '<?php echo e(route("admin.internship.data")); ?>',
                 data: d => {
                     d.status_magang = $('select[name="status_magang"]').val();
                     d.id_institute = $('select[name="id_institute"]').val();
@@ -336,15 +337,17 @@
         $('#btnExportExcel').off('click').on('click', function (e) {
             e.preventDefault();
             const qs = buildQueryInternship();
-            window.location.href = '{{ route("atasan.internship.export.excel") }}' + (qs ? '?' + qs :
+            window.location.href = '<?php echo e(route("admin.internship.export.excel")); ?>' + (qs ? '?' + qs :
             '');
         });
         $('#btnExportPdf').off('click').on('click', function (e) {
             e.preventDefault();
             const qs = buildQueryInternship();
-            window.location.href = '{{ route("atasan.internship.export.pdf") }}' + (qs ? '?' + qs : '');
+            window.location.href = '<?php echo e(route("admin.internship.export.pdf")); ?>' + (qs ? '?' + qs : '');
         });
     });
 
 </script>
-@endpush
+<?php $__env->stopPush(); ?>
+
+<?php echo $__env->make('admin.layoutsadmin.main', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\laragon\www\magang\resources\views/admin/internship/index.blade.php ENDPATH**/ ?>

@@ -1,14 +1,12 @@
-@extends('atasan.layoutsatasan.main')
+<?php $__env->startSection('penugasan-active', 'active'); ?>
+<?php $__env->startSection('title', 'Detail Tugas'); ?>
 
-@section('penugasan-active', 'active')
-@section('title', 'Detail Tugas')
-
-@section('content')
+<?php $__env->startSection('content'); ?>
     <div class="container-fluid">
         <div class="d-sm-flex align-items-center justify-content-between mb-4">
             <h1 class="h3 mb-0 text-gray-800">Detail Tugas</h1>
             <div>
-                <a href="{{ route('atasan.penugasan.index') }}" class="btn btn-secondary shadow-sm">
+                <a href="<?php echo e(route('atasan.penugasan.index')); ?>" class="btn btn-secondary shadow-sm">
                     <i class="fas fa-arrow-left fa-sm"></i> Kembali
                 </a>
             </div>
@@ -18,18 +16,18 @@
             <div class="col-lg-8">
                 <div class="card shadow mb-4">
                     <div class="card-header py-3">
-                        <h6 class="m-0 font-weight-bold text-primary">{{ $task->title }}</h6>
+                        <h6 class="m-0 font-weight-bold text-primary"><?php echo e($task->title); ?></h6>
                     </div>
                     <div class="card-body">
                         <h5>Deskripsi Tugas</h5>
-                        <p class="text-gray-800" style="white-space: pre-wrap;">{{ $task->description }}</p>
+                        <p class="text-gray-800" style="white-space: pre-wrap;"><?php echo e($task->description); ?></p>
                         <hr>
                         <h5>Feedback dari Pembimbing</h5>
-                        @if ($task->feedback)
-                            <p class="text-gray-800" style="white-space: pre-wrap;">{{ $task->feedback }}</p>
-                        @else
+                        <?php if($task->feedback): ?>
+                            <p class="text-gray-800" style="white-space: pre-wrap;"><?php echo e($task->feedback); ?></p>
+                        <?php else: ?>
                             <p class="text-muted"><i>Belum ada feedback.</i></p>
-                        @endif
+                        <?php endif; ?>
                     </div>
                 </div>
             </div>
@@ -43,31 +41,31 @@
                         <ul class="list-group list-group-flush">
                             <li class="list-group-item d-flex justify-content-between align-items-center px-0">
                                 <strong>Status</strong>
-                                @php
+                                <?php
                                     $badgeColor = match ($task->status) {
                                         'Dikerjakan' => 'badge-info',
                                         'Revisi' => 'badge-warning',
                                         'Selesai' => 'badge-success',
                                         default => 'badge-secondary',
                                     };
-                                @endphp
-                                <span class="badge {{ $badgeColor }} badge-pill">{{ $task->status }}</span>
+                                ?>
+                                <span class="badge <?php echo e($badgeColor); ?> badge-pill"><?php echo e($task->status); ?></span>
                             </li>
                             <li class="list-group-item d-flex justify-content-between align-items-center px-0">
                                 <strong>Tanggal Tugas</strong>
-                                <span>{{ $task->task_date->format('d F Y') }}</span>
+                                <span><?php echo e($task->task_date->format('d F Y')); ?></span>
                             </li>
                             <li class="list-group-item d-flex justify-content-between align-items-center px-0">
                                 <strong>Peserta</strong>
-                                <span>{{ $task->participant->nama }}</span>
+                                <span><?php echo e($task->participant->nama); ?></span>
                             </li>
                             <li class="list-group-item d-flex justify-content-between align-items-center px-0">
                                 <strong>Instansi</strong>
-                                <span>{{ $task->internship->permohonan->institute->nama_instansi }}</span>
+                                <span><?php echo e($task->internship->permohonan->institute->nama_instansi); ?></span>
                             </li>
                             <li class="list-group-item d-flex justify-content-between align-items-center px-0">
                                 <strong>Pembimbing</strong>
-                                <span>{{ $task->internship->supervisor->nama }}</span>
+                                <span><?php echo e($task->internship->supervisor->nama); ?></span>
                             </li>
                         </ul>
                     </div>
@@ -75,4 +73,6 @@
             </div>
         </div>
     </div>
-@endsection
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('atasan.layoutsatasan.main', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\laragon\www\magang\resources\views/atasan/penugasan/show.blade.php ENDPATH**/ ?>

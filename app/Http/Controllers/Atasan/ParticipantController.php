@@ -72,63 +72,6 @@ class ParticipantController extends Controller
         return view('atasan.peserta.detail', compact('participant'));
     }
 
-    public function create()
-    {
-        return view('atasan.peserta.create');
-    }
-
-    public function store(Request $request): RedirectResponse
-    {
-        $data = $request->validate([
-            'permohonan_id'  => 'nullable|exists:permohonan,id',
-            'nama'           => 'required|string|max:50',
-            'nik'            => 'required|string|max:16',
-            'nisnim'         => 'required|string|max:20',
-            'jenis_kelamin'  => 'required|in:L,P',
-            'jurusan'        => 'required|string|max:50',
-            'kontak_peserta' => 'required|string|max:13',
-            'tahun_aktif'    => 'required|digits:4',
-            'keterangan'     => 'nullable|string|max:255',
-        ]);
-
-        Participant::create($data);
-
-        if (!empty($data['permohonan_id'])) {
-            return redirect()
-                ->route('atasan.permohonan.show', $data['permohonan_id'])
-                ->with('success', 'Peserta berhasil ditambahkan.');
-        }
-
-        return redirect()
-            ->route('atasan.peserta.index')
-            ->with('sukses', 'Peserta berhasil ditambahkan.');
-    }
-
-    public function edit(Participant $participant): View
-    {
-        return view('atasan.peserta.edit', compact('participant'));
-    }
-
-    public function update(Request $request, Participant $participant): RedirectResponse
-    {
-        $request->validate([
-            'nama'           => 'required|string|max:50',
-            'nik'            => 'required|string|max:16',
-            'nisnim'         => 'required|string|max:20',
-            'jenis_kelamin'  => 'required|in:L,P',
-            'jurusan'        => 'required|string|max:50',
-            'kontak_peserta' => 'required|string|max:13',
-            'tahun_aktif'    => 'required|digits:4',
-            'keterangan'     => 'nullable|string|max:255',
-        ]);
-
-        $participant->update($request->only([
-            'nama','nik','nisnim','jenis_kelamin','jurusan','kontak_peserta','tahun_aktif','keterangan'
-        ]));
-
-        return redirect()->route('atasan.peserta.index')->with('sukses', 'Data berhasil diperbarui');
-    }
-
     public function exportExcel(Request $request)
     {
         // ParticipantsExport kamu sudah menerima $request → biarkan

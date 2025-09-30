@@ -1,8 +1,7 @@
-@extends('atasan.layoutsatasan.main')
-@section('peserta-active', 'active')
-@section('title', 'Peserta')
+<?php $__env->startSection('peserta-active', 'active'); ?>
+<?php $__env->startSection('title', 'Peserta'); ?>
 
-@section('content')
+<?php $__env->startSection('content'); ?>
     <div class="container-fluid">
         <div class="d-sm-flex align-items-center justify-content-between mb-2">
             <h1 class="h3 mb-3 text-gray-800">Peserta</h1>
@@ -10,10 +9,10 @@
 
         <div class="card">
             <div class="card-body">
-                {{-- Filter + Search + Tambah --}}
+                
                 <div class="row align-items-end g-3 mb-3">
 
-                    {{-- Filter Jenis Kelamin --}}
+                    
                     <div class="col-md-3">
                         <label class="form-label">Filter Jenis Kelamin</label>
                         <select id="jenis_kelamin_filter" class="form-control">
@@ -23,20 +22,20 @@
                         </select>
                     </div>
 
-                    {{-- Filter Tahun Aktif --}}
+                    
                     <div class="col-md-3">
                         <label class="form-label">Filter Tahun Aktif</label>
                         <select id="tahun_aktif_filter" class="form-control">
                             <option value="">Semua tahun</option>
-                            @isset($years)
-                                @foreach($years as $y)
-                                    <option value="{{ $y }}">{{ $y }}</option>
-                                @endforeach
-                            @endisset
+                            <?php if(isset($years)): ?>
+                                <?php $__currentLoopData = $years; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $y): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                    <option value="<?php echo e($y); ?>"><?php echo e($y); ?></option>
+                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                            <?php endif; ?>
                         </select>
                     </div>
 
-                    {{-- Search --}}
+                    
                     <div class="col-md-6 pe-lg-3">
                         <label class="form-label">Pencarian</label>
                         <div class="search-wrapper">
@@ -56,7 +55,7 @@
                     </div>
                 </div>
 
-                {{-- Export Button --}}
+                
                 <div class="d-flex flex-wrap gap-3 mb-2">
                     <button id="btnExportExcel" type="button" class="btn btn-success">
                         <i class="fas fa-file-excel me-1"></i> Excel
@@ -85,9 +84,9 @@
         </div>
 
     </div>
-@endsection
+<?php $__env->stopSection(); ?>
 
-{{-- ====== STYLE ====== --}}
+
 <style>
     .card .card-body { padding: 1.25rem 1.25rem 1rem; }
     #participants-table_wrapper .row { align-items: center; }
@@ -146,22 +145,22 @@
     .dataTables_paginate .paginate_button.disabled { opacity: .55; cursor: default !important; }
 </style>
 
-{{-- ====== SCRIPTS ====== --}}
-@section('scripts')
-    @if (session('sukses'))
+
+<?php $__env->startSection('scripts'); ?>
+    <?php if(session('sukses')): ?>
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         <script>
             Swal.fire({
                 position: 'center',
                 icon: 'success',
-                title: "{{ session('sukses') }}",
+                title: "<?php echo e(session('sukses')); ?>",
                 showConfirmButton: false,
                 timer: 1500
             });
         </script>
-    @endif
+    <?php endif; ?>
 
-    {{-- Select2 (CDN) --}}
+    
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
@@ -175,7 +174,7 @@
                     processing: true,
                     serverSide: true,
                     ajax: {
-                        url: '{!! route('atasan.peserta.data') !!}',
+                        url: '<?php echo route('atasan.peserta.data'); ?>',
                         data: d => {
                             d.jenis_kelamin = $('#jenis_kelamin_filter').val();
                             d.tahun_aktif   = $('#tahun_aktif_filter').val();
@@ -263,13 +262,15 @@
 
             $('#btnExportExcel').off('click').on('click', function() {
                 const qs = buildQuery();
-                window.location = "{{ route('atasan.peserta.export.excel') }}" + (qs ? ('?' + qs) : '');
+                window.location = "<?php echo e(route('atasan.peserta.export.excel')); ?>" + (qs ? ('?' + qs) : '');
             });
 
             $('#btnExportPdf').off('click').on('click', function() {
                 const qs = buildQuery();
-                window.location = "{{ route('atasan.peserta.export.pdf') }}" + (qs ? ('?' + qs) : '');
+                window.location = "<?php echo e(route('atasan.peserta.export.pdf')); ?>" + (qs ? ('?' + qs) : '');
             });
         });
     </script>
-@endsection
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('atasan.layoutsatasan.main', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\laragon\www\magang\resources\views/atasan/peserta/index.blade.php ENDPATH**/ ?>

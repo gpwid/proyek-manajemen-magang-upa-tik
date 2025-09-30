@@ -1,42 +1,80 @@
-@extends('atasan.layoutsatasan.main')
-
-@section('title', 'Detail Permohonan')
-@section('permohonan-active', 'active')
-@section('content')
+<?php $__env->startSection('title', 'Detail Permohonan'); ?>
+<?php $__env->startSection('permohonan-active', 'active'); ?>
+<?php $__env->startSection('content'); ?>
     <div class="container-fluid">
         <div class="d-sm-flex align-items-center justify-content-between mb-3">
             <h1 class="h3 text-gray-800">Detail Permohonan</h1>
             <div class="d-flex flex-wrap gap-2">
-                <a href="{{ route('atasan.permohonan.index') }}" class="btn btn-secondary">Kembali</a>
+                <a href="<?php echo e(route('admin.permohonan.edit', $application->id)); ?>" class="btn btn-primary">
+                    <i class="fa-solid fa-pen-to-square"></i> Edit
+                </a>
+                <a href="<?php echo e(route('admin.permohonan.index')); ?>" class="btn btn-secondary">Kembali</a>
+
+                <?php if($application->status === 'Proses'): ?>
+                    <form method="POST" action="<?php echo e(route('admin.permohonan.status', $application)); ?>"
+                        onsubmit="return confirm('Ubah status menjadi Aktif?');">
+                        <?php echo csrf_field(); ?> <?php echo method_field('PATCH'); ?>
+                        <input type="hidden" name="to" value="Aktif">
+                        <button class="btn btn-success"><i class="fa-solid fa-circle-check"></i> Set Aktif</button>
+                    </form>
+
+                    <form method="POST" action="<?php echo e(route('admin.permohonan.status', $application)); ?>"
+                        onsubmit="return confirm('Tolak permohonan ini?');">
+                        <?php echo csrf_field(); ?> <?php echo method_field('PATCH'); ?>
+                        <input type="hidden" name="to" value="Ditolak">
+                        <button class="btn btn-danger"><i class="fa-solid fa-circle-xmark"></i> Tolak</button>
+                    </form>
+                <?php endif; ?>
+
+                <?php if($application->status === 'Aktif'): ?>
+                    <form method="POST" action="<?php echo e(route('admin.permohonan.status', $application)); ?>"
+                        onsubmit="return confirm('Tandai selesai?');">
+                        <?php echo csrf_field(); ?> <?php echo method_field('PATCH'); ?>
+                        <input type="hidden" name="to" value="Selesai">
+                        <button class="btn btn-primary">Tandai Selesai</button>
+                    </form>
+
+                    <form method="POST" action="<?php echo e(route('admin.permohonan.status', $application)); ?>"
+                        onsubmit="return confirm('Tolak permohonan ini?');">
+                        <?php echo csrf_field(); ?> <?php echo method_field('PATCH'); ?>
+                        <input type="hidden" name="to" value="Ditolak">
+                        <button class="btn btn-danger">Tolak</button>
+                    </form>
+                <?php endif; ?>
+
+                <?php if(in_array($application->status, ['Selesai', 'Ditolak'])): ?>
+                    <span class="text-muted">Tidak ada aksi status tersedia.</span>
+                <?php endif; ?>
             </div>
         </div>
 
-        @if (session('success'))
+        <?php if(session('success')): ?>
             <div class="alert alert-success alert-dismissible fade show" role="alert">
-                {{ session('success') }}
+                <?php echo e(session('success')); ?>
+
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
-        @endif
+        <?php endif; ?>
 
-        @if ($errors->any())
+        <?php if($errors->any()): ?>
             <div class="alert alert-danger alert-dismissible fade show" role="alert">
                 <ul class="mb-0">
-                    @foreach ($errors->all() as $e)
-                        <li>{{ $e }}</li>
-                    @endforeach
+                    <?php $__currentLoopData = $errors->all(); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $e): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                        <li><?php echo e($e); ?></li>
+                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                 </ul>
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
-        @endif
+        <?php endif; ?>
 
-        @php
+        <?php
             // cek keberadaan file di disk 'public'
             $hasPermohonan =
                 filled($application->file_permohonan) && Storage::disk('public')->exists($application->file_permohonan);
             $hasSuratBalasan =
                 filled($application->file_suratbalasan) &&
                 Storage::disk('public')->exists($application->file_suratbalasan);
-        @endphp
+        ?>
 
         <div class="row">
             <div class="col-md-12">
@@ -49,7 +87,7 @@
 
                     <div class="card-body p-4">
 
-                        {{-- styling ringan untuk layout rapi --}}
+                        
                         <style>
                             .info-grid {
                                 display: grid;
@@ -126,87 +164,91 @@
 
                             <div class="kv">
                                 <p class="label">Asal Instansi Surat</p>
-                                <p class="value">{{ $application->institute->nama_instansi ?? '-' }}</p>
+                                <p class="value"><?php echo e($application->institute->nama_instansi ?? '-'); ?></p>
                             </div>
 
                             <div class="kv">
                                 <p class="label">Jenis Magang</p>
-                                <p class="value">{{ $application->jenis_magang }}</p>
+                                <p class="value"><?php echo e($application->jenis_magang); ?></p>
                             </div>
 
                             <div class="kv">
                                 <p class="label">No. Surat</p>
-                                <p class="value">{{ $application->no_surat }}</p>
+                                <p class="value"><?php echo e($application->no_surat); ?></p>
                             </div>
 
                             <div class="kv">
                                 <p class="label">Tanggal Surat Masuk</p>
-                                <p class="value">{{ optional($application->tgl_suratmasuk)->format('d-m-Y') ?? '-' }}</p>
+                                <p class="value"><?php echo e(optional($application->tgl_suratmasuk)->format('d-m-Y') ?? '-'); ?></p>
                             </div>
 
                             <div class="kv">
                                 <p class="label">Tanggal Surat dibuat</p>
-                                <p class="value">{{ optional($application->tgl_surat)->format('d-m-Y') ?? '-' }}</p>
+                                <p class="value"><?php echo e(optional($application->tgl_surat)->format('d-m-Y') ?? '-'); ?></p>
                             </div>
 
                             <div class="kv">
                                 <p class="label">Tanggal Mulai Magang</p>
-                                <p class="value">{{ optional($application->tgl_mulai)->format('d-m-Y') ?? '-' }}</p>
+                                <p class="value"><?php echo e(optional($application->tgl_mulai)->format('d-m-Y') ?? '-'); ?></p>
                             </div>
 
                             <div class="kv">
                                 <p class="label">Tanggal Selesai Magang</p>
-                                <p class="value">{{ optional($application->tgl_selesai)->format('d-m-Y') ?? '-' }}</p>
+                                <p class="value"><?php echo e(optional($application->tgl_selesai)->format('d-m-Y') ?? '-'); ?></p>
                             </div>
 
                             <div class="kv">
                                 <p class="label">Status</p>
                                 <p class="value">
-                                    @if ($application->status === 'Aktif')
+                                    <?php if($application->status === 'Aktif'): ?>
                                         <span class="badge bg-success">Aktif</span>
-                                    @elseif ($application->status === 'Proses')
+                                    <?php elseif($application->status === 'Proses'): ?>
                                         <span class="badge bg-warning text-dark">Proses</span>
-                                    @elseif ($application->status === 'Selesai')
+                                    <?php elseif($application->status === 'Selesai'): ?>
                                         <span class="badge bg-primary">Selesai</span>
-                                    @elseif ($application->status === 'Ditolak')
+                                    <?php elseif($application->status === 'Ditolak'): ?>
                                         <span class="badge bg-danger">Ditolak</span>
-                                    @else
+                                    <?php else: ?>
                                         <span class="text-muted">-</span>
-                                    @endif
+                                    <?php endif; ?>
                                 </p>
                             </div>
 
                             <div class="kv">
                                 <p class="label">Pembimbing dari Instansi</p>
-                                <p class="value">{{ $application->pembimbing_sekolah ?? '-' }}</p>
+                                <p class="value"><?php echo e($application->pembimbing_sekolah ?? '-'); ?></p>
                             </div>
 
                             <div class="kv">
                                 <p class="label">Kontak Pembimbing</p>
-                                <p class="value">{{ $application->kontak_pembimbing ?? '-' }}</p>
+                                <p class="value"><?php echo e($application->kontak_pembimbing ?? '-'); ?></p>
                             </div>
 
-                            {{-- Catatan sebagai blok teks penuh lebar --}}
+                            
                             <div class="note-block">
                                 <div class="note-title">Catatan</div>
-                                @if (filled($application->catatan))
-                                    <div class="note-body">{{ $application->catatan }}</div>
-                                @else
+                                <?php if(filled($application->catatan)): ?>
+                                    <div class="note-body"><?php echo e($application->catatan); ?></div>
+                                <?php else: ?>
                                     <div class="note-body note-empty">Tidak ada catatan.</div>
-                                @endif
+                                <?php endif; ?>
                             </div>
 
                         </div>
 
-                        {{-- ===== Peserta ===== --}}
+                        
                         <div class="mt-4">
                             <div class="section-head">
                                 <h5 class="mb-0"><i class="fa-solid fa-users me-2"></i> Peserta pada Surat Permohonan
                                 </h5>
                                 <span class="badge bg-light text-dark">Total:
-                                    {{ $application->participants->count() }}</span>
+                                    <?php echo e($application->participants->count()); ?></span>
                             </div>
                             <div class="section-body p-3">
+                                <a href="<?php echo e(route('admin.peserta.create', ['permohonan_id' => $application->id])); ?>"
+                                    class="btn btn-sm btn-primary mb-2">
+                                    <i class="fa fa-plus"></i> Tambah Peserta
+                                </a>
 
                                 <div class="table-responsive">
                                     <table class="table table-striped table-hover mb-0">
@@ -223,51 +265,51 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            @forelse($application->participants as $i => $ps)
+                                            <?php $__empty_1 = true; $__currentLoopData = $application->participants; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $i => $ps): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
                                                 <tr>
-                                                    <td>{{ $i + 1 }}</td>
-                                                    <td>{{ $ps->nama }}</td>
-                                                    <td>{{ $ps->nik }}</td>
-                                                    <td>{{ $ps->nisnim }}</td>
-                                                    <td>{{ $ps->jenis_kelamin }}</td>
-                                                    <td>{{ $ps->jurusan }}</td>
-                                                    <td>{{ $ps->kontak_peserta }}</td>
-                                                    <td>{{ $ps->keterangan ?? '-' }}</td>
+                                                    <td><?php echo e($i + 1); ?></td>
+                                                    <td><?php echo e($ps->nama); ?></td>
+                                                    <td><?php echo e($ps->nik); ?></td>
+                                                    <td><?php echo e($ps->nisnim); ?></td>
+                                                    <td><?php echo e($ps->jenis_kelamin); ?></td>
+                                                    <td><?php echo e($ps->jurusan); ?></td>
+                                                    <td><?php echo e($ps->kontak_peserta); ?></td>
+                                                    <td><?php echo e($ps->keterangan ?? '-'); ?></td>
                                                 </tr>
-                                            @empty
+                                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
                                                 <tr>
                                                     <td colspan="8" class="text-center text-muted py-4">
                                                         Belum ada peserta untuk permohonan ini.
                                                     </td>
                                                 </tr>
-                                            @endforelse
+                                            <?php endif; ?>
                                         </tbody>
                                     </table>
                                 </div>
                             </div>
                         </div>
 
-                        {{-- ===== File PDF Permohonan ===== --}}
+                        
                         <div class="mt-4">
                             <div class="section-head">
                                 <span>File PDF Permohonan</span>
                                 <div>
-                                    @if ($hasPermohonan)
+                                    <?php if($hasPermohonan): ?>
                                         <a download class="btn btn-success btn-sm"
-                                            href="{{ Storage::url($application->file_permohonan) }}">
+                                            href="<?php echo e(Storage::url($application->file_permohonan)); ?>">
                                             <i class="fa-solid fa-file-arrow-down"></i> Unduh
                                         </a>
-                                    @else
+                                    <?php else: ?>
                                         <span class="badge bg-secondary">Belum diunggah</span>
-                                    @endif
+                                    <?php endif; ?>
                                 </div>
                             </div>
                             <div class="section-body">
                                 <div class="ratio ratio-16x9">
-                                    @if ($hasPermohonan)
-                                        <iframe src="{{ Storage::url($application->file_permohonan) }}"
+                                    <?php if($hasPermohonan): ?>
+                                        <iframe src="<?php echo e(Storage::url($application->file_permohonan)); ?>"
                                             title="PDF Permohonan" style="border:0;width:100%;height:70vh"></iframe>
-                                    @else
+                                    <?php else: ?>
                                         <div class="d-flex align-items-center justify-content-center"
                                             style="height:70vh;">
                                             <div class="text-center text-muted">
@@ -275,32 +317,32 @@
                                                 <div>Tidak ada file permohonan untuk ditampilkan.</div>
                                             </div>
                                         </div>
-                                    @endif
+                                    <?php endif; ?>
                                 </div>
                             </div>
                         </div>
 
-                        {{-- ===== File PDF Surat Balasan ===== --}}
+                        
                         <div class="mt-4">
                             <div class="section-head">
                                 <span>File PDF Surat Balasan</span>
                                 <div>
-                                    @if ($hasSuratBalasan)
+                                    <?php if($hasSuratBalasan): ?>
                                         <a download class="btn btn-success btn-sm"
-                                            href="{{ Storage::url($application->file_suratbalasan) }}">
+                                            href="<?php echo e(Storage::url($application->file_suratbalasan)); ?>">
                                             <i class="fa-solid fa-file-arrow-down"></i> Unduh
                                         </a>
-                                    @else
+                                    <?php else: ?>
                                         <span class="badge bg-secondary">Belum diunggah</span>
-                                    @endif
+                                    <?php endif; ?>
                                 </div>
                             </div>
                             <div class="section-body">
                                 <div class="ratio ratio-16x9">
-                                    @if ($hasSuratBalasan)
-                                        <iframe src="{{ Storage::url($application->file_suratbalasan) }}"
+                                    <?php if($hasSuratBalasan): ?>
+                                        <iframe src="<?php echo e(Storage::url($application->file_suratbalasan)); ?>"
                                             title="PDF Surat Balasan" style="border:0;width:100%;height:70vh"></iframe>
-                                    @else
+                                    <?php else: ?>
                                         <div class="d-flex align-items-center justify-content-center"
                                             style="height:70vh;">
                                             <div class="text-center text-muted">
@@ -308,14 +350,16 @@
                                                 <div>Tidak ada surat balasan untuk ditampilkan.</div>
                                             </div>
                                         </div>
-                                    @endif
+                                    <?php endif; ?>
                                 </div>
                             </div>
                         </div>
 
-                    </div> {{-- card-body --}}
+                    </div> 
                 </div>
             </div>
         </div>
     </div>
-@endsection
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('admin.layoutsadmin.main', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\laragon\www\magang\resources\views/admin/permohonan/show.blade.php ENDPATH**/ ?>

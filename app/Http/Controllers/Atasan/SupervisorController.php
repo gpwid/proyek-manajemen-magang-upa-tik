@@ -34,49 +34,7 @@ class SupervisorController extends Controller
 
         return DataTables::of($query)
             ->addIndexColumn()
-            ->addColumn('actions', function ($p) {
-                return view('atasan.pembimbing.actions', compact('p'))->render();
-            })
-            ->rawColumns(['actions'])
             ->make(true);
-    }
-
-    public function create()
-    {
-        return view('atasan.pembimbing.create');
-    }
-
-    public function store(Request $request): RedirectResponse
-    {
-        $request->validate([
-            'nama' => 'required|string|max:50',
-            'nip' => 'required|string|max:30|unique:supervisors,nip',
-        ]);
-
-        Supervisor::create($request->only([
-            'nama','nip'
-        ]));
-
-        return redirect()->route('atasan.pembimbing.index')->with('sukses', 'Data Disimpan');
-    }
-
-    public function edit(Supervisor $supervisor): View
-    {
-        return view('atasan.pembimbing.edit', compact('supervisor'));
-    }
-
-    public function update(Request $request, Supervisor $supervisor): RedirectResponse
-    {
-        $request->validate([
-            'nama' => 'required|string|max:50',
-            'nip' => 'required|string|max:30|unique:supervisors,nip,'.$supervisor->id,
-        ]);
-
-        $supervisor->update($request->only([
-            'nama','nip'
-        ]));
-
-        return redirect()->route('atasan.pembimbing.index')->with('sukses', 'Data berhasil diperbarui');
     }
 
     public function exportExcel(Request $request)

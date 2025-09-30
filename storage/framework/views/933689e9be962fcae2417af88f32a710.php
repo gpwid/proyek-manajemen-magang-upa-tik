@@ -1,70 +1,72 @@
-@extends('atasan.layoutsatasan.main')
-@section('title', 'Permohonan')
-@section('permohonan-active', 'active')
-@section('title', 'Permohonan')
+<?php $__env->startSection('title', 'Permohonan'); ?>
+<?php $__env->startSection('permohonan-active', 'active'); ?>
+<?php $__env->startSection('title', 'Permohonan'); ?>
 
-@section('content')
+<?php $__env->startSection('content'); ?>
     <div class="container-fluid">
         <div class="d-sm-flex align-items-center justify-content-between mb-4">
             <h1 class="h3 mb-0 text-gray-800">Kelola Permohonan Magang</h1>
         </div>
 
-        @if ($errors->any())
+        <?php if($errors->any()): ?>
             <div class="alert alert-danger alert-dismissible fade show" role="alert">
                 <ul class="mb-0">
-                    @foreach ($errors->all() as $e)
-                        <li>{{ $e }}</li>
-                    @endforeach
+                    <?php $__currentLoopData = $errors->all(); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $e): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                        <li><?php echo e($e); ?></li>
+                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                 </ul>
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
-        @endif
+        <?php endif; ?>
 
-        @if (session('success'))
+        <?php if(session('success')): ?>
             <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
             <script>
                 Swal.fire({
                     position: 'center',
                     icon: 'success',
-                    title: "{{ session('success') }}",
+                    title: "<?php echo e(session('success')); ?>",
                     showConfirmButton: false,
                     timer: 1500
                 });
             </script>
-        @endif
+        <?php endif; ?>
 
-        {{-- Filter --}}
-        <form id="filterForm" method="GET" action="{{ route('atasan.permohonan.index') }}">
+        
+        <form id="filterForm" method="GET" action="<?php echo e(route('admin.permohonan.index')); ?>">
             <div class="card mb-4">
                 <div class="row align-items-end p-3">
                     <div class="col-md-4 mb-3">
                         <label class="form-label">Status</label>
                         <select name="status" class="form-select select2-filter">
                             <option value="">Semua status…</option>
-                            @foreach (['Proses', 'Aktif', 'Selesai', 'Ditolak'] as $st)
-                                <option value="{{ $st }}" @selected(request('status') === $st)>{{ $st }}
+                            <?php $__currentLoopData = ['Proses', 'Aktif', 'Selesai', 'Ditolak']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $st): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                <option value="<?php echo e($st); ?>" <?php if(request('status') === $st): echo 'selected'; endif; ?>><?php echo e($st); ?>
+
                                 </option>
-                            @endforeach
+                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                         </select>
                     </div>
                     <div class="col-md-4 mb-3">
                         <label class="form-label">Instansi</label>
                         <select name="id_institute" class="form-select select2-filter">
                             <option value="">Semua instansi…</option>
-                            @foreach ($searchinstitutes as $ins)
-                                <option value="{{ $ins->id }}" @selected(request('id_institute') == $ins->id)>{{ $ins->nama_instansi }}
+                            <?php $__currentLoopData = $searchinstitutes; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $ins): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                <option value="<?php echo e($ins->id); ?>" <?php if(request('id_institute') == $ins->id): echo 'selected'; endif; ?>><?php echo e($ins->nama_instansi); ?>
+
                                 </option>
-                            @endforeach
+                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                         </select>
                     </div>
                     <div class="col-md-4 mb-3">
                         <label class="form-label">Jenis Magang</label>
                         <select name="jenis_magang" class="form-select select2-filter">
                             <option value="">Semua jenis magang…</option>
-                            @foreach (['Sekolah', 'MBKM', 'Mandiri'] as $jm)
-                                <option value="{{ $jm }}" @selected(request('jenis_magang') === $jm)>{{ $jm }}
+                            <?php $__currentLoopData = ['Sekolah', 'MBKM', 'Mandiri']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $jm): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                <option value="<?php echo e($jm); ?>" <?php if(request('jenis_magang') === $jm): echo 'selected'; endif; ?>><?php echo e($jm); ?>
+
                                 </option>
-                            @endforeach
+                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                         </select>
                     </div>
                 </div>
@@ -72,6 +74,9 @@
         </form>
 
         <div class="d-flex justify-content-between flex-wrap gap-2 mb-3">
+            <a href="<?php echo e(route('admin.permohonan.create')); ?>" class="btn btn-primary">
+                <i class="fa-solid fa-file-circle-plus"></i> Permohonan Baru
+            </a>
             <div class="d-flex flex-wrap gap-2">
                 <button id="btnExportExcel" type="button" class="btn btn-success"><i class="fas fa-file-excel me-1"></i>
                     Excel</button>
@@ -101,9 +106,9 @@
         </div>
 
     </div>
-@endsection
+<?php $__env->stopSection(); ?>
 
-{{-- ==== STYLE (sama seperti internship, dipisah agar mandiri) ==== --}}
+
 <style>
     .card .card-body {
         padding: 1.25rem 1.25rem 1rem;
@@ -235,8 +240,8 @@
     }
 </style>
 
-@push('scripts')
-    {{-- Select2 (kalau belum global di layout) --}}
+<?php $__env->startPush('scripts'); ?>
+    
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
@@ -285,7 +290,7 @@
                 processing: true,
                 serverSide: true,
                 ajax: {
-                    url: '{{ route('atasan.permohonan.data') }}',
+                    url: '<?php echo e(route('admin.permohonan.data')); ?>',
                     data: d => {
                         d.status = $('select[name="status"]').val();
                         d.jenis_magang = $('select[name="jenis_magang"]').val();
@@ -352,14 +357,16 @@
             $('#btnExportExcel').off('click').on('click', function(e) {
                 e.preventDefault();
                 const qs = buildQueryPermohonan();
-                window.location.href = '{{ route('atasan.permohonan.export.excel') }}' + (qs ? '?' + qs :
+                window.location.href = '<?php echo e(route('admin.permohonan.export.excel')); ?>' + (qs ? '?' + qs :
                     '');
             });
             $('#btnExportPdf').off('click').on('click', function(e) {
                 e.preventDefault();
                 const qs = buildQueryPermohonan();
-                window.location.href = '{{ route('atasan.permohonan.export.pdf') }}' + (qs ? '?' + qs : '');
+                window.location.href = '<?php echo e(route('admin.permohonan.export.pdf')); ?>' + (qs ? '?' + qs : '');
             });
         });
     </script>
-@endpush
+<?php $__env->stopPush(); ?>
+
+<?php echo $__env->make('admin.layoutsadmin.main', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\laragon\www\magang\resources\views/admin/permohonan/index.blade.php ENDPATH**/ ?>

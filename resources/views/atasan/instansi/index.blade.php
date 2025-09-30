@@ -10,11 +10,11 @@
 
     <div class="card">
         <div class="card-body">
-            {{-- Search + Tambah --}}
+            {{-- Search --}}
             <div class="row align-items-end g-3 mb-3">
 
                 {{-- Search --}}
-                <div class="col-md-9 pe-lg-3">
+                <div class="col-md pe-lg-3">
                     <label class="form-label">Pencarian</label>
                     <div class="search-wrapper">
                         <span class="search-icon" aria-hidden="true">
@@ -30,14 +30,6 @@
                             </svg>
                         </button>
                     </div>
-                </div>
-
-                {{-- Tombol Tambah --}}
-                <div class="col-md-3 text-lg-end">
-                    <label class="form-label d-none d-lg-block">&nbsp;</label>
-                    <a class="btn btn-primary px-3 shadow-sm w-100 w-lg-auto" href="{{ route('atasan.instansi.create') }}">
-                        <i class="fas fa-plus me-1"></i> Tambah Instansi
-                    </a>
                 </div>
             </div>
 
@@ -58,7 +50,6 @@
                         <th>No.</th>
                         <th>Nama Instansi</th>
                         <th>Alamat</th>
-                        <th>Aksi</th>
                     </tr>
                 </thead>
             </table>
@@ -102,10 +93,6 @@
     #institute-table tbody td { vertical-align: middle; }
     #institute-table.table-hover tbody tr:hover { background: #f6f9ff; }
     .text-nowrap { white-space: nowrap; }
-
-    /* Actions */
-    .btn-icon { width: 34px; height: 34px; display: inline-flex; align-items: center; justify-content: center; border-radius: 10px; }
-    .btn-icon + .btn-icon { margin-left: .35rem; }
 
     /* Info & Pagination */
     .dataTables_info { color: #6b7280; }
@@ -169,13 +156,6 @@ $(function () {
             { // Alamat
                 data: 'alamat',
                 name: 'alamat',
-                className: 'text-nowrap'
-            },
-            { // Aksi
-                data: 'actions',
-                name: 'actions',
-                orderable: false,
-                searchable: false,
                 className: 'text-nowrap'
             }
         ],
