@@ -51,6 +51,20 @@ class DashboardController extends Controller
             'series' => $transformedGenderCounts->values(), // -> [10, 15]
         ];
 
+        $participantStatusCounts = Participant::query()
+            ->select('status', DB::raw('count(*) as total'))
+            ->groupBy('status')
+            ->pluck('total', 'status');
+
+        $aktifCount = $participantStatusCounts->get('approved', 0);
+        // Gabungkan 'pending' dan 'rejected' menjadi 'Tidak Aktif'
+        $tidakAktifCount = $participantStatusCounts->get('nonactive', 0) + $participantStatusCounts->get('rejected', 0);
+
+        $participantStatusChartData = [
+            'labels' => ['Aktif', 'Tidak Aktif'],
+            'series' => [$aktifCount, $tidakAktifCount],
+        ];
+
         $permohonanCounts = Permohonan::query()
             // Hubungkan tabel permohonan dengan institutes berdasarkan id_institute
             ->join('institutes', 'permohonan.id_institute', '=', 'institutes.id')
@@ -66,6 +80,6 @@ class DashboardController extends Controller
             'series' => $permohonanCounts->values(),
         ];
 
-        return view('admin.dashboard.index', compact('totalPemagang', 'permohonanPending', 'totalPenugasan', 'totalPengguna', 'greeting', 'genderChartData', 'permohonanChartData'));
+        return view('admin.dashboard.index', compact('totalPemagang', 'permohonanPending', 'totalPenugasan', 'totalPengguna', 'greeting', 'genderChartData', 'permohonanChartData', 'participantStatusChartData'));
     }
 }

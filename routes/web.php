@@ -83,6 +83,7 @@ Route::middleware(['auth', 'verified', 'role:admin'])->prefix('admin')->name('ad
     // Pengguna
     Route::get('/users/data', [UsersController::class, 'data'])->name('users.data');
     Route::resource('users', UsersController::class)->names('users');
+    Route::put('users/{user}/status', [UsersController::class, 'toggleStatus'])->name('users.status');
 
     // -- Profil Pengguna (dari Breeze) --
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

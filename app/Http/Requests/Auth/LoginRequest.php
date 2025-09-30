@@ -55,24 +55,27 @@ class LoginRequest extends FormRequest
             'password' => $password,
         ];
 
+        $loginSuccess = false; // Inisialisasi variabel
+
         if ($credentialType === 'email') {
             $credentials['email'] = $identifier;
+            $loginSuccess = Auth::attempt($credentials, $this->boolean('remember'));
         } else {
-            // Jika bukan email, coba login dengan nip ATAU nisnim
-            // Ini adalah cara yang lebih fleksibel
             $loginSuccess = Auth::attempt(['nip' => $identifier, 'password' => $password], $this->boolean('remember'))
                 || Auth::attempt(['nisnim' => $identifier, 'password' => $password], $this->boolean('remember'));
         }
 
-        // Jika tipe kredensial adalah email, coba login dengan email
-        if ($credentialType === 'email') {
-            $loginSuccess = Auth::attempt($credentials, $this->boolean('remember'));
+        // --- LOGIKA BARU UNTUK CEK STATUS ---
+        if ($loginSuccess && Auth::user()->status === 'inactive') {
+            Auth::logout(); // Langsung logout lagi jika status nonaktif
+            throw ValidationException::withMessages([
+                'identifier' => 'Akun Anda telah dinonaktifkan. Silakan hubungi administrator.',
+            ]);
         }
+        // --- AKHIR LOGIKA BARU ---
 
-        // Jika login gagal (baik via unique_id maupun email)
-        if (! isset($loginSuccess) || ! $loginSuccess) {
+        if (! $loginSuccess) {
             RateLimiter::hit($this->throttleKey());
-
             throw ValidationException::withMessages([
                 'identifier' => __('auth.failed'),
             ]);

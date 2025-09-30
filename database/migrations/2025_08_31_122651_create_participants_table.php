@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('jurusan', 50);
             $table->string('kontak_peserta', 13);
             $table->year('tahun_aktif', 4);
-            $table->enum('status', ['pending', 'approved', 'rejected'])->default('pending');
+            $table->enum('status', ['pending', 'approved', 'rejected', 'nonactive'])->default('pending');
             $table->string('keterangan', 255)->nullable();
             $table->timestamps();
         });
