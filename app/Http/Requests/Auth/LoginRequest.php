@@ -9,6 +9,9 @@ use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
 
+/**
+ * @method \Illuminate\Session\Store session()
+ */
 class LoginRequest extends FormRequest
 {
     /**
@@ -27,7 +30,7 @@ class LoginRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'email' => ['required', 'string', 'email'],
+            'identifier' => ['required', 'string'],
             'password' => ['required', 'string'],
         ];
     }
@@ -41,11 +44,40 @@ class LoginRequest extends FormRequest
     {
         $this->ensureIsNotRateLimited();
 
-        if (! Auth::attempt($this->only('email', 'password'), $this->boolean('remember'))) {
-            RateLimiter::hit($this->throttleKey());
+        $identifier = $this->input('identifier');
+        $password = $this->input('password');
 
+        // Tentukan tipe kredensial: apakah email atau bukan?
+        $credentialType = filter_var($identifier, FILTER_VALIDATE_EMAIL) ? 'email' : 'unique_id';
+
+        // Siapkan kredensial berdasarkan tipenya
+        $credentials = [
+            'password' => $password,
+        ];
+
+        $loginSuccess = false; // Inisialisasi variabel
+
+        if ($credentialType === 'email') {
+            $credentials['email'] = $identifier;
+            $loginSuccess = Auth::attempt($credentials, $this->boolean('remember'));
+        } else {
+            $loginSuccess = Auth::attempt(['nip' => $identifier, 'password' => $password], $this->boolean('remember'))
+                || Auth::attempt(['nisnim' => $identifier, 'password' => $password], $this->boolean('remember'));
+        }
+
+        // --- LOGIKA BARU UNTUK CEK STATUS ---
+        if ($loginSuccess && Auth::user()->status === 'inactive') {
+            Auth::logout(); // Langsung logout lagi jika status nonaktif
             throw ValidationException::withMessages([
-                'email' => trans('auth.failed'),
+                'identifier' => 'Akun Anda telah dinonaktifkan. Silakan hubungi administrator.',
+            ]);
+        }
+        // --- AKHIR LOGIKA BARU ---
+
+        if (! $loginSuccess) {
+            RateLimiter::hit($this->throttleKey());
+            throw ValidationException::withMessages([
+                'identifier' => __('auth.failed'),
             ]);
         }
 

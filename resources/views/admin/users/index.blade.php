@@ -56,7 +56,7 @@
 
                 {{-- Actions --}}
                 <div class="d-flex flex-wrap gap-2 mb-3">
-                    <a href="{{ route('admin.internship.create') }}" class="btn btn-primary">
+                    <a href="{{ route('admin.users.create') }}" class="btn btn-primary">
                         <i class="fa-solid fa-file-circle-plus"></i> Akun Baru
                     </a>
                     <button id="btnExportExcel" class="btn btn-success"><i class="fas fa-file-excel"></i> Excel</button>
@@ -71,6 +71,7 @@
                             <th>Email</th>
                             <th>Nama</th>
                             <th>Role</th>
+                            <th>Status</th>
                             <th class="text-nowrap">Aksi</th>
                         </tr>
                     </thead>
@@ -282,10 +283,24 @@
                         name: 'role'
                     },
                     {
+                        data: 'status',
+                        name: 'status'
+                    },
+                    {
                         data: 'aksi',
                         name: 'aksi',
                         orderable: false,
                         searchable: false
+                    }
+                ],
+                columnDefs: [ // <-- Tambahkan ini untuk styling
+                    {
+                        targets: 4, // Sesuaikan dengan indeks kolom status Anda (dimulai dari 0)
+                        render: function(data, type, row) {
+                            let badgeClass = data === 'active' ? 'badge-success' :
+                                'badge-secondary';
+                            return `<span class="badge ${badgeClass}">${data}</span>`;
+                        }
                     }
                 ],
                 order: [

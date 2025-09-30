@@ -2,24 +2,27 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
-use Illuminate\View\View;
-use App\Models\Participant;
-use Yajra\DataTables\Facades\DataTables;
-use Illuminate\Http\Request;
-use Illuminate\Http\RedirectResponse;
-use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\ParticipantsExport;
+use App\Http\Controllers\Controller;
+use App\Http\Requests\StoreParticipantController;
+use App\Http\Requests\UpdateParticipantRequest;
+use App\Models\Participant;
+use App\Services\ParticipantService;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
+use Illuminate\View\View;
+use Maatwebsite\Excel\Facades\Excel;
+use Yajra\DataTables\Facades\DataTables;
 
 class ParticipantController extends Controller
 {
     public function index(): View
     {
         $stats = [
-            'total'      => Participant::count(),
-            'laki_laki'  => Participant::where('jenis_kelamin', 'L')->count(),
-            'perempuan'  => Participant::where('jenis_kelamin', 'P')->count(),
+            'total' => Participant::count(),
+            'laki_laki' => Participant::where('jenis_kelamin', 'L')->count(),
+            'perempuan' => Participant::where('jenis_kelamin', 'P')->count(),
         ];
 
         // daftar tahun untuk dropdown (distinct & desc)
@@ -51,17 +54,45 @@ class ParticipantController extends Controller
             $search = $request->searchbox;
             $query->where(function ($q) use ($search) {
                 $q->where('nama', 'like', "%{$search}%")
-                  ->orWhere('nisnim', 'like', "%{$search}%")
-                  ->orWhere('jurusan', 'like', "%{$search}%")
-                  ->orWhere('kontak_peserta', 'like', "%{$search}%")
-                  ->orWhere('tahun_aktif', 'like', "%{$search}%");
+                    ->orWhere('nisnim', 'like', "%{$search}%")
+                    ->orWhere('jurusan', 'like', "%{$search}%")
+                    ->orWhere('kontak_peserta', 'like', "%{$search}%")
+                    ->orWhere('tahun_aktif', 'like', "%{$search}%");
             });
         }
 
         return DataTables::of($query)
             ->addIndexColumn()
             ->addColumn('actions', function ($p) {
-                return view('admin.peserta.actions', compact('p'))->render();
+                $buttons = "
+                    <div class='flex gap-2'>
+                    <a href='".route('admin.peserta.edit', $p->id)."'
+                       class='btn btn-sm btn-primary text-white'
+                       data-bs-toggle='tooltip'
+                       data-bs-placement='top'
+                       title='Edit'>
+                        <i class='fa-solid fa-pen-to-square'></i> Edit
+                    </a>
+                    <a href='".route('admin.peserta.show', $p->id)."'
+                       class='btn btn-sm btn-info'
+                       data-bs-toggle='tooltip'
+                       data-bs-placement='top'
+                       title='Detail'>
+                        <i class='fa-solid fa-eye'></i> Detail
+                    </a>";
+                if ($p->status !== 'approved') {
+                    $buttons .= "
+                    <a href='".route('admin.peserta.approve', $p->id)."'
+                       class='btn btn-sm btn-success text-white'
+                       data-bs-toggle='tooltip'
+                       data-bs-placement='top'
+                       title='Setujui'>
+                        <i class='fa-solid fa-check'></i> Setujui
+                    </a>";
+                }
+                $buttons .= '</div>';
+
+                return $buttons;
             })
             ->rawColumns(['actions'])
             ->make(true);
@@ -77,23 +108,13 @@ class ParticipantController extends Controller
         return view('admin.peserta.create');
     }
 
-    public function store(Request $request): RedirectResponse
+    public function store(StoreParticipantController $request): RedirectResponse
     {
-        $data = $request->validate([
-            'permohonan_id'  => 'nullable|exists:permohonan,id',
-            'nama'           => 'required|string|max:50',
-            'nik'            => 'required|string|max:16',
-            'nisnim'         => 'required|string|max:20',
-            'jenis_kelamin'  => 'required|in:L,P',
-            'jurusan'        => 'required|string|max:50',
-            'kontak_peserta' => 'required|string|max:13',
-            'tahun_aktif'    => 'required|digits:4',
-            'keterangan'     => 'nullable|string|max:255',
-        ]);
+        $data = $request->validated();
 
         Participant::create($data);
 
-        if (!empty($data['permohonan_id'])) {
+        if (! empty($data['permohonan_id'])) {
             return redirect()
                 ->route('admin.permohonan.show', $data['permohonan_id'])
                 ->with('success', 'Peserta berhasil ditambahkan.');
@@ -109,22 +130,9 @@ class ParticipantController extends Controller
         return view('admin.peserta.edit', compact('participant'));
     }
 
-    public function update(Request $request, Participant $participant): RedirectResponse
+    public function update(UpdateParticipantRequest $request, Participant $participant): RedirectResponse
     {
-        $request->validate([
-            'nama'           => 'required|string|max:50',
-            'nik'            => 'required|string|max:16',
-            'nisnim'         => 'required|string|max:20',
-            'jenis_kelamin'  => 'required|in:L,P',
-            'jurusan'        => 'required|string|max:50',
-            'kontak_peserta' => 'required|string|max:13',
-            'tahun_aktif'    => 'required|digits:4',
-            'keterangan'     => 'nullable|string|max:255',
-        ]);
-
-        $participant->update($request->only([
-            'nama','nik','nisnim','jenis_kelamin','jurusan','kontak_peserta','tahun_aktif','keterangan'
-        ]));
+        $participant->update($request->validated());
 
         return redirect()->route('admin.peserta.index')->with('sukses', 'Data berhasil diperbarui');
     }
@@ -133,7 +141,8 @@ class ParticipantController extends Controller
     {
         // ParticipantsExport kamu sudah menerima $request → biarkan
         // (pastikan di export memperhatikan 'tahun_aktif' juga)
-        $filename = 'peserta_' . now()->format('Ymd_His') . '.xlsx';
+        $filename = 'peserta_'.now()->format('Ymd_His').'.xlsx';
+
         return Excel::download(new ParticipantsExport($request), $filename);
     }
 
@@ -142,7 +151,7 @@ class ParticipantController extends Controller
         $q = Participant::query();
 
         $gender = $request->get('jenis_kelamin');
-        $year   = $request->get('tahun_aktif');
+        $year = $request->get('tahun_aktif');
         $search = $request->get('search');
 
         if ($gender) {
@@ -154,24 +163,44 @@ class ParticipantController extends Controller
         if ($search) {
             $q->where(function ($x) use ($search) {
                 $x->where('nama', 'like', "%{$search}%")
-                  ->orWhere('nisnim', 'like', "%{$search}%")
-                  ->orWhere('jurusan', 'like', "%{$search}%")
-                  ->orWhere('kontak_peserta', 'like', "%{$search}%")
-                  ->orWhere('tahun_aktif', 'like', "%{$search}%");
+                    ->orWhere('nisnim', 'like', "%{$search}%")
+                    ->orWhere('jurusan', 'like', "%{$search}%")
+                    ->orWhere('kontak_peserta', 'like', "%{$search}%")
+                    ->orWhere('tahun_aktif', 'like', "%{$search}%");
             });
         }
 
         $data = $q->orderBy('nama')->get();
 
         $subtitle = [];
-        if ($gender) $subtitle[] = 'Jenis kelamin: ' . ($gender === 'L' ? 'Laki-laki' : 'Perempuan');
-        if ($year)   $subtitle[] = 'Tahun aktif: ' . $year;
-        if ($search) $subtitle[] = 'Pencarian: "' . $search . '"';
+        if ($gender) {
+            $subtitle[] = 'Jenis kelamin: '.($gender === 'L' ? 'Laki-laki' : 'Perempuan');
+        }
+        if ($year) {
+            $subtitle[] = 'Tahun aktif: '.$year;
+        }
+        if ($search) {
+            $subtitle[] = 'Pencarian: "'.$search.'"';
+        }
         $subtitle = implode(' · ', $subtitle);
 
         $pdf = Pdf::loadView('admin.peserta.pdf', compact('data', 'subtitle'))
             ->setPaper('a4', 'portrait');
 
-        return $pdf->download('peserta_' . now()->format('Ymd_His') . '.pdf');
+        return $pdf->download('peserta_'.now()->format('Ymd_His').'.pdf');
+    }
+
+    public function approve(Participant $participant, ParticipantService $service): RedirectResponse
+    {
+        try {
+            $password = $service->approveParticipant($participant);
+
+            $message = "Peserta {$participant->nama} berhasil disetujui. Akun telah dibuat. Password sementara: {$password}";
+
+            return redirect()->route('admin.peserta.index')->with('success', $message);
+        } catch (\Exception $e) {
+            // Jika service melempar error (misal: sudah disetujui), tampilkan pesannya
+            return redirect()->route('admin.peserta.index')->with('error', $e->getMessage());
+        }
     }
 }

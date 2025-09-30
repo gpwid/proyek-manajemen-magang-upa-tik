@@ -1,168 +1,119 @@
 @extends('admin.layoutsadmin.main')
-@section('internship-active', 'active')
-@section('title', 'Tambah Data Magang Baru')
+@section('title', 'Tambah Pengguna Baru')
+@section('users-active', 'active')
 
 @section('content')
     <div class="container-fluid">
-        <div class="d-sm-flex align-items-center justify-content-between mb-2">
-            <h1 class="h3 mb-3 text-gray-800">Form Tambah Data Magang</h1>
-        </div>
+        <h1 class="h3 mb-4 text-gray-800">Tambah Pengguna Baru</h1>
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">Formulir Pengguna Baru</h6>
+            </div>
+            <div class="card-body">
+                <form action="{{ route('admin.users.store') }}" method="POST">
+                    @csrf
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="name" class="form-label">Nama Lengkap <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control @error('name') is-invalid @enderror" id="name"
+                                name="name" value="{{ old('name') }}" required>
+                            @error('name')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="email" class="form-label">Alamat Email <span class="text-danger">*</span></label>
+                            <input type="email" class="form-control @error('email') is-invalid @enderror" id="email"
+                                name="email" value="{{ old('email') }}" required>
+                            @error('email')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
+                    </div>
 
-        <div class="card shadow col-12 p-4">
-            @if ($errors->any())
-                <div class="alert alert-danger">
-                    <ul class="mb-0">
-                        @foreach ($errors->all() as $e)
-                            <li>{{ $e }}</li>
-                        @endforeach
-                    </ul>
-                </div>
-            @endif
-            <form action="{{ route('admin.internship.store') }}" method="POST">
-                @csrf
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="password" class="form-label">Password <span class="text-danger">*</span></label>
+                            <input type="password" class="form-control @error('password') is-invalid @enderror"
+                                id="password" name="password" required>
+                            @error('password')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="password_confirmation" class="form-label">Konfirmasi Password <span
+                                    class="text-danger">*</span></label>
+                            <input type="password" class="form-control" id="password_confirmation"
+                                name="password_confirmation" required>
+                        </div>
+                    </div>
 
-                {{-- Permohonan --}}
-                <div class="mb-3">
-                    <label class="form-label">Permohonan <span class="text-danger">*</span></label>
-                    <select name="id_permohonan" class="form-control select2 @error('id_permohonan') is-invalid @enderror"
-                        data-live-search="true">
-                        <option value="">-- Pilih Permohonan --</option>
-                        @foreach ($permohonan as $pm)
-                            <option value="{{ $pm->id }}" {{ old('id_permohonan') == $pm->id ? 'selected' : '' }}>
-                                {{ $pm->no_surat }} — {{ $pm->institute->nama_instansi ?? 'Instansi?' }}
-                                ({{ $pm->tgl_surat->format('d-m-Y') }})
-                            </option>
-                        @endforeach
-                    </select>
-                    @error('id_permohonan')
-                        <div class="invalid-feedback">{{ $message }}</div>
-                    @enderror
-                </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="role" class="form-label">Peran (Role) <span class="text-danger">*</span></label>
+                            <select class="form-select @error('role') is-invalid @enderror" id="role" name="role"
+                                required>
+                                <option value="" disabled selected>Pilih peran...</option>
+                                <option value="admin" @selected(old('role') == 'admin')>Admin</option>
+                                <option value="atasan" @selected(old('role') == 'atasan')>Atasan</option>
+                                <option value="pembimbing" @selected(old('role') == 'pembimbing')>Pembimbing</option>
+                                <option value="pemagang" @selected(old('role') == 'pemagang')>Pemagang</option>
+                            </select>
+                            @error('role')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
+                    </div>
 
-                {{-- Pembimbing --}}
-                <div class="mb-3">
-                    <label class="form-label">Pembimbing <span class="text-danger">*</span></label>
-                    <select name="id_pembimbing" class="form-control select2 @error('id_pembimbing') is-invalid @enderror">
-                        <option value="">-- Pilih Pembimbing --</option>
-                        @foreach ($supervisors as $sup)
-                            <option value="{{ $sup->id }}" {{ old('id_pembimbing') == $sup->id ? 'selected' : '' }}>
-                                {{ $sup->nama }} ({{ $sup->nip }})
-                            </option>
-                        @endforeach
-                    </select>
-                    @error('id_pembimbing')
-                        <div class="invalid-feedback">{{ $message }}</div>
-                    @enderror
-                </div>
+                    {{-- Field Kondisional untuk NIP dan NIS/NIM --}}
+                    <div class="row">
+                        <div class="col-md-6 mb-3" id="nip-field" style="display: none;">
+                            <label for="nip" class="form-label">NIP</label>
+                            <input type="text" class="form-control @error('nip') is-invalid @enderror" id="nip"
+                                name="nip" value="{{ old('nip') }}">
+                            @error('nip')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
 
-                {{-- Peserta --}}
-                <div class="mb-3">
-                    <label class="form-label">Peserta <span class="text-danger">*</span></label>
-                    <select name="id_peserta[]" class="form-control select2 @error('id_peserta') is-invalid @enderror"
-                        multiple required>
-                        @foreach ($participants as $peserta)
-                            <option value="{{ $peserta->id }}"
-                                {{ in_array($peserta->id, old('id_peserta', [])) ? 'selected' : '' }}>
-                                {{ $peserta->nama }} ({{ $peserta->nik }})
-                            </option>
-                        @endforeach
-                    </select>
-                    @error('id_peserta')
-                        <div class="invalid-feedback">{{ $message }}</div>
-                    @enderror
-                </div>
+                        <div class="col-md-6 mb-3" id="nisnim-field" style="display: none;">
+                            <label for="nisnim" class="form-label">NIS/NIM</label>
+                            <input type="text" class="form-control @error('nisnim') is-invalid @enderror" id="nisnim"
+                                name="nisnim" value="{{ old('nisnim') }}">
+                            @error('nisnim')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
+                    </div>
 
-                {{-- Tombol --}}
-                <div class="d-flex justify-content-end">
-                    <a class="btn btn-secondary mr-2" href="{{ route('admin.internship.index') }}">Kembali</a>
-                    <button type="submit" class="btn btn-primary">Tambah</button>
-                </div>
-            </form>
+                    <div class="d-flex justify-content-end">
+                        <a href="{{ route('admin.users.index') }}" class="btn btn-secondary me-2">Batal</a>
+                        <button type="submit" class="btn btn-primary">Simpan Pengguna</button>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
 @endsection
 
-<style>
-    /* ====== Modernize Select2 (single select) ====== */
-    .select2-container .select2-selection--single {
-        height: 44px !important;
-        border-radius: 12px !important;
-        border: 1px solid #e5e7eb !important;
-        /* abu-abu lembut */
-        display: flex !important;
-        align-items: center !important;
-        padding: 0 .75rem !important;
-        position: relative !important;
-        /* untuk posisikan clear btn */
-        box-shadow: 0 1px 2px rgba(16, 24, 40, .04);
-    }
-
-    .select2-container--bootstrap4 .select2-selection--single,
-    .select2-container--bootstrap-5 .select2-selection--single {
-        padding-right: 2.25rem !important;
-        /* ruang untuk ikon panah/clear */
-    }
-
-    .select2-container .select2-selection--single .select2-selection__rendered {
-        line-height: 1.4 !important;
-        padding-left: 0 !important;
-    }
-
-    .select2-container .select2-selection--single .select2-selection__arrow {
-        height: 100% !important;
-        right: .75rem !important;
-    }
-
-    .select2-container .select2-selection--single .select2-selection__clear {
-        position: absolute !important;
-        right: 2rem !important;
-        /* di kiri panah */
-        top: 50% !important;
-        transform: translateY(-50%) !important;
-        margin: 0 !important;
-        font-size: 18px !important;
-        color: #9ca3af !important;
-    }
-
-    .select2-container .select2-selection--single .select2-selection__clear:hover {
-        color: #111827 !important;
-    }
-
-    /* Fokus: warna & ring halus */
-    .select2-container--default.select2-container--focus .select2-selection--single,
-    .select2-container--bootstrap4.select2-container--focus .select2-selection--single,
-    .select2-container--bootstrap-5.select2-container--focus .select2-selection--single {
-        border-color: #c7d2fe !important;
-        box-shadow: 0 0 0 .2rem rgba(99, 102, 241, .2) !important;
-        /* indigo ring */
-    }
-
-    /* Dropdown: lebih lega & modern */
-    .select2-results__option {
-        padding: .55rem .75rem !important;
-        border-radius: .5rem !important;
-        margin: 2px !important;
-    }
-
-    .select2-results__option--highlighted {
-        background: #eef2ff !important;
-        color: #1f2937 !important;
-    }
-
-    /* Placeholder agar abu-abu muda */
-    .select2-container .select2-selection__placeholder {
-        color: #9ca3af !important;
-    }
-</style>
-
 @push('scripts')
     <script>
-        $(document).ready(function() {
-            $('.select2').select2({
-                placeholder: "-- Pilih --",
-                allowClear: true,
-                width: '100%'
-            });
+        document.addEventListener('DOMContentLoaded', function() {
+            const roleSelect = document.getElementById('role');
+            const nipField = document.getElementById('nip-field');
+            const nisnimField = document.getElementById('nisnim-field');
+
+            function toggleFields() {
+                const selectedRole = roleSelect.value;
+                // Tampilkan NIP jika role bukan pemagang dan ada isinya
+                nipField.style.display = (selectedRole && selectedRole !== 'pemagang') ? 'block' : 'none';
+                // Tampilkan NIS/NIM jika role adalah pemagang
+                nisnimField.style.display = (selectedRole === 'pemagang') ? 'block' : 'none';
+            }
+
+            roleSelect.addEventListener('change', toggleFields);
+            // Panggil saat halaman dimuat untuk menangani old value
+            toggleFields();
         });
     </script>
 @endpush

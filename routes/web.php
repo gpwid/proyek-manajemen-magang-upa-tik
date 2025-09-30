@@ -36,7 +36,7 @@ Route::get('/dashboard', [RedirectController::class, 'dashboard'])
     ->name('dashboard');
 
 // BUNGKUS SEMUA ROUTE ADMIN DI DALAM MIDDLEWARE 'auth'
-Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->group(function () {
+Route::middleware(['auth', 'verified', 'role:admin'])->prefix('admin')->name('admin.')->group(function () {
 
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
 
@@ -50,6 +50,7 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
     // -- Peserta --
     Route::get('/peserta/data', [ParticipantController::class, 'data'])->name('peserta.data');
     Route::resource('peserta', ParticipantController::class)->names('peserta')->parameters(['peserta' => 'participant']);
+    Route::get('/peserta/{participant}/approve', [ParticipantController::class, 'approve'])->name('peserta.approve');
     Route::get('/peserta/export/excel', [ParticipantController::class, 'exportExcel'])->name('peserta.export.excel');
     Route::get('/peserta/export/pdf', [ParticipantController::class, 'exportPdf'])->name('peserta.export.pdf');
 
@@ -82,6 +83,7 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
     // Pengguna
     Route::get('/users/data', [UsersController::class, 'data'])->name('users.data');
     Route::resource('users', UsersController::class)->names('users');
+    Route::put('users/{user}/status', [UsersController::class, 'toggleStatus'])->name('users.status');
 
     // -- Profil Pengguna (dari Breeze) --
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

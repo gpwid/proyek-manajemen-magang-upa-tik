@@ -4,13 +4,14 @@ namespace App\Http\Controllers\Admin;
 
 use App\Exports\PermohonanExport;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\StorePermohonanRequest;
+use App\Http\Requests\UpdatePermohonanRequest;
 use App\Models\Institute;
 use App\Models\Permohonan;
+use App\Services\PermohonanService;
 use Barryvdh\DomPDF\Facade\Pdf;
-use Carbon\Carbon;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Validation\Rule;
 use Illuminate\View\View;
 use Maatwebsite\Excel\Facades\Excel;
 use Yajra\DataTables\Facades\DataTables;
@@ -98,7 +99,7 @@ class PermohonanController extends Controller
                     <i class='fa-solid fa-pen-to-square'></i> Edit
                 </a>
                 <a href='".route('admin.permohonan.show', $p->id)."'
-                   class='btn btn-sm btn-success text-white'
+                   class='btn btn-sm btn-info text-white'
                    data-bs-toggle='tooltip'
                    data-bs-placement='top'
                    title='Detail'>
@@ -126,130 +127,28 @@ class PermohonanController extends Controller
         return view('admin.permohonan.edit', compact('application', 'searchinstitutes'));
     }
 
-    public function update(Request $request, Permohonan $application)
+    public function update(UpdatePermohonanRequest $request, Permohonan $application, PermohonanService $service): RedirectResponse
     {
-        $validated = $request->validate([
-            'no_surat' => [
-                'required',
-                'string',
-                'max:100',
-                Rule::unique('permohonan', 'no_surat')->ignore($application->id),
-            ],
-            'tgl_surat' => 'required|date',
-            'id_institute' => 'required|exists:institutes,id',
-            'tgl_mulai' => 'required|date',
-            'tgl_selesai' => 'required|date|after_or_equal:tgl_mulai',
-            'pembimbing_sekolah' => 'required|string|max:255',
-            'kontak_pembimbing' => 'required|string|max:13',
-            'jenis_magang' => 'required|in:Mandiri,MBKM,Sekolah',
-            'file_permohonan' => 'nullable|file|mimes:pdf|max:5120',
-            'file_suratbalasan' => 'nullable|file|mimes:pdf|max:5120',
-            'catatan' => 'nullable|string|max:255',
-        ]);
+        $validated = $request->validated();
 
-        $institute = Institute::findOrFail($validated['id_institute']);
-
-        // objek file (boleh null)
-        $filePermohonan = $request->file('file_permohonan');
+        $filePermohonan = $request->file('file_permohonan'); // KALO ADA ERROR CUEKIN AJA, ITU MASALAH INTELLISENSE BUKAN MASALAH AKU
         $fileSurat = $request->file('file_suratbalasan');
 
-        // path file permohonan
-        if ($filePermohonan) {
-            if ($application->file_permohonan) {
-                Storage::disk('public')->delete($application->file_permohonan);
-            }
-            $permohonanPath = $filePermohonan->store('permohonan', 'public');
-        } else {
-            $permohonanPath = $application->file_permohonan;
-        }
-
-        // path file surat balasan
-        if ($fileSurat) {
-            if ($application->file_suratbalasan) {
-                Storage::disk('public')->delete($application->file_suratbalasan);
-            }
-            $suratBalasanPath = $fileSurat->store('permohonan', 'public');
-        } else {
-            $suratBalasanPath = $application->file_suratbalasan;
-        }
-
-        // Update data permohonan
-        $application->update([
-            'id_institute' => $institute->id,
-            'no_surat' => $validated['no_surat'],
-            'tgl_surat' => $validated['tgl_surat'],
-            'tgl_mulai' => $validated['tgl_mulai'],
-            'tgl_selesai' => $validated['tgl_selesai'],
-            'pembimbing_sekolah' => $validated['pembimbing_sekolah'],
-            'kontak_pembimbing' => $validated['kontak_pembimbing'],
-            'jenis_magang' => $validated['jenis_magang'],
-            'status' => $application->status,
-
-            'file_permohonan' => $permohonanPath,
-            'file_suratbalasan' => $suratBalasanPath,
-
-            // jika kamu simpan metadata di update juga, gunakan nullsafe
-            // 'file_suratbalasan_nama_asli' => $fileSurat?->getClientOriginalName(),
-            // dst...
-            'catatan' => $validated['catatan'] ?? $application->catatan,
-        ]);
+        $service->updatePermohonan($application, $validated, $filePermohonan, $fileSurat);
 
         return redirect()->route('admin.permohonan.index')
             ->with('success', 'Permohonan berhasil diperbarui.');
     }
 
-    public function store(Request $request)
+    public function store(StorePermohonanRequest $request, PermohonanService $service): RedirectResponse
     {
-        $validated = $request->validate([
-            'no_surat' => 'required|string|max:100|unique:permohonan,no_surat',
-            'tgl_surat' => 'required|date',
-            'id_institute' => 'required|exists:institutes,id',
-            'tgl_mulai' => 'required|date',
-            'tgl_selesai' => 'required|date|after_or_equal:tgl_mulai',
-            'pembimbing_sekolah' => 'required|string|max:255',
-            'kontak_pembimbing' => 'required|string|max:13',
-            'jenis_magang' => 'required|in:Mandiri,MBKM,Sekolah',
-            'file_permohonan' => 'required|file|mimes:pdf|max:5120',
-            'file_suratbalasan' => 'nullable|file|mimes:pdf|max:5120',
-            'catatan' => 'nullable|string|max:255',
-        ]);
+        $validated = $request->validated();
 
-        $institute = Institute::findOrFail($validated['id_institute']);
+        // Ambil file dari request secara terpisah
+        $filePermohonan = $request->file('file_permohonan');
+        $fileSurat = $request->file('file_suratbalasan');
 
-        // simpan objek file ke variabel
-        $filePermohonan = $request->file('file_permohonan');           // required
-        $fileSurat = $request->file('file_suratbalasan');          // nullable
-
-        // simpan ke storage
-        $permohonanPath = $filePermohonan->store('permohonan', 'public');
-        $suratBalasanPath = $fileSurat ? $fileSurat->store('permohonan', 'public') : null;
-
-        Permohonan::create([
-            'id_institute' => $institute->id,
-            'no_surat' => $validated['no_surat'],
-            'tgl_surat' => $validated['tgl_surat'],
-            'tgl_mulai' => $validated['tgl_mulai'],
-            'tgl_selesai' => $validated['tgl_selesai'],
-            'pembimbing_sekolah' => $validated['pembimbing_sekolah'],
-            'kontak_pembimbing' => $validated['kontak_pembimbing'],
-            'tgl_suratmasuk' => Carbon::now(),
-            'jenis_magang' => $validated['jenis_magang'],
-            'status' => 'Proses',
-
-            // file permohonan (wajib)
-            'file_permohonan' => $permohonanPath,
-            'file_permohonan_nama_asli' => $filePermohonan->getClientOriginalName(),
-            'file_permohonan_size' => $filePermohonan->getSize(),
-            'file_permohonan_mime' => $filePermohonan->getClientMimeType(),
-
-            // file surat balasan (opsional) — gunakan nullsafe `?->`
-            'file_suratbalasan' => $suratBalasanPath,
-            'file_suratbalasan_nama_asli' => $fileSurat?->getClientOriginalName(),
-            'file_suratbalasan_size' => $fileSurat?->getSize(),
-            'file_suratbalasan_mime' => $fileSurat?->getClientMimeType(),
-
-            'catatan' => $validated['catatan'] ?? null,
-        ]);
+        $service->createPermohonan($validated, $filePermohonan, $fileSurat);
 
         return redirect()->route('admin.permohonan.index')
             ->with('success', 'Data permohonan berhasil ditambahkan.');

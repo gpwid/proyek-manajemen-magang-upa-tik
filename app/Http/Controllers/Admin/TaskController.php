@@ -3,10 +3,13 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\StoreTaskRequest;
+use App\Http\Requests\UpdateTaskRequest;
 use App\Models\Institute;
 use App\Models\Internship;
 use App\Models\Participant;
 use App\Models\Task;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 use Yajra\DataTables\Facades\DataTables;
@@ -56,7 +59,7 @@ class TaskController extends Controller
 
                 return "<div class='flex gap-2'>
                     <a href='{$url1}' class='btn btn-sm btn-primary text-white'><i class='fa-solid fa-pen-to-square'></i> Edit</a>
-                    <a href='{$url2}' class='btn btn-sm btn-success text-white'><i class='fa-solid fa-eye'></i> Detail</a>
+                    <a href='{$url2}' class='btn btn-sm btn-info text-white'><i class='fa-solid fa-eye'></i> Detail</a>
                 </div>";
             })
             ->filter(function ($query) use ($request) {
@@ -91,18 +94,9 @@ class TaskController extends Controller
         return view('admin.penugasan.create', compact('internships', 'participants'));
     }
 
-    public function store(Request $request)
+    public function store(StoreTaskRequest $request): RedirectResponse
     {
-        $validated = $request->validate([
-            'internship_id' => 'required|exists:internship,id',
-            'participant_id' => 'required|exists:participants,id',
-            'title' => 'required|string|max:255',
-            'description' => 'required|string',
-            'task_date' => 'required|date',
-            'status' => 'required|in:Dikerjakan,Revisi,Selesai',
-        ]);
-
-        Task::create($validated);
+        Task::create($request->validated());
 
         return redirect()->route('admin.penugasan.index')->with('success', 'Tugas baru berhasil ditambahkan!');
     }
@@ -115,18 +109,9 @@ class TaskController extends Controller
         return view('admin.penugasan.edit', compact('task', 'internships', 'participants'));
     }
 
-    public function update(Request $request, Task $task)
+    public function update(UpdateTaskRequest $request, Task $task): RedirectResponse
     {
-        $validated = $request->validate([
-            'internship_id' => 'required|exists:internship,id',
-            'participant_id' => 'required|exists:participants,id',
-            'title' => 'required|string|max:255',
-            'description' => 'required|string',
-            'task_date' => 'required|date',
-            'status' => 'required|in:Dikerjakan,Revisi,Selesai',
-        ]);
-
-        $task->update($validated);
+        $task->update($request->validated());
 
         return redirect()->route('admin.penugasan.index')->with('success', 'Tugas berhasil diperbarui!');
     }

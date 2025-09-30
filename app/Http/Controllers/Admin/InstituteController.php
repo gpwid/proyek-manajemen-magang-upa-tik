@@ -4,11 +4,12 @@ namespace App\Http\Controllers\Admin;
 
 use App\Exports\InstitutesExport;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\StoreInstituteRequest;
+use App\Http\Requests\UpdateInstituteRequest;
 use App\Models\Institute;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Validation\Rule;
 use Illuminate\View\View;
 use Maatwebsite\Excel\Facades\Excel;
 use Yajra\DataTables\Facades\DataTables;
@@ -36,7 +37,22 @@ class InstituteController extends Controller
         return DataTables::of($query)
             ->addIndexColumn()
             ->addColumn('actions', function ($p) {
-                return view('admin.instansi.actions', compact('p'))->render();
+                return "<div class='flex gap-2'>
+                <a href='".route('admin.instansi.edit', $p->id)."'
+                   class='btn btn-sm btn-primary text-white'
+                   data-bs-toggle='tooltip'
+                   data-bs-placement='top'
+                   title='Edit'>
+                    <i class='fa-solid fa-pen-to-square'></i> Edit
+                </a>
+                <a href='".route('admin.instansi.show', $p->id)."'
+                   class='btn btn-sm btn-info text-white'
+                   data-bs-toggle='tooltip'
+                   data-bs-placement='top'
+                   title='Detail'>
+                    <i class='fa-solid fa-eye'></i> Detail
+                </a>
+            </div>";
             })
             ->rawColumns(['actions'])
             ->make(true);
@@ -47,16 +63,9 @@ class InstituteController extends Controller
         return view('admin.instansi.create');
     }
 
-    public function store(Request $request): RedirectResponse
+    public function store(StoreInstituteRequest $request): RedirectResponse
     {
-        $request->validate([
-            'nama_instansi' => 'required|string|max:50',
-            'alamat' => 'required|string|max:255',
-        ]);
-
-        Institute::create($request->only([
-            'nama_instansi', 'alamat',
-        ]));
+        Institute::create($request->validated());
 
         return redirect()->route('admin.instansi.index')->with('sukses', 'Data Disimpan');
     }
@@ -66,16 +75,9 @@ class InstituteController extends Controller
         return view('admin.instansi.edit', compact('institute'));
     }
 
-    public function update(Request $request, Institute $institute): RedirectResponse
+    public function update(UpdateInstituteRequest $request, Institute $institute): RedirectResponse
     {
-        $request->validate([
-            'nama_instansi' => ['required', 'string', 'max:50', Rule::unique('institutes')->ignore($institute->id)],
-            'alamat' => 'required|string|max:255',
-        ]);
-
-        $institute->update($request->only([
-            'nama_instansi', 'alamat',
-        ]));
+        $institute->update($request->validated());
 
         return redirect()->route('admin.instansi.index')->with('sukses', 'Data berhasil diperbarui');
     }

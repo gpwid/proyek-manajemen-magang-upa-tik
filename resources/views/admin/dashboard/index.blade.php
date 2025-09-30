@@ -2,9 +2,16 @@
 @section('title', 'Dashboard')
 @section('dashboard-active', 'active')
 @section('content')
+
+    @php
+        // Ambil user dari guard admin jika ada, kalau tidak pakai default
+        $user = Auth::user();
+        $name = $user?->name ?? 'Guest';
+
+    @endphp
     <div class="container-fluid">
         <div class="d-sm-flex align-items-center justify-content-between mb-4">
-            <h1 class="h3 mb-0 text-gray-800">{{ $greeting }}, User! 😍</h1>
+            <h1 class="h3 mb-0 text-gray-800">{{ $greeting }}, {{ $name }}! 😍</h1>
         </div>
 
         <div class="row">
@@ -122,10 +129,22 @@
                     </div>
                 </div>
             </div>
-        </div>
 
+        </div>
         <div class="row mt-1">
-            <div class="col-12 mb-4">
+            <div class="col-lg-6 mb-4">
+                <div class="card shadow h-100">
+                    <div class="card-header py-3">
+                        <h6 class="m-0 font-weight-bold text-primary"><i class="fa-solid fa-users"></i> Statistik User Aktif
+                            & Nonaktif</h6>
+                    </div>
+                    <div class="card-body">
+                        {{-- Ini adalah "kanvas" tempat chart akan digambar oleh JavaScript --}}
+                        <div id="userStatusChart"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6 mb-4">
                 <div class="card shadow h-100">
                     <div class="card-header py-3">
                         <h6 class="m-0 font-weight-bold text-primary">
@@ -215,5 +234,29 @@
 
         var barChart = new ApexCharts(document.querySelector("#permohonanBarChart"), barChartOptions);
         barChart.render();
+
+        var userStatusData = @json($participantStatusChartData);
+        var statusOptions = {
+            series: userStatusData.series,
+            labels: userStatusData.labels,
+            chart: {
+                type: 'donut',
+                height: 250
+            },
+            colors: ['#1cc88a', '#e74a3b'],
+            responsive: [{
+                breakpoint: 480,
+                options: {
+                    chart: {
+                        width: 200
+                    },
+                    legend: {
+                        position: 'bottom'
+                    }
+                }
+            }]
+        };
+        var statusChart = new ApexCharts(document.querySelector("#userStatusChart"), statusOptions);
+        statusChart.render();
     </script>
 @endpush
