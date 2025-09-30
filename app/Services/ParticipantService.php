@@ -31,8 +31,7 @@ class ParticipantService
             // 3. Buat user baru
             $user = User::create([
                 'name' => $participant->nama,
-                'email' => $participant->email,
-                'nomor_unik' => 'magang_'.$participant->nisnim, // Pastikan peserta punya nisnim yang unik
+                'nisnim' => $participant->nisnim, // Pastikan peserta punya nisnim yang unik
                 'password' => Hash::make($temporaryPassword),
                 'role' => 'pemagang',
             ]);

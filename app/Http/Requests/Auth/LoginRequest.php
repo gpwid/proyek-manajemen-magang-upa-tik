@@ -9,6 +9,9 @@ use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
 
+/**
+ * @method \Illuminate\Session\Store session()
+ */
 class LoginRequest extends FormRequest
 {
     /**
@@ -27,7 +30,7 @@ class LoginRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'email' => ['required', 'string', 'email'],
+            'identifier' => ['required', 'string'],
             'password' => ['required', 'string'],
         ];
     }
@@ -41,11 +44,37 @@ class LoginRequest extends FormRequest
     {
         $this->ensureIsNotRateLimited();
 
-        if (! Auth::attempt($this->only('email', 'password'), $this->boolean('remember'))) {
+        $identifier = $this->input('identifier');
+        $password = $this->input('password');
+
+        // Tentukan tipe kredensial: apakah email atau bukan?
+        $credentialType = filter_var($identifier, FILTER_VALIDATE_EMAIL) ? 'email' : 'unique_id';
+
+        // Siapkan kredensial berdasarkan tipenya
+        $credentials = [
+            'password' => $password,
+        ];
+
+        if ($credentialType === 'email') {
+            $credentials['email'] = $identifier;
+        } else {
+            // Jika bukan email, coba login dengan nip ATAU nisnim
+            // Ini adalah cara yang lebih fleksibel
+            $loginSuccess = Auth::attempt(['nip' => $identifier, 'password' => $password], $this->boolean('remember'))
+                || Auth::attempt(['nisnim' => $identifier, 'password' => $password], $this->boolean('remember'));
+        }
+
+        // Jika tipe kredensial adalah email, coba login dengan email
+        if ($credentialType === 'email') {
+            $loginSuccess = Auth::attempt($credentials, $this->boolean('remember'));
+        }
+
+        // Jika login gagal (baik via unique_id maupun email)
+        if (! isset($loginSuccess) || ! $loginSuccess) {
             RateLimiter::hit($this->throttleKey());
 
             throw ValidationException::withMessages([
-                'email' => trans('auth.failed'),
+                'identifier' => __('auth.failed'),
             ]);
         }
 

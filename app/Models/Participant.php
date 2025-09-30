@@ -2,8 +2,8 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 
 class Participant extends Model
 {
@@ -20,6 +20,8 @@ class Participant extends Model
         'jurusan',
         'kontak_peserta',
         'tahun_aktif',
+        'status',
+        'user_id',
         'keterangan',
     ];
 

@@ -25,8 +25,8 @@
         @csrf
 
         <div class="form-group">
-            <input type="text" class="form-control form-control-user" id="nomor_unik" name="nomor_unik"
-                value="{{ old('nomor_unik') }}" required autofocus placeholder="Masukkan NIM/NIS...">
+            <input type="text" class="form-control form-control-user" id="identifier" name="identifier"
+                value="{{ old('identifier') }}" required autofocus placeholder="Masukkan NIM/NIS/NIP/Email...">
         </div>
 
         <div class="form-group">

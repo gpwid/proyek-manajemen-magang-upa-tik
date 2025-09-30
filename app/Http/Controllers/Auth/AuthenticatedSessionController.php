@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Auth\LoginRequest;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -21,23 +22,21 @@ class AuthenticatedSessionController extends Controller
     /**
      * Handle an incoming authentication request.
      */
-    public function store(Request $request): RedirectResponse
+    public function store(LoginRequest $request): RedirectResponse
     {
-        $request->validate([
-            'nomor_unik' => ['required', 'string'],
-            'password' => ['required', 'string'],
-        ]);
+        $request->authenticate();
 
-        if (Auth::attempt(['nomor_unik' => $request->nomor_unik, 'password' => $request->password])) {
-            $request->session()->regenerate();
+        $request->session()->regenerate();
 
-            return redirect()->intended(route('dashboard', absolute: false));
+        // Redirect pengguna berdasarkan peran mereka setelah login berhasil
+        $user = Auth::user();
+
+        if ($user->role === 'pemagang') {
+            return redirect()->route('pemagang.dashboard.index');
         }
 
-        // Handle failed login attempt
-        return back()->withErrors([
-            'nisnim' => 'The provided credentials do not match our records.',
-        ]);
+        // Untuk admin, atasan, dan pembimbing, arahkan ke dashboard admin
+        return redirect()->intended(route('admin.dashboard.index', absolute: false));
     }
 
     /**
