@@ -85,7 +85,6 @@ class InternshipController extends Controller
                 $url2 = route('atasan.internship.show', $i->id);
 
                 return "<div class='flex gap-2'>
-                    <a href='{$url1}' class='btn btn-sm btn-primary text-white'><i class='fa-solid fa-pen-to-square'></i> Edit</a>
                     <a href='{$url2}' class='btn btn-sm btn-success text-white'><i class='fa-solid fa-eye'></i> Detail</a>
                 </div>";
             })
@@ -127,50 +126,6 @@ class InternshipController extends Controller
             ->make(true);
     }
 
-    public function create()
-    {
-        $permohonan = Permohonan::with('institute')
-            ->where('status', 'Aktif')
-            ->orderBy('tgl_surat', 'desc')
-            ->get();
-        $permohonan = Permohonan::with('institute')
-            ->where('status', 'Aktif')
-            ->orderBy('tgl_surat', 'desc')
-            ->get();
-        $supervisors = Supervisor::all();
-        $participants = Participant::all();
-
-        return view('atasan.internship.create', compact('permohonan', 'supervisors', 'participants'));
-    }
-
-    public function store(Request $request)
-    {
-        $validated = $request->validate([
-            'id_permohonan' => ['required', 'integer', Rule::exists('permohonan', 'id')->where(fn($q) => $q->where('status', 'Aktif'))],
-            'id_pembimbing' => 'required|integer|exists:supervisors,id',
-            'id_peserta' => 'required|array',
-            'id_peserta.*' => 'integer|exists:participants,id',
-        ], [
-            'id_permohonan.exists' => 'Permohonan yang dipilih harus memiliki status Aktif.',
-        ]);
-
-        $internship = Internship::create([
-            'id_pembimbing' => $validated['id_pembimbing'],
-            'id_permohonan' => $validated['id_permohonan'],
-            'id_permohonan' => $validated['id_permohonan'],
-            'status_magang' => 'Aktif',
-        ]);
-
-        $internship->participants()->attach($validated['id_peserta']);
-
-        // <<< KUNCI: set peserta -> permohonan terkait agar muncul di Detail Permohonan
-        Participant::whereIn('id', $validated['id_peserta'])
-            ->update(['permohonan_id' => $validated['id_permohonan']]);
-
-        return redirect()->route('atasan.internship.index')
-            ->with('success', 'Data magang berhasil ditambahkan.');
-    }
-
     public function show(Internship $internship): \Illuminate\View\View
     {
         $internship->load([
@@ -181,65 +136,6 @@ class InternshipController extends Controller
         ]);
 
         return view('atasan.internship.detail', compact('internship'));
-    }
-
-    public function edit(Internship $internship)
-    {
-        $permohonan = Permohonan::with('institute')
-            ->where('status', 'Aktif')
-            ->orderBy('tgl_surat', 'desc')
-            ->get();
-        $supervisors = Supervisor::orderBy('nama')->get();
-        $participants = Participant::orderBy('nama')->get();
-
-        return view('atasan.internship.edit', compact(
-            'internship',
-            'permohonan',
-            'supervisors',
-            'participants'
-        ));
-    }
-
-    public function update(Request $request, Internship $internship)
-    {
-        $validated = $request->validate([
-            'id_permohonan' => ['required', 'integer', Rule::exists('permohonan', 'id')->where(fn($q) => $q->where('status', 'Aktif'))],
-            'id_pembimbing' => 'required|integer|exists:supervisors,id',
-            'status_magang' => ['required', Rule::in(['Aktif', 'Nonaktif', 'Tidak Selesai'])],
-            'id_peserta' => 'required|array',
-            'id_peserta.*' => 'integer|exists:participants,id',
-        ], [
-            'id_permohonan.exists' => 'Permohonan yang dipilih harus memiliki status Aktif.',
-        ]);
-
-        $internship->update([
-            'id_permohonan' => $validated['id_permohonan'],
-            'id_pembimbing' => $validated['id_pembimbing'],
-            'status_magang' => $validated['status_magang'],
-        ]);
-
-        // Simpan perubahan peserta di pivot
-        $changes = $internship->participants()->sync($validated['id_peserta']);
-
-        // Peserta baru ditambahkan ke internship ini -> set permohonan_id
-        if (! empty($changes['attached'])) {
-            Participant::whereIn('id', $changes['attached'])
-                ->update(['permohonan_id' => $validated['id_permohonan']]);
-        }
-
-        // Peserta yang dicabut dari internship ini -> kosongkan permohonan_id jika sebelumnya menunjuk permohonan ini
-        if (! empty($changes['detached'])) {
-            Participant::whereIn('id', $changes['detached'])
-                ->where('permohonan_id', $validated['id_permohonan'])
-                ->update(['permohonan_id' => null]);
-        }
-
-        // Pastikan yang tersisa semua menunjuk permohonan saat ini
-        Participant::whereIn('id', $validated['id_peserta'])
-            ->update(['permohonan_id' => $validated['id_permohonan']]);
-
-        return redirect()->route('atasan.internship.index')
-            ->with('success', 'Data magang berhasil diperbarui.');
     }
 
     // Export

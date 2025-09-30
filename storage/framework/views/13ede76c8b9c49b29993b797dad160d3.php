@@ -1,8 +1,6 @@
-@extends('atasan.layoutsatasan.main')
-
-@section('title', 'Penugasan')
-@section('penugasan-active', 'active')
-@section('content')
+<?php $__env->startSection('title', 'Penugasan'); ?>
+<?php $__env->startSection('penugasan-active', 'active'); ?>
+<?php $__env->startSection('content'); ?>
     <div class="container-fluid">
 
         <!-- Page Heading -->
@@ -10,80 +8,84 @@
             <h1 class="h3 mb-3 text-gray-800">Penugasan</h1>
         </div>
 
-        @if ($errors->any())
+        <?php if($errors->any()): ?>
             <div class="alert alert-danger alert-dismissible fade show" role="alert">
                 <ul class="mb-0">
-                    @foreach ($errors->all() as $e)
-                        <li>{{ $e }}</li>
-                    @endforeach
+                    <?php $__currentLoopData = $errors->all(); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $e): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                        <li><?php echo e($e); ?></li>
+                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                 </ul>
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
-        @endif
+        <?php endif; ?>
 
-        @if (session('success'))
+        <?php if(session('success')): ?>
             <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
             <script>
                 Swal.fire({
                     position: 'center',
                     icon: 'success',
-                    title: "{{ session('success') }}",
+                    title: "<?php echo e(session('success')); ?>",
                     showConfirmButton: false,
                     timer: 1500
                 });
             </script>
-        @endif
+        <?php endif; ?>
 
         <div class="row">
-            @foreach ($kanbanColumns as $status => $tasks)
+            <?php $__currentLoopData = $kanbanColumns; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $status => $tasks): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                 <div class="col-12 col-md-6 col-lg-4 mb-4">
                     <div class="card shadow-sm bg-light border-0 h-100">
                         <div class="card-header bg-transparent py-2 border-0">
                             <h6 class="m-0 font-weight-bold text-primary d-flex justify-content-between align-items-center">
-                                {{ $status }}
-                                @php
+                                <?php echo e($status); ?>
+
+                                <?php
                                     $badgeColor = match ($status) {
                                         'Dikerjakan' => 'bg-info',
                                         'Revisi' => 'bg-warning',
                                         'Selesai' => 'bg-success',
                                         default => 'bg-secondary',
                                     };
-                                @endphp
-                                <span class="badge {{ $badgeColor }} rounded-pill">{{ $tasks->count() }}</span>
+                                ?>
+                                <span class="badge <?php echo e($badgeColor); ?> rounded-pill"><?php echo e($tasks->count()); ?></span>
                             </h6>
                         </div>
                         <div class="card-body">
-                            @forelse ($tasks as $task)
+                            <?php $__empty_1 = true; $__currentLoopData = $tasks; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $task): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
                                 <div class="card shadow-sm mb-3">
                                     <div class="card-body p-3">
                                         <div class="d-flex justify-content-between align-items-start">
-                                            <h6 class="card-title font-weight-bold mb-1">{{ $task->title }}</h6>
+                                            <h6 class="card-title font-weight-bold mb-1"><?php echo e($task->title); ?></h6>
                                         </div>
                                         <p class="card-text small text-muted">
-                                            {{ Str::limit($task->description, 100) }}
+                                            <?php echo e(Str::limit($task->description, 100)); ?>
+
                                         </p>
                                         <div class="d-flex justify-content-between align-items-center mt-3">
                                             <small class="text-muted d-flex align-items-center">
                                                 <i class="fas fa-user fa-sm mr-2"></i>
-                                                {{ $task->participant->nama }}
+                                                <?php echo e($task->participant->nama); ?>
+
                                             </small>
                                             <small class="text-muted">
-                                                {{ $task->task_date->format('d M') }}
+                                                <?php echo e($task->task_date->format('d M')); ?>
+
                                             </small>
                                         </div>
                                     </div>
                                 </div>
-                            @empty
+                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
                                 <div class="card bg-light border-dashed">
                                     <div class="card-body text-center text-muted py-5">
                                         <small>Tidak ada tugas</small>
                                     </div>
                                 </div>
-                            @endforelse
+                            <?php endif; ?>
                         </div>
                     </div>
                 </div>
-            @endforeach
+            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
         </div>
 
         <div class="card shadow mt-4">
@@ -96,19 +98,20 @@
                         <label for="institute_filter">Filter Instansi</label>
                         <select id="institute_filter" class="form-control">
                             <option value="">Semua Instansi</option>
-                            @foreach ($institutes as $institute)
-                                <option value="{{ $institute->id }}">{{ $institute->nama_instansi }}</option>
-                            @endforeach
+                            <?php $__currentLoopData = $institutes; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $institute): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                <option value="<?php echo e($institute->id); ?>"><?php echo e($institute->nama_instansi); ?></option>
+                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                         </select>
                     </div>
                     <div class="col-md-4 mb-3">
                         <label for="status_filter">Filter Status</label>
                         <select id="status_filter" class="form-control">
                             <option value="">-- Pilih Status --</option>
-                            @foreach (['Dikerjakan', 'Revisi', 'Selesai'] as $sp)
-                                <option value="{{ $sp }}">{{ $sp }}
+                            <?php $__currentLoopData = ['Dikerjakan', 'Revisi', 'Selesai']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $sp): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                <option value="<?php echo e($sp); ?>"><?php echo e($sp); ?>
+
                                 </option>
-                            @endforeach
+                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                         </select>
                     </div>
                 </div>
@@ -131,31 +134,31 @@
 
 
     </div>
-@endsection
+<?php $__env->stopSection(); ?>
 
-@push('scripts')
-    {{-- Sweet Alert untuk notifikasi sukses --}}
-    @if (session('success'))
+<?php $__env->startPush('scripts'); ?>
+    
+    <?php if(session('success')): ?>
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         <script>
             Swal.fire({
                 position: 'center',
                 icon: 'success',
-                title: "{{ session('success') }}",
+                title: "<?php echo e(session('success')); ?>",
                 showConfirmButton: false,
                 timer: 1500
             });
         </script>
-    @endif
+    <?php endif; ?>
 
-    {{-- Skrip Inisialisasi DataTables --}}
+    
     <script>
         $(function() {
             const table = $('#tasksTable').DataTable({
                 processing: true,
                 serverSide: true,
                 ajax: {
-                    url: '{{ route('atasan.penugasan.data') }}',
+                    url: '<?php echo e(route('atasan.penugasan.data')); ?>',
                     data: function(d) {
                         d.institute_id = $('#institute_filter').val();
                         d.status = $('#status_filter').val();
@@ -205,4 +208,6 @@
             });
         });
     </script>
-@endpush
+<?php $__env->stopPush(); ?>
+
+<?php echo $__env->make('atasan.layoutsatasan.main', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\laragon\www\magang\resources\views/atasan/penugasan/index.blade.php ENDPATH**/ ?>

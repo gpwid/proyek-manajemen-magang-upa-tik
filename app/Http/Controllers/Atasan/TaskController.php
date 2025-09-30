@@ -55,7 +55,6 @@ class TaskController extends Controller
                 $url2 = route('atasan.penugasan.show', $task->id);
 
                 return "<div class='flex gap-2'>
-                    <a href='{$url1}' class='btn btn-sm btn-primary text-white'><i class='fa-solid fa-pen-to-square'></i> Edit</a>
                     <a href='{$url2}' class='btn btn-sm btn-success text-white'><i class='fa-solid fa-eye'></i> Detail</a>
                 </div>";
             })
@@ -80,55 +79,6 @@ class TaskController extends Controller
             })
             ->rawColumns(['status', 'actions'])
             ->make(true);
-    }
-
-    public function create(): View
-    {
-        // Query ini sudah benar karena memuat relasi yang diperlukan
-        $internships = Internship::has('participants')->with('permohonan.institute', 'participants')->get();
-        $participants = Participant::orderBy('nama')->get();
-
-        return view('atasan.penugasan.create', compact('internships', 'participants'));
-    }
-
-    public function store(Request $request)
-    {
-        $validated = $request->validate([
-            'internship_id' => 'required|exists:internship,id',
-            'participant_id' => 'required|exists:participants,id',
-            'title' => 'required|string|max:255',
-            'description' => 'required|string',
-            'task_date' => 'required|date',
-            'status' => 'required|in:Dikerjakan,Revisi,Selesai',
-        ]);
-
-        Task::create($validated);
-
-        return redirect()->route('atasan.penugasan.index')->with('success', 'Tugas baru berhasil ditambahkan!');
-    }
-
-    public function edit(Task $task): View
-    {
-        $internships = Internship::has('participants')->with('permohonan.institute', 'participants')->get();
-        $participants = Participant::orderBy('nama')->get();
-
-        return view('atasan.penugasan.edit', compact('task', 'internships', 'participants'));
-    }
-
-    public function update(Request $request, Task $task)
-    {
-        $validated = $request->validate([
-            'internship_id' => 'required|exists:internship,id',
-            'participant_id' => 'required|exists:participants,id',
-            'title' => 'required|string|max:255',
-            'description' => 'required|string',
-            'task_date' => 'required|date',
-            'status' => 'required|in:Dikerjakan,Revisi,Selesai',
-        ]);
-
-        $task->update($validated);
-
-        return redirect()->route('atasan.penugasan.index')->with('success', 'Tugas berhasil diperbarui!');
     }
 
     public function show(Task $task): View
