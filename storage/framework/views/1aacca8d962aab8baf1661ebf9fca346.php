@@ -35,8 +35,8 @@
         <?php echo csrf_field(); ?>
 
         <div class="form-group">
-            <input type="email" class="form-control form-control-user" id="email" name="email"
-                value="<?php echo e(old('email')); ?>" required autofocus placeholder="Masukkan Alamat Email...">
+            <input type="text" class="form-control form-control-user" id="identifier" name="identifier"
+                value="<?php echo e(old('identifier')); ?>" required autofocus placeholder="Masukkan NIM/NIS/NIP/Email...">
         </div>
 
         <div class="form-group">
