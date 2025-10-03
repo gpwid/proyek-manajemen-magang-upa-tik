@@ -1,0 +1,20 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+
+class Attendance extends Model
+{
+    use HasFactory;
+
+    protected $fillable = [
+        'participant_id',
+        'date',
+        'check_in_time',
+        'check_in_ip_address',
+        'check_out_time',
+        'check_out_ip_address',
+    ];
+}

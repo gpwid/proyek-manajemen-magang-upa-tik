@@ -34,4 +34,9 @@ class Participant extends Model
     {
         return $this->belongsTo(\App\Models\User::class, 'user_id');
     }
+
+    public function internships()
+    {
+        return $this->belongsToMany(Internship::class, 'internship_participant', 'participant_id', 'internship_id');
+    }
 }

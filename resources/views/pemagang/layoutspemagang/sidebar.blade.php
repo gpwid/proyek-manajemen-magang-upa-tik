@@ -10,7 +10,7 @@
     <hr class="sidebar-divider my-0">
 
     <li class="nav-item @yield('dashboard-active')">
-        <a class="nav-link" href="#"> {{-- Arahkan ke route dashboard pemagang nanti --}}
+        <a class="nav-link" href="{{ route('pemagang.dashboard.index') }}"> {{-- Arahkan ke route dashboard pemagang nanti --}}
             <i class="fas fa-fw fa-tachometer-alt"></i>
             <span>Dashboard</span></a>
     </li>
@@ -22,13 +22,13 @@
     </div>
 
     <li class="nav-item @yield('logbook-active')">
-        <a class="nav-link" href="#"> {{-- Arahkan ke route logbook nanti --}}
+        <a class="nav-link" href="{{ route('pemagang.logbook.index') }}"> {{-- Arahkan ke route logbook nanti --}}
             <i class="fas fa-book-open"></i>
             <span>Logbook Harian</span>
         </a>
     </li>
     <li class="nav-item @yield('absensi-active')">
-        <a class="nav-link" href="#"> {{-- Arahkan ke route absensi nanti --}}
+        <a class="nav-link" href="{{ route('pemagang.attendance.index') }}"> {{-- Arahkan ke route absensi nanti --}}
             <i class="fas fa-fingerprint"></i>
             <span>Absensi</span>
         </a>
