@@ -12,9 +12,15 @@ use App\Exports\SupervisorsExport;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\View\View;
 
+// Tambahan import:
+use App\Models\User;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
+
 class SupervisorController extends Controller
 {
-    public function index()
+    public function index(): View
     {
         return view('admin.pembimbing.index');
     }
@@ -41,7 +47,7 @@ class SupervisorController extends Controller
             ->make(true);
     }
 
-    public function create()
+    public function create(): View
     {
         return view('admin.pembimbing.create');
     }
@@ -50,14 +56,43 @@ class SupervisorController extends Controller
     {
         $request->validate([
             'nama' => 'required|string|max:50',
-            'nip' => 'required|string|max:30|unique:supervisors,nip',
+            'nip'  => 'required|string|max:30|unique:supervisors,nip',
         ]);
 
-        Supervisor::create($request->only([
-            'nama','nip'
-        ]));
+        $nama = $request->input('nama');
+        $nip  = $request->input('nip');
 
-        return redirect()->route('admin.pembimbing.index')->with('sukses', 'Data Disimpan');
+        // Bentuk email dasar dari nama → nama@unri.ac.id (dibersihkan)
+        $baseEmail = $this->emailFromName($nama);
+        // Pastikan unik di tabel users
+        $email = $this->uniqueEmail($baseEmail);
+
+        DB::transaction(function () use ($nama, $nip, $email) {
+            // 1) Buat akun user dengan role 'pembimbing'
+            $user = User::create([
+                'name'     => $nama,
+                'email'    => $email,
+                'password' => Hash::make($nip),    // password awal = NIP
+                'role'     => 'pembimbing',        // kolom role di tabel users
+            ]);
+
+            // 2) (Opsional) Jika pakai Spatie Permission:
+            if (method_exists($user, 'assignRole')) {
+                $user->assignRole('pembimbing');
+            }
+
+            // 3) Buat supervisor terhubung ke user + simpan email
+            Supervisor::create([
+                'nama'    => $nama,
+                'nip'     => $nip,
+                'email'   => $email,
+                'user_id' => $user->id,
+            ]);
+        });
+
+        return redirect()
+            ->route('admin.pembimbing.index')
+            ->with('sukses', 'Data Disimpan & akun pembimbing dibuat.');
     }
 
     public function edit(Supervisor $supervisor): View
@@ -69,14 +104,15 @@ class SupervisorController extends Controller
     {
         $request->validate([
             'nama' => 'required|string|max:50',
-            'nip' => 'required|string|max:30|unique:supervisors,nip,'.$supervisor->id,
+            'nip'  => 'required|string|max:30|unique:supervisors,nip,'.$supervisor->id,
         ]);
 
-        $supervisor->update($request->only([
-            'nama','nip'
-        ]));
+        // Catatan: kalau ingin sinkron juga ke tabel users (name/email), bisa ditambah di sini.
+        $supervisor->update($request->only(['nama','nip']));
 
-        return redirect()->route('admin.pembimbing.index')->with('sukses', 'Data berhasil diperbarui');
+        return redirect()
+            ->route('admin.pembimbing.index')
+            ->with('sukses', 'Data berhasil diperbarui');
     }
 
     public function exportExcel(Request $request)
@@ -106,5 +142,40 @@ class SupervisorController extends Controller
                   ->setPaper('a4', 'portrait');
 
         return $pdf->download('supervisor_'.now()->format('Ymd_His').'.pdf');
+    }
+
+    /**
+     * Bentuk base email dari nama → nama@unri.ac.id
+     * - huruf kecil
+     * - hapus non-alfanumerik
+     */
+    private function emailFromName(string $nama): string
+    {
+        $local = Str::of($nama)
+            ->lower()
+            ->replaceMatches('/[^a-z0-9]+/i', '')
+            ->limit(64, '');
+
+        $local = $local->isEmpty() ? 'user' : (string)$local;
+
+        return $local . '@unri.ac.id';
+    }
+
+    /**
+     * Pastikan email unik di tabel users.
+     * Jika sudah ada, akan menjadi nama2@unri.ac.id, nama3@unri.ac.id, dst.
+     */
+    private function uniqueEmail(string $baseEmail): string
+    {
+        [$local, $domain] = explode('@', $baseEmail, 2);
+        $email = $baseEmail;
+        $n = 1;
+
+        while (User::where('email', $email)->exists()) {
+            $n++;
+            $email = $local . $n . '@' . $domain;
+        }
+
+        return $email;
     }
 }

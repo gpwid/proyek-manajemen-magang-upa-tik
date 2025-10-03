@@ -16,8 +16,7 @@
             <div class="mb-3">
                 <label class="form-label">Nama <span class="text-danger">*</span></label>
                 <input value="{{ old('nama') }}" type="text" name="nama"
-                       class="form-control @error('nama') is-invalid @enderror"
-                       placeholder="Masukkan nama lengkap">
+                    class="form-control @error('nama') is-invalid @enderror" placeholder="Masukkan nama lengkap">
                 @error('nama') <div class="invalid-feedback">{{ $message }}</div> @enderror
             </div>
 
@@ -25,9 +24,15 @@
             <div class="mb-3">
                 <label class="form-label">NIP <span class="text-danger">*</span></label>
                 <input value="{{ old('nip') }}" type="text" name="nip"
-                       class="form-control @error('nip') is-invalid @enderror"
-                       placeholder="Masukkan NIP">
+                    class="form-control @error('nip') is-invalid @enderror" placeholder="Masukkan NIP">
                 @error('nip') <div class="invalid-feedback">{{ $message }}</div> @enderror
+            </div>
+
+            {{-- Info otomatis --}}
+            <div class="alert alert-info">
+                Email akun akan dibuat otomatis dari nama dengan format <code>nama@unri.ac.id</code>.
+                Jika sudah dipakai, sistem menambahkan angka (mis. <code>nama2@unri.ac.id</code>).
+                Password awal = <strong>NIP</strong>. Mohon ganti setelah login pertama.
             </div>
 
             {{-- Tombol --}}

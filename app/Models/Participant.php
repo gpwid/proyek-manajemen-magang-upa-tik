@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Participant extends Model
 {
@@ -21,10 +22,16 @@ class Participant extends Model
         'kontak_peserta',
         'tahun_aktif',
         'keterangan',
+        'supervisor_id',
     ];
 
-    public function permohonan()
+    public function permohonan(): BelongsTo
     {
         return $this->belongsTo(\App\Models\Permohonan::class, 'permohonan_id');
+    }
+
+    public function supervisor(): BelongsTo
+    {
+        return $this->belongsTo(Supervisor::class);
     }
 }

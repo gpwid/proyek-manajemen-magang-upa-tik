@@ -18,6 +18,8 @@ use App\Http\Controllers\Atasan\ParticipantController as AtasanParticipantContro
 use App\Http\Controllers\Atasan\PermohonanController as AtasanPermohonanController;
 use App\Http\Controllers\Atasan\SupervisorController as AtasanSupervisorController;
 use App\Http\Controllers\Atasan\TaskController as AtasanTaskController;
+use App\Http\Controllers\Pembimbing\ParticipantController as PembimbingParticipantController;
+use App\Http\Controllers\Pembimbing\TaskController as PembimbingTaskController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -156,6 +158,25 @@ Route::middleware(['auth', 'role:atasan'])->prefix('atasan')->name('atasan.')->g
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
+
+// PEMBIMBING
+Route::middleware(['auth']) // tambahkan 'role:pembimbing' jika pakai Spatie
+    ->prefix('pembimbing')
+    ->name('pembimbing.')
+    ->group(function () {
+        Route::get('/dashboard', [App\Http\Controllers\Pembimbing\DashboardController::class, 'index'])
+            ->name('dashboard.index');
+
+        Route::get('/peserta', [PembimbingParticipantController::class, 'index'])
+            ->name('peserta.index');
+
+        Route::get('/peserta/{participant}/tugas', [PembimbingTaskController::class, 'index'])
+            ->name('tugas.index');
+        Route::get('/peserta/{participant}/tugas/create', [PembimbingTaskController::class, 'create'])
+            ->name('tugas.create');
+        Route::post('/peserta/{participant}/tugas', [PembimbingTaskController::class, 'store'])
+            ->name('tugas.store');
+    });
 
 // Memuat route-route autentikasi dari Breeze
 require __DIR__.'/auth.php';
