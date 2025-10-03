@@ -31,12 +31,7 @@ class AuthenticatedSessionController extends Controller
         // Redirect pengguna berdasarkan peran mereka setelah login berhasil
         $user = Auth::user();
 
-        if ($user->role === 'pemagang') {
-            return redirect()->route('pemagang.dashboard.index');
-        }
-
-        // Untuk admin, atasan, dan pembimbing, arahkan ke dashboard admin
-        return redirect()->intended(route('admin.dashboard.index', absolute: false));
+        return redirect()->route('dashboard');
     }
 
     /**
