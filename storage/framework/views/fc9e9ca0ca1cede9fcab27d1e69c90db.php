@@ -56,6 +56,7 @@
                     <tr>
                         <th>No.</th>
                         <th>Nama</th>
+                        <th>Email</th>
                         <th>NIP</th>
                         <th>Aksi</th>
                     </tr>
@@ -164,6 +165,10 @@ $(function () {
             { // Nama
                 data: 'nama',
                 name: 'nama'
+            },
+            { // Email
+                data: 'email',
+                name: 'email'
             },
             { // NIP
                 data: 'nip',

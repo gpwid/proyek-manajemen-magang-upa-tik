@@ -50,13 +50,6 @@ class SupervisorController extends Controller
                    title='Edit'>
                     <i class='fa-solid fa-pen-to-square'></i> Edit
                 </a>
-                <a href='".route('admin.pembimbing.show', $p->id)."'
-                   class='btn btn-sm btn-info text-white'
-                   data-bs-toggle='tooltip'
-                   data-bs-placement='top'
-                   title='Detail'>
-                    <i class='fa-solid fa-eye'></i> Detail
-                </a>
             </div>";
             })
             ->rawColumns(['actions'])
