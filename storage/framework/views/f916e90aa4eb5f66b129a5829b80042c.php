@@ -1,6 +1,7 @@
 <?php $__env->startSection('title', 'Dashboard'); ?>
 <?php $__env->startSection('dashboard-active', 'active'); ?>
 
+
 <?php $__env->startSection('content'); ?>
 <div class="container-fluid">
 
