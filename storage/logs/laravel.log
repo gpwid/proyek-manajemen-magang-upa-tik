@@ -3790,3 +3790,7 @@ Stack trace:
 #51 C:\\laragon\\www\\magang\\public\\index.php(17): Illuminate\\Foundation\\Application->handleRequest(Object(Illuminate\\Http\\Request))
 #52 {main}
 "}
+[2025-10-03 08:22:18] local.ERROR: syntax error, unexpected token "<<", expecting end of file {"exception":"[object] (Symfony\\Component\\ErrorHandler\\Error\\FatalError(code: 0): syntax error, unexpected token \"<<\", expecting end of file at C:\\laragon\\www\\magang\\app\\Models\\Participant.php:6)
+[stacktrace]
+#0 {main}
+"} 
