@@ -41,6 +41,7 @@ class AttendanceController extends Controller
         $participant = Auth::user()->participant;
         $today = Carbon::today()->toDateString();
         $now = now();
+        $nowJakarta = $now->setTimezone('Asia/Jakarta');
         $type = $request->query('type'); // 'check-in' atau 'check-out'
 
         // Dapatkan atau buat data absensi untuk hari ini
@@ -58,7 +59,7 @@ class AttendanceController extends Controller
             $attendance->check_in_ip_address = $request->ip();
             $attendance->save();
 
-            return view('pemagang.attendance.result', ['message' => 'Check-in berhasil direkam pada pukul '.$now->format('H:i:s')]);
+            return view('pemagang.attendance.result', ['message' => 'Check-in berhasil direkam pada pukul '.$nowJakarta->format('H:i:s')]);
         }
 
         if ($type === 'check-out') {
@@ -72,7 +73,7 @@ class AttendanceController extends Controller
             $attendance->check_out_ip_address = $request->ip();
             $attendance->save();
 
-            return view('pemagang.attendance.result', ['message' => 'Check-out berhasil direkam pada pukul '.$now->format('H:i:s')]);
+            return view('pemagang.attendance.result', ['message' => 'Check-out berhasil direkam pada pukul '.$nowJakarta->format('H:i:s')]);
         }
 
         return view('pemagang.attendance.result', ['isError' => true, 'message' => 'Tipe absensi tidak dikenal.']);
