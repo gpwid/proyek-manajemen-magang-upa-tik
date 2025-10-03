@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Participant extends Model
 {
@@ -23,9 +24,10 @@ class Participant extends Model
         'status',
         'user_id',
         'keterangan',
+        'supervisor_id',
     ];
 
-    public function permohonan()
+    public function permohonan(): BelongsTo
     {
         return $this->belongsTo(\App\Models\Permohonan::class, 'permohonan_id');
     }
@@ -33,5 +35,10 @@ class Participant extends Model
     public function user()
     {
         return $this->belongsTo(\App\Models\User::class, 'user_id');
+    }
+
+    public function supervisor(): BelongsTo
+    {
+        return $this->belongsTo(Supervisor::class);
     }
 }
