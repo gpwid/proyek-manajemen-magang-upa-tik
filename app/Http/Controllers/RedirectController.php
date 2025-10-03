@@ -21,6 +21,12 @@ class RedirectController extends Controller
         } elseif ($user->isPemagang()) {
             return redirect()->route('pemagang.dashboard.index');
 
+        } elseif ($user->isAtasan()) {
+            return redirect()->route('atasan.dashboard.index');
+
+        } elseif ($user->isPembimbing()) {
+            return redirect()->route('pembimbing.dashboard.index');
+
         } else {
             Auth::logout();
 

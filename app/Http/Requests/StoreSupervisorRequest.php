@@ -1,23 +1,22 @@
 <?php
 
-// app/Http/Requests/StoreSupervisorRequest.php
-
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Auth;
 
 class StoreSupervisorRequest extends FormRequest
 {
     public function authorize(): bool
     {
-        return true;
+        return Auth::check(); // ganti sesuai kebijakan auth kamu
     }
 
     public function rules(): array
     {
         return [
-            'nama' => 'required|string|max:50',
-            'nip' => 'required|string|max:30|unique:supervisors,nip',
+            'nama' => ['required', 'string', 'max:50'],
+            'nip'  => ['required', 'string', 'max:30', 'unique:supervisors,nip'],
         ];
     }
 
