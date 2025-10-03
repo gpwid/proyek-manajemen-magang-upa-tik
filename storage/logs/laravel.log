@@ -3794,3 +3794,11 @@ Stack trace:
 [stacktrace]
 #0 {main}
 "} 
+[2025-10-03 08:27:40] local.ERROR: Cannot use App\Models\User as User because the name is already in use {"exception":"[object] (Symfony\\Component\\ErrorHandler\\Error\\FatalError(code: 0): Cannot use App\\Models\\User as User because the name is already in use at C:\\laragon\\www\\magang\\app\\Http\\Controllers\\Admin\\SupervisorController.php:23)
+[stacktrace]
+#0 {main}
+"} 
+[2025-10-03 08:27:49] local.ERROR: Cannot use App\Models\User as User because the name is already in use {"exception":"[object] (Symfony\\Component\\ErrorHandler\\Error\\FatalError(code: 0): Cannot use App\\Models\\User as User because the name is already in use at C:\\laragon\\www\\magang\\app\\Http\\Controllers\\Admin\\SupervisorController.php:23)
+[stacktrace]
+#0 {main}
+"} 
