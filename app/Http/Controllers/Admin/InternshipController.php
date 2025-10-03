@@ -212,4 +212,21 @@ class InternshipController extends Controller
 
         return $pdf->download('internships_'.now()->format('Ymd_His').'.pdf');
     }
+
+    public function updateStatus(Request $request, Internship $internship): RedirectResponse
+    {
+        // 1. Validasi input yang masuk
+        $validated = $request->validate([
+            'status' => 'required|in:Nonaktif,Tidak Selesai',
+        ]);
+
+        // 2. Update status magang
+        $internship->update([
+            'status_magang' => $validated['status'],
+        ]);
+
+        // 3. Kembalikan dengan pesan sukses
+        return redirect()->route('admin.internship.index')
+            ->with('success', "Status magang berhasil diubah menjadi '{$validated['status']}'.");
+    }
 }

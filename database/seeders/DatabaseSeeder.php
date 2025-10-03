@@ -23,6 +23,7 @@ class DatabaseSeeder extends Seeder
             InstituteSeeder::class,
             SupervisorSeeder::class,  // akan membuat user2 dengan role 'pembimbing'
             ParticipantSeeder::class,
+            UserSeeder::class,
         ]);
     }
 }

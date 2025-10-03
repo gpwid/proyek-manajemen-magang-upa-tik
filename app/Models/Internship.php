@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Internship extends Model
 {
     protected $guarded = ['id'];
+
     protected $table = 'internship';
 
     protected $fillable = [
@@ -29,5 +30,10 @@ class Internship extends Model
     public function participants()
     {
         return $this->belongsToMany(Participant::class, 'internship_participant');
+    }
+
+    public function logbooks()
+    {
+        return $this->hasMany(Logbook::class, 'internship_id');
     }
 }

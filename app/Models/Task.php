@@ -34,4 +34,9 @@ class Task extends Model
     {
         return $this->belongsTo(Participant::class);
     }
+
+    public function logbooks()
+    {
+        return $this->hasMany(Logbook::class);
+    }
 }

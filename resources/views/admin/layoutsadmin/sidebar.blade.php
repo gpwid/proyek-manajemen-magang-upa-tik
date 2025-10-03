@@ -42,6 +42,13 @@
                 <span>Penugasan</span>
             </a>
         </li>
+
+        <li class="nav-item @yield('qrcode-active')">
+            <a class="nav-link" href="{{ route('admin.attendance.qrcode') }}">
+                <i class="fa-solid fa-briefcase"></i>
+                <span>QR Code Absensi</span>
+            </a>
+        </li>
     @endif
 
     {{-- =================================================== --}}

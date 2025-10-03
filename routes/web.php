@@ -9,6 +9,7 @@ use App\Http\Controllers\Admin\SupervisorController;
 use App\Http\Controllers\Admin\TaskController;
 use App\Http\Controllers\Admin\UsersController;
 use App\Http\Controllers\Pemagang\DashboardController as PemagangDashboardController;
+use App\Http\Controllers\Pemagang\LogbookController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RedirectController;
 use App\Http\Controllers\Atasan\DashboardController as AtasanDashboardController;
@@ -84,6 +85,7 @@ Route::middleware(['auth', 'verified', 'role:admin'])->prefix('admin')->name('ad
     Route::resource('internship', InternshipController::class);
     Route::get('/internship/export/excel', [InternshipController::class, 'exportExcel'])->name('internship.export.excel');
     Route::get('/internship/export/pdf', [InternshipController::class, 'exportPdf'])->name('internship.export.pdf');
+    Route::put('internship/{internship}/update-status', [InternshipController::class, 'updateStatus'])->name('internship.update-status');
 
     // -- Penugasan / Tasks --
     Route::get('/penugasan/data', [TaskController::class, 'data'])->name('penugasan.data');
@@ -93,6 +95,8 @@ Route::middleware(['auth', 'verified', 'role:admin'])->prefix('admin')->name('ad
     Route::get('/users/data', [UsersController::class, 'data'])->name('users.data');
     Route::resource('users', UsersController::class)->names('users');
     Route::put('users/{user}/status', [UsersController::class, 'toggleStatus'])->name('users.status');
+
+    Route::get('/attendance/qrcode', [\App\Http\Controllers\Admin\AttendanceController::class, 'showQrCode'])->name('attendance.qrcode');
 
     // -- Profil Pengguna (dari Breeze) --
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -104,6 +108,13 @@ Route::middleware(['auth', 'verified', 'role:admin'])->prefix('admin')->name('ad
 Route::middleware(['auth', 'role:pemagang'])->prefix('pemagang')->name('pemagang.')->group(function () {
 
     Route::get('/dashboard', [PemagangDashboardController::class, 'index'])->name('dashboard.index');
+
+    Route::get('/logbook/data', [\App\Http\Controllers\Pemagang\LogbookController::class, 'data'])->name('logbook.data');
+    Route::resource('logbook', LogbookController::class)->names('logbook');
+
+    Route::get('/attendance/record', [\App\Http\Controllers\Pemagang\AttendanceController::class, 'record'])->name('attendance.record');
+
+    Route::get('/attendance', [\App\Http\Controllers\Pemagang\AttendanceController::class, 'index'])->name('attendance.index');
 
     // -- Profil Pengguna (dari Breeze) --
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

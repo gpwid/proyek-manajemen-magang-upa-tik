@@ -11,14 +11,16 @@
         </div>
 
         @if ($errors->any())
-            <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                <ul class="mb-0">
-                    @foreach ($errors->all() as $e)
-                        <li>{{ $e }}</li>
-                    @endforeach
-                </ul>
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>
+            <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+            <script>
+                Swal.fire({
+                    position: 'center',
+                    icon: 'error',
+                    title: "{{ $errors->first() }}",
+                    showConfirmButton: false,
+                    timer: 1500
+                });
+            </script>
         @endif
 
         @if (session('success'))

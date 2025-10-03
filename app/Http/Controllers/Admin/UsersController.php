@@ -135,9 +135,10 @@ class UsersController extends Controller
     public function toggleStatus(User $user): RedirectResponse
     {
         $authUser = Auth::user();
+
         // Pencegahan agar tidak bisa menonaktifkan diri sendiri
         if ($user->id === $authUser->id) {
-            return back()->with('error', 'Anda tidak dapat mengubah status akun Anda sendiri.');
+            return back()->withErrors('Anda tidak dapat mengubah status akun Anda sendiri.');
         }
 
         $newStatus = $user->status === 'active' ? 'inactive' : 'active';
