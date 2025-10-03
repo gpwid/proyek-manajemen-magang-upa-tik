@@ -19,6 +19,12 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 
 
+// Tambahan import:
+use App\Models\User;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
+
 class SupervisorController extends Controller
 {
     public function index(): View

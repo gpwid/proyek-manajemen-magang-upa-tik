@@ -65,7 +65,7 @@
 #62 C:\\laragon\\www\\magang\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(1220): Illuminate\\Foundation\\Http\\Kernel->handle(Object(Illuminate\\Http\\Request))
 #63 C:\\laragon\\www\\magang\\public\\index.php(17): Illuminate\\Foundation\\Application->handleRequest(Object(Illuminate\\Http\\Request))
 #64 {main}
-"} 
+"}
 [2025-09-30 07:41:19] local.ERROR: Please provide a valid cache path. {"userId":1,"exception":"[object] (InvalidArgumentException(code: 0): Please provide a valid cache path. at C:\\laragon\\www\\magang\\vendor\\laravel\\framework\\src\\Illuminate\\View\\Compilers\\Compiler.php:67)
 [stacktrace]
 #0 C:\\laragon\\www\\magang\\vendor\\laravel\\framework\\src\\Illuminate\\View\\ViewServiceProvider.php(97): Illuminate\\View\\Compilers\\Compiler->__construct(Object(Illuminate\\Filesystem\\Filesystem), false, '', true, 'php')
@@ -133,7 +133,7 @@
 #62 C:\\laragon\\www\\magang\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(1220): Illuminate\\Foundation\\Http\\Kernel->handle(Object(Illuminate\\Http\\Request))
 #63 C:\\laragon\\www\\magang\\public\\index.php(17): Illuminate\\Foundation\\Application->handleRequest(Object(Illuminate\\Http\\Request))
 #64 {main}
-"} 
+"}
 [2025-09-30 07:41:55] local.ERROR: Uncaught InvalidArgumentException: Please provide a valid cache path. in C:\laragon\www\magang\vendor\laravel\framework\src\Illuminate\View\Compilers\Compiler.php:67
 Stack trace:
 #0 C:\laragon\www\magang\vendor\laravel\framework\src\Illuminate\View\ViewServiceProvider.php(97): Illuminate\View\Compilers\Compiler->__construct(Object(Illuminate\Filesystem\Filesystem), false, '', true, 'php')
@@ -159,7 +159,7 @@ Stack trace:
   thrown at C:\\laragon\\www\\magang\\vendor\\laravel\\framework\\src\\Illuminate\\View\\Compilers\\Compiler.php:67)
 [stacktrace]
 #0 {main}
-"} 
+"}
 [2025-09-30 07:58:16] local.ERROR: View [atasan.penugasan.edit] not found. {"userId":2,"exception":"[object] (InvalidArgumentException(code: 0): View [atasan.penugasan.edit] not found. at C:\\laragon\\www\\magang\\vendor\\laravel\\framework\\src\\Illuminate\\View\\FileViewFinder.php:139)
 [stacktrace]
 #0 C:\\laragon\\www\\magang\\vendor\\laravel\\framework\\src\\Illuminate\\View\\FileViewFinder.php(79): Illuminate\\View\\FileViewFinder->findInPaths('atasan.penugasa...', Array)
@@ -217,7 +217,7 @@ Stack trace:
 #52 C:\\laragon\\www\\magang\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(1220): Illuminate\\Foundation\\Http\\Kernel->handle(Object(Illuminate\\Http\\Request))
 #53 C:\\laragon\\www\\magang\\public\\index.php(17): Illuminate\\Foundation\\Application->handleRequest(Object(Illuminate\\Http\\Request))
 #54 {main}
-"} 
+"}
 [2025-09-30 08:08:31] local.ERROR: Route [atasan.dashboard] not defined. {"view":{"view":"C:\\laragon\\www\\magang\\resources\\views\\atasan\\layoutsatasan\\main.blade.php","data":{"errors":"<pre class=sf-dump id=sf-dump-1596416938 data-indent-pad=\"  \"><span class=sf-dump-note>Illuminate\\Support\\ViewErrorBag</span> {<a class=sf-dump-ref>#1212</a><samp data-depth=1 class=sf-dump-expanded>
   #<span class=sf-dump-protected title=\"Protected property\">bags</span>: []
 </samp>}
@@ -411,7 +411,7 @@ Stack trace:
 #66 C:\\laragon\\www\\magang\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(1220): Illuminate\\Foundation\\Http\\Kernel->handle(Object(Illuminate\\Http\\Request))
 #67 C:\\laragon\\www\\magang\\public\\index.php(17): Illuminate\\Foundation\\Application->handleRequest(Object(Illuminate\\Http\\Request))
 #68 {main}
-"} 
+"}
 [2025-09-30 08:09:22] local.ERROR: Route [atasan.dashboard] not defined. {"view":{"view":"C:\\laragon\\www\\magang\\resources\\views\\atasan\\layoutsatasan\\sidebar.blade.php","data":{"errors":"<pre class=sf-dump id=sf-dump-16188401 data-indent-pad=\"  \"><span class=sf-dump-note>Illuminate\\Support\\ViewErrorBag</span> {<a class=sf-dump-ref>#1212</a><samp data-depth=1 class=sf-dump-expanded>
   #<span class=sf-dump-protected title=\"Protected property\">bags</span>: []
 </samp>}
@@ -621,7 +621,7 @@ Stack trace:
 #74 C:\\laragon\\www\\magang\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(1220): Illuminate\\Foundation\\Http\\Kernel->handle(Object(Illuminate\\Http\\Request))
 #75 C:\\laragon\\www\\magang\\public\\index.php(17): Illuminate\\Foundation\\Application->handleRequest(Object(Illuminate\\Http\\Request))
 #76 {main}
-"} 
+"}
 [2025-09-30 08:12:44] local.ERROR: Route [atasan.dashboard] not defined. {"view":{"view":"C:\\laragon\\www\\magang\\resources\\views\\atasan\\layoutsatasan\\main.blade.php","data":{"errors":"<pre class=sf-dump id=sf-dump-936234787 data-indent-pad=\"  \"><span class=sf-dump-note>Illuminate\\Support\\ViewErrorBag</span> {<a class=sf-dump-ref>#1212</a><samp data-depth=1 class=sf-dump-expanded>
   #<span class=sf-dump-protected title=\"Protected property\">bags</span>: []
 </samp>}
@@ -815,7 +815,7 @@ Stack trace:
 #66 C:\\laragon\\www\\magang\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(1220): Illuminate\\Foundation\\Http\\Kernel->handle(Object(Illuminate\\Http\\Request))
 #67 C:\\laragon\\www\\magang\\public\\index.php(17): Illuminate\\Foundation\\Application->handleRequest(Object(Illuminate\\Http\\Request))
 #68 {main}
-"} 
+"}
 [2025-09-30 08:13:50] local.ERROR: Route [atasan.dashboard] not defined. {"view":{"view":"C:\\laragon\\www\\magang\\resources\\views\\atasan\\layoutsatasan\\sidebar.blade.php","data":{"errors":"<pre class=sf-dump id=sf-dump-2033047491 data-indent-pad=\"  \"><span class=sf-dump-note>Illuminate\\Support\\ViewErrorBag</span> {<a class=sf-dump-ref>#1212</a><samp data-depth=1 class=sf-dump-expanded>
   #<span class=sf-dump-protected title=\"Protected property\">bags</span>: []
 </samp>}
@@ -1025,7 +1025,7 @@ Stack trace:
 #74 C:\\laragon\\www\\magang\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(1220): Illuminate\\Foundation\\Http\\Kernel->handle(Object(Illuminate\\Http\\Request))
 #75 C:\\laragon\\www\\magang\\public\\index.php(17): Illuminate\\Foundation\\Application->handleRequest(Object(Illuminate\\Http\\Request))
 #76 {main}
-"} 
+"}
 [2025-09-30 08:16:08] local.ERROR: Route [atasan.dashboard] not defined. {"view":{"view":"C:\\laragon\\www\\magang\\resources\\views\\atasan\\layoutsatasan\\sidebar.blade.php","data":{"errors":"<pre class=sf-dump id=sf-dump-1192913641 data-indent-pad=\"  \"><span class=sf-dump-note>Illuminate\\Support\\ViewErrorBag</span> {<a class=sf-dump-ref>#1212</a><samp data-depth=1 class=sf-dump-expanded>
   #<span class=sf-dump-protected title=\"Protected property\">bags</span>: []
 </samp>}
@@ -1237,7 +1237,7 @@ Stack trace:
 #74 C:\\laragon\\www\\magang\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(1220): Illuminate\\Foundation\\Http\\Kernel->handle(Object(Illuminate\\Http\\Request))
 #75 C:\\laragon\\www\\magang\\public\\index.php(17): Illuminate\\Foundation\\Application->handleRequest(Object(Illuminate\\Http\\Request))
 #76 {main}
-"} 
+"}
 [2025-09-30 08:16:22] local.ERROR: Route [atasan.dashboard] not defined. {"view":{"view":"C:\\laragon\\www\\magang\\resources\\views\\atasan\\layoutsatasan\\sidebar.blade.php","data":{"errors":"<pre class=sf-dump id=sf-dump-607888470 data-indent-pad=\"  \"><span class=sf-dump-note>Illuminate\\Support\\ViewErrorBag</span> {<a class=sf-dump-ref>#1212</a><samp data-depth=1 class=sf-dump-expanded>
   #<span class=sf-dump-protected title=\"Protected property\">bags</span>: []
 </samp>}
@@ -1449,7 +1449,7 @@ Stack trace:
 #74 C:\\laragon\\www\\magang\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(1220): Illuminate\\Foundation\\Http\\Kernel->handle(Object(Illuminate\\Http\\Request))
 #75 C:\\laragon\\www\\magang\\public\\index.php(17): Illuminate\\Foundation\\Application->handleRequest(Object(Illuminate\\Http\\Request))
 #76 {main}
-"} 
+"}
 [2025-09-30 08:16:30] local.ERROR: Route [atasan.dashboard] not defined. {"view":{"view":"C:\\laragon\\www\\magang\\resources\\views\\atasan\\layoutsatasan\\sidebar.blade.php","data":{"errors":"<pre class=sf-dump id=sf-dump-800514560 data-indent-pad=\"  \"><span class=sf-dump-note>Illuminate\\Support\\ViewErrorBag</span> {<a class=sf-dump-ref>#1212</a><samp data-depth=1 class=sf-dump-expanded>
   #<span class=sf-dump-protected title=\"Protected property\">bags</span>: []
 </samp>}
@@ -1661,7 +1661,7 @@ Stack trace:
 #74 C:\\laragon\\www\\magang\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(1220): Illuminate\\Foundation\\Http\\Kernel->handle(Object(Illuminate\\Http\\Request))
 #75 C:\\laragon\\www\\magang\\public\\index.php(17): Illuminate\\Foundation\\Application->handleRequest(Object(Illuminate\\Http\\Request))
 #76 {main}
-"} 
+"}
 [2025-09-30 08:23:55] local.ERROR: Route [atasan.dashboard] not defined. {"view":{"view":"C:\\laragon\\www\\magang\\resources\\views\\atasan\\layoutsatasan\\sidebar.blade.php","data":{"errors":"<pre class=sf-dump id=sf-dump-1201346610 data-indent-pad=\"  \"><span class=sf-dump-note>Illuminate\\Support\\ViewErrorBag</span> {<a class=sf-dump-ref>#1212</a><samp data-depth=1 class=sf-dump-expanded>
   #<span class=sf-dump-protected title=\"Protected property\">bags</span>: []
 </samp>}
@@ -1871,7 +1871,7 @@ Stack trace:
 #74 C:\\laragon\\www\\magang\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(1220): Illuminate\\Foundation\\Http\\Kernel->handle(Object(Illuminate\\Http\\Request))
 #75 C:\\laragon\\www\\magang\\public\\index.php(17): Illuminate\\Foundation\\Application->handleRequest(Object(Illuminate\\Http\\Request))
 #76 {main}
-"} 
+"}
 [2025-09-30 08:25:05] local.ERROR: Route [atasan.dashboard] not defined. {"view":{"view":"C:\\laragon\\www\\magang\\resources\\views\\atasan\\layoutsatasan\\sidebar.blade.php","data":{"errors":"<pre class=sf-dump id=sf-dump-1912007399 data-indent-pad=\"  \"><span class=sf-dump-note>Illuminate\\Support\\ViewErrorBag</span> {<a class=sf-dump-ref>#1212</a><samp data-depth=1 class=sf-dump-expanded>
   #<span class=sf-dump-protected title=\"Protected property\">bags</span>: []
 </samp>}
@@ -2081,7 +2081,7 @@ Stack trace:
 #74 C:\\laragon\\www\\magang\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(1220): Illuminate\\Foundation\\Http\\Kernel->handle(Object(Illuminate\\Http\\Request))
 #75 C:\\laragon\\www\\magang\\public\\index.php(17): Illuminate\\Foundation\\Application->handleRequest(Object(Illuminate\\Http\\Request))
 #76 {main}
-"} 
+"}
 [2025-09-30 08:25:55] local.ERROR: Route [atasan.dashboard] not defined. {"view":{"view":"C:\\laragon\\www\\magang\\resources\\views\\atasan\\layoutsatasan\\sidebar.blade.php","data":{"errors":"<pre class=sf-dump id=sf-dump-765261914 data-indent-pad=\"  \"><span class=sf-dump-note>Illuminate\\Support\\ViewErrorBag</span> {<a class=sf-dump-ref>#1212</a><samp data-depth=1 class=sf-dump-expanded>
   #<span class=sf-dump-protected title=\"Protected property\">bags</span>: []
 </samp>}
@@ -2291,7 +2291,7 @@ Stack trace:
 #74 C:\\laragon\\www\\magang\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(1220): Illuminate\\Foundation\\Http\\Kernel->handle(Object(Illuminate\\Http\\Request))
 #75 C:\\laragon\\www\\magang\\public\\index.php(17): Illuminate\\Foundation\\Application->handleRequest(Object(Illuminate\\Http\\Request))
 #76 {main}
-"} 
+"}
 [2025-09-30 08:26:08] local.ERROR: Route [atasan.dashboard] not defined. {"view":{"view":"C:\\laragon\\www\\magang\\resources\\views\\atasan\\layoutsatasan\\sidebar.blade.php","data":{"errors":"<pre class=sf-dump id=sf-dump-900263144 data-indent-pad=\"  \"><span class=sf-dump-note>Illuminate\\Support\\ViewErrorBag</span> {<a class=sf-dump-ref>#1212</a><samp data-depth=1 class=sf-dump-expanded>
   #<span class=sf-dump-protected title=\"Protected property\">bags</span>: []
 </samp>}
@@ -2501,7 +2501,7 @@ Stack trace:
 #74 C:\\laragon\\www\\magang\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(1220): Illuminate\\Foundation\\Http\\Kernel->handle(Object(Illuminate\\Http\\Request))
 #75 C:\\laragon\\www\\magang\\public\\index.php(17): Illuminate\\Foundation\\Application->handleRequest(Object(Illuminate\\Http\\Request))
 #76 {main}
-"} 
+"}
 [2025-09-30 08:31:04] local.ERROR: Route [atasan.dashboard] not defined. {"view":{"view":"C:\\laragon\\www\\magang\\resources\\views\\atasan\\layoutsatasan\\sidebar.blade.php","data":{"errors":"<pre class=sf-dump id=sf-dump-212588839 data-indent-pad=\"  \"><span class=sf-dump-note>Illuminate\\Support\\ViewErrorBag</span> {<a class=sf-dump-ref>#1212</a><samp data-depth=1 class=sf-dump-expanded>
   #<span class=sf-dump-protected title=\"Protected property\">bags</span>: []
 </samp>}
@@ -2711,7 +2711,7 @@ Stack trace:
 #74 C:\\laragon\\www\\magang\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(1220): Illuminate\\Foundation\\Http\\Kernel->handle(Object(Illuminate\\Http\\Request))
 #75 C:\\laragon\\www\\magang\\public\\index.php(17): Illuminate\\Foundation\\Application->handleRequest(Object(Illuminate\\Http\\Request))
 #76 {main}
-"} 
+"}
 [2025-09-30 08:37:08] local.ERROR: Route [atasan.profile] not defined. {"view":{"view":"C:\\laragon\\www\\magang\\resources\\views\\atasan\\layoutsatasan\\navbar.blade.php","data":{"errors":"<pre class=sf-dump id=sf-dump-87184813 data-indent-pad=\"  \"><span class=sf-dump-note>Illuminate\\Support\\ViewErrorBag</span> {<a class=sf-dump-ref>#1212</a><samp data-depth=1 class=sf-dump-expanded>
   #<span class=sf-dump-protected title=\"Protected property\">bags</span>: []
 </samp>}
@@ -2921,7 +2921,7 @@ Stack trace:
 #74 C:\\laragon\\www\\magang\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(1220): Illuminate\\Foundation\\Http\\Kernel->handle(Object(Illuminate\\Http\\Request))
 #75 C:\\laragon\\www\\magang\\public\\index.php(17): Illuminate\\Foundation\\Application->handleRequest(Object(Illuminate\\Http\\Request))
 #76 {main}
-"} 
+"}
 [2025-10-03 06:50:24] local.ERROR: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'after `id`, `created_at` timestamp null, `updated_at` timestamp null) default ch' at line 1 (Connection: mysql, SQL: create table `participants` (`id` bigint unsigned not null auto_increment primary key, `nama` varchar(50) not null, `nik` varchar(16) not null, `nisnim` varchar(20) not null, `jenis_kelamin` enum('L', 'P') not null, `jurusan` varchar(50) not null, `kontak_peserta` varchar(13) not null, `tahun_aktif` year not null, `keterangan` varchar(255) null, `supervisor_id` bigint unsigned null after `id`, `created_at` timestamp null, `updated_at` timestamp null) default character set utf8mb4 collate 'utf8mb4_0900_ai_ci') {"exception":"[object] (Illuminate\\Database\\QueryException(code: 42000): SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'after `id`, `created_at` timestamp null, `updated_at` timestamp null) default ch' at line 1 (Connection: mysql, SQL: create table `participants` (`id` bigint unsigned not null auto_increment primary key, `nama` varchar(50) not null, `nik` varchar(16) not null, `nisnim` varchar(20) not null, `jenis_kelamin` enum('L', 'P') not null, `jurusan` varchar(50) not null, `kontak_peserta` varchar(13) not null, `tahun_aktif` year not null, `keterangan` varchar(255) null, `supervisor_id` bigint unsigned null after `id`, `created_at` timestamp null, `updated_at` timestamp null) default character set utf8mb4 collate 'utf8mb4_0900_ai_ci') at C:\\laragon\\www\\magang\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Connection.php:825)
 [stacktrace]
 #0 C:\\laragon\\www\\magang\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Connection.php(779): Illuminate\\Database\\Connection->runQueryCallback('create table `p...', Array, Object(Closure))
@@ -3021,7 +3021,7 @@ Stack trace:
 #45 C:\\laragon\\www\\magang\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(1235): Illuminate\\Foundation\\Console\\Kernel->handle(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
 #46 C:\\laragon\\www\\magang\\artisan(13): Illuminate\\Foundation\\Application->handleCommand(Object(Symfony\\Component\\Console\\Input\\ArgvInput))
 #47 {main}
-"} 
+"}
 [2025-10-03 06:55:55] local.ERROR: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'after `id`, `created_at` timestamp null, `updated_at` timestamp null) default ch' at line 1 (Connection: mysql, SQL: create table `participants` (`id` bigint unsigned not null auto_increment primary key, `nama` varchar(50) not null, `nik` varchar(16) not null, `nisnim` varchar(20) not null, `jenis_kelamin` enum('L', 'P') not null, `jurusan` varchar(50) not null, `kontak_peserta` varchar(13) not null, `tahun_aktif` year not null, `keterangan` varchar(255) null, `supervisor_id` bigint unsigned null after `id`, `created_at` timestamp null, `updated_at` timestamp null) default character set utf8mb4 collate 'utf8mb4_0900_ai_ci') {"exception":"[object] (Illuminate\\Database\\QueryException(code: 42000): SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'after `id`, `created_at` timestamp null, `updated_at` timestamp null) default ch' at line 1 (Connection: mysql, SQL: create table `participants` (`id` bigint unsigned not null auto_increment primary key, `nama` varchar(50) not null, `nik` varchar(16) not null, `nisnim` varchar(20) not null, `jenis_kelamin` enum('L', 'P') not null, `jurusan` varchar(50) not null, `kontak_peserta` varchar(13) not null, `tahun_aktif` year not null, `keterangan` varchar(255) null, `supervisor_id` bigint unsigned null after `id`, `created_at` timestamp null, `updated_at` timestamp null) default character set utf8mb4 collate 'utf8mb4_0900_ai_ci') at C:\\laragon\\www\\magang\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Connection.php:825)
 [stacktrace]
 #0 C:\\laragon\\www\\magang\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Connection.php(779): Illuminate\\Database\\Connection->runQueryCallback('create table `p...', Array, Object(Closure))
@@ -3121,7 +3121,7 @@ Stack trace:
 #45 C:\\laragon\\www\\magang\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(1235): Illuminate\\Foundation\\Console\\Kernel->handle(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
 #46 C:\\laragon\\www\\magang\\artisan(13): Illuminate\\Foundation\\Application->handleCommand(Object(Symfony\\Component\\Console\\Input\\ArgvInput))
 #47 {main}
-"} 
+"}
 [2025-10-03 07:01:29] local.ERROR: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'after `id`, `created_at` timestamp null, `updated_at` timestamp null) default ch' at line 1 (Connection: mysql, SQL: create table `supervisors` (`id` bigint unsigned not null auto_increment primary key, `nama` varchar(50) not null, `nip` varchar(30) not null, `user_id` bigint unsigned null after `id`, `created_at` timestamp null, `updated_at` timestamp null) default character set utf8mb4 collate 'utf8mb4_0900_ai_ci') {"exception":"[object] (Illuminate\\Database\\QueryException(code: 42000): SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'after `id`, `created_at` timestamp null, `updated_at` timestamp null) default ch' at line 1 (Connection: mysql, SQL: create table `supervisors` (`id` bigint unsigned not null auto_increment primary key, `nama` varchar(50) not null, `nip` varchar(30) not null, `user_id` bigint unsigned null after `id`, `created_at` timestamp null, `updated_at` timestamp null) default character set utf8mb4 collate 'utf8mb4_0900_ai_ci') at C:\\laragon\\www\\magang\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Connection.php:825)
 [stacktrace]
 #0 C:\\laragon\\www\\magang\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Connection.php(779): Illuminate\\Database\\Connection->runQueryCallback('create table `s...', Array, Object(Closure))
@@ -3221,7 +3221,7 @@ Stack trace:
 #45 C:\\laragon\\www\\magang\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(1235): Illuminate\\Foundation\\Console\\Kernel->handle(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
 #46 C:\\laragon\\www\\magang\\artisan(13): Illuminate\\Foundation\\Application->handleCommand(Object(Symfony\\Component\\Console\\Input\\ArgvInput))
 #47 {main}
-"} 
+"}
 [2025-10-03 07:04:27] local.ERROR: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'after `id`, `created_at` timestamp null, `updated_at` timestamp null) default ch' at line 1 (Connection: mysql, SQL: create table `supervisors` (`id` bigint unsigned not null auto_increment primary key, `nama` varchar(50) not null, `nip` varchar(30) not null, `user_id` bigint unsigned null after `id`, `created_at` timestamp null, `updated_at` timestamp null) default character set utf8mb4 collate 'utf8mb4_0900_ai_ci') {"exception":"[object] (Illuminate\\Database\\QueryException(code: 42000): SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'after `id`, `created_at` timestamp null, `updated_at` timestamp null) default ch' at line 1 (Connection: mysql, SQL: create table `supervisors` (`id` bigint unsigned not null auto_increment primary key, `nama` varchar(50) not null, `nip` varchar(30) not null, `user_id` bigint unsigned null after `id`, `created_at` timestamp null, `updated_at` timestamp null) default character set utf8mb4 collate 'utf8mb4_0900_ai_ci') at C:\\laragon\\www\\magang\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Connection.php:825)
 [stacktrace]
 #0 C:\\laragon\\www\\magang\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Connection.php(779): Illuminate\\Database\\Connection->runQueryCallback('create table `s...', Array, Object(Closure))
@@ -3321,7 +3321,7 @@ Stack trace:
 #45 C:\\laragon\\www\\magang\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(1235): Illuminate\\Foundation\\Console\\Kernel->handle(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
 #46 C:\\laragon\\www\\magang\\artisan(13): Illuminate\\Foundation\\Application->handleCommand(Object(Symfony\\Component\\Console\\Input\\ArgvInput))
 #47 {main}
-"} 
+"}
 [2025-10-03 07:24:09] local.ERROR: Route [pembimbing.permohonan.index] not defined. {"view":{"view":"C:\\laragon\\www\\magang\\resources\\views\\pembimbing\\layoutspembimbing\\sidebar.blade.php","data":{"errors":"<pre class=sf-dump id=sf-dump-1376752668 data-indent-pad=\"  \"><span class=sf-dump-note>Illuminate\\Support\\ViewErrorBag</span> {<a class=sf-dump-ref>#1258</a><samp data-depth=1 class=sf-dump-expanded>
   #<span class=sf-dump-protected title=\"Protected property\">bags</span>: []
 </samp>}
@@ -3527,7 +3527,7 @@ Stack trace:
 #72 C:\\laragon\\www\\magang\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(1220): Illuminate\\Foundation\\Http\\Kernel->handle(Object(Illuminate\\Http\\Request))
 #73 C:\\laragon\\www\\magang\\public\\index.php(17): Illuminate\\Foundation\\Application->handleRequest(Object(Illuminate\\Http\\Request))
 #74 {main}
-"} 
+"}
 [2025-10-03 07:25:07] local.ERROR: Route [pembimbing.penugasan.index] not defined. {"view":{"view":"C:\\laragon\\www\\magang\\resources\\views\\pembimbing\\layoutspembimbing\\sidebar.blade.php","data":{"errors":"<pre class=sf-dump id=sf-dump-1734121902 data-indent-pad=\"  \"><span class=sf-dump-note>Illuminate\\Support\\ViewErrorBag</span> {<a class=sf-dump-ref>#1258</a><samp data-depth=1 class=sf-dump-expanded>
   #<span class=sf-dump-protected title=\"Protected property\">bags</span>: []
 </samp>}
@@ -3733,7 +3733,7 @@ Stack trace:
 #72 C:\\laragon\\www\\magang\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(1220): Illuminate\\Foundation\\Http\\Kernel->handle(Object(Illuminate\\Http\\Request))
 #73 C:\\laragon\\www\\magang\\public\\index.php(17): Illuminate\\Foundation\\Application->handleRequest(Object(Illuminate\\Http\\Request))
 #74 {main}
-"} 
+"}
 [2025-10-03 07:26:17] local.ERROR: View [pembimbing.participant.index] not found. {"userId":1,"exception":"[object] (InvalidArgumentException(code: 0): View [pembimbing.participant.index] not found. at C:\\laragon\\www\\magang\\vendor\\laravel\\framework\\src\\Illuminate\\View\\FileViewFinder.php:139)
 [stacktrace]
 #0 C:\\laragon\\www\\magang\\vendor\\laravel\\framework\\src\\Illuminate\\View\\FileViewFinder.php(79): Illuminate\\View\\FileViewFinder->findInPaths('pembimbing.part...', Array)
@@ -3789,20 +3789,4 @@ Stack trace:
 #50 C:\\laragon\\www\\magang\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(1220): Illuminate\\Foundation\\Http\\Kernel->handle(Object(Illuminate\\Http\\Request))
 #51 C:\\laragon\\www\\magang\\public\\index.php(17): Illuminate\\Foundation\\Application->handleRequest(Object(Illuminate\\Http\\Request))
 #52 {main}
-"} 
-[2025-10-03 08:12:52] local.ERROR: syntax error, unexpected token "<<", expecting end of file {"exception":"[object] (Symfony\\Component\\ErrorHandler\\Error\\FatalError(code: 0): syntax error, unexpected token \"<<\", expecting end of file at C:\\laragon\\www\\magang\\app\\Models\\Participant.php:6)
-[stacktrace]
-#0 {main}
-"} 
-[2025-10-03 08:13:18] local.ERROR: syntax error, unexpected token "<<", expecting end of file {"exception":"[object] (Symfony\\Component\\ErrorHandler\\Error\\FatalError(code: 0): syntax error, unexpected token \"<<\", expecting end of file at C:\\laragon\\www\\magang\\app\\Models\\Participant.php:6)
-[stacktrace]
-#0 {main}
-"} 
-[2025-10-03 08:14:18] local.ERROR: syntax error, unexpected token "<<", expecting end of file {"exception":"[object] (Symfony\\Component\\ErrorHandler\\Error\\FatalError(code: 0): syntax error, unexpected token \"<<\", expecting end of file at C:\\laragon\\www\\magang\\app\\Models\\Participant.php:6)
-[stacktrace]
-#0 {main}
-"} 
-[2025-10-03 08:15:18] local.ERROR: syntax error, unexpected token "<<", expecting end of file {"exception":"[object] (Symfony\\Component\\ErrorHandler\\Error\\FatalError(code: 0): syntax error, unexpected token \"<<\", expecting end of file at C:\\laragon\\www\\magang\\app\\Models\\Participant.php:6)
-[stacktrace]
-#0 {main}
-"} 
+"}
