@@ -273,8 +273,8 @@
                                                     <td>{{ $ps->nik }}</td>
                                                     <td>{{ $ps->nisnim }}</td>
                                                     <td>{{ $ps->jenis_kelamin }}</td>
-                                                    <td>{{ $ps->jurusan }}</td>
-                                                    <td>{{ $ps->kontak_peserta }}</td>
+                                                    <td>{{ $ps->jurusan ?? '-' }}</td>
+                                                    <td>{{ $ps->kontak_peserta ?? '-' }}</td>
                                                     <td>{{ $ps->keterangan ?? '-' }}</td>
                                                 </tr>
                                             @empty
