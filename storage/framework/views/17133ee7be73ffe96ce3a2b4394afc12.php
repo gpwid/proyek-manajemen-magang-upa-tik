@@ -13,12 +13,12 @@
         </div>
     </div>
 
+    <?php if(session('success')): ?>
+        <div class="alert alert-success"><?php echo e(session('success')); ?></div>
+    <?php endif; ?>
+
     <div class="card shadow-sm">
         <div class="card-body p-0">
-            <?php if(session('success')): ?>
-                <div class="alert alert-success m-3"><?php echo e(session('success')); ?></div>
-            <?php endif; ?>
-
             <div class="table-responsive">
                 <table class="table table-hover mb-0">
                     <thead class="table-light">
@@ -28,7 +28,7 @@
                             <th>Judul</th>
                             <th>Status</th>
                             <th>Feedback</th>
-                            <th style="width:160px;">Aksi</th>
+                            <th style="width:200px;" class="text-end">Aksi</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -47,9 +47,14 @@
                                     </span>
                                 </td>
                                 <td class="text-truncate" style="max-width:280px;"><?php echo e($t->feedback ?? '-'); ?></td>
-                                <td>
-                                    <a class="btn btn-sm btn-outline-secondary disabled" tabindex="-1" aria-disabled="true">Edit</a>
-                                    <a class="btn btn-sm btn-outline-danger disabled" tabindex="-1" aria-disabled="true">Hapus</a>
+                                <td class="text-end">
+                                    <a href="<?php echo e(route('pembimbing.task.edit', [$participant, $t])); ?>" class="btn btn-sm btn-outline-secondary">Edit</a>
+                                    <form action="<?php echo e(route('pembimbing.task.destroy', [$participant, $t])); ?>" method="POST" class="d-inline"
+                                          onsubmit="return confirm('Hapus task ini?')">
+                                        <?php echo csrf_field(); ?>
+                                        <?php echo method_field('DELETE'); ?>
+                                        <button type="submit" class="btn btn-sm btn-outline-danger">Hapus</button>
+                                    </form>
                                 </td>
                             </tr>
                         <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>

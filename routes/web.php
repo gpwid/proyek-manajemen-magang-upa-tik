@@ -225,21 +225,32 @@ Route::middleware(['auth', 'role:pembimbing'])
     ->prefix('pembimbing')
     ->name('pembimbing.')
     ->group(function () {
-        Route::get('/dashboard', [App\Http\Controllers\Pembimbing\DashboardController::class, 'index'])
+        Route::get('/dashboard', [DashboardController::class, 'index'])
             ->name('dashboard.index');
 
         // Peserta
-        Route::get('/peserta', [App\Http\Controllers\Pembimbing\ParticipantController::class, 'index'])->name('peserta.index');
-        Route::get('/peserta/{participant}', [App\Http\Controllers\Pembimbing\ParticipantController::class, 'show'])->name('peserta.show');
+        Route::get('/peserta', [ParticipantController::class, 'index'])->name('peserta.index');
+        Route::get('/peserta/{participant}', [ParticipantController::class, 'show'])->name('peserta.show');
 
-        // ===== Overview Penugasan (daftar peserta bimbingan + aksi) =====
-        Route::get('/penugasan', [App\Http\Controllers\Pembimbing\TaskOverviewController::class, 'index'])
+        // Overview Penugasan (daftar peserta bimbingan + aksi)
+        Route::get('/penugasan', [TaskOverviewController::class, 'index'])
             ->name('task.participants');
 
         // Task per peserta
-        Route::get('/peserta/{participant}/task', [App\Http\Controllers\Pembimbing\TaskController::class, 'index'])->name('task.index');
-        Route::get('/peserta/{participant}/task/create', [App\Http\Controllers\Pembimbing\TaskController::class, 'create'])->name('task.create');
-        Route::post('/peserta/{participant}/task', [App\Http\Controllers\Pembimbing\TaskController::class, 'store'])->name('task.store');
+        Route::get('/peserta/{participant}/task', [TaskController::class, 'index'])
+            ->name('task.index');
+        Route::get('/peserta/{participant}/task/create', [TaskController::class, 'create'])
+            ->name('task.create');
+        Route::post('/peserta/{participant}/task', [TaskController::class, 'store'])
+            ->name('task.store');
+
+        // === Tambahkan ini (EDIT/UPDATE/DELETE) ===
+        Route::get('/peserta/{participant}/task/{task}/edit', [TaskController::class, 'edit'])
+            ->name('task.edit');
+        Route::put('/peserta/{participant}/task/{task}', [TaskController::class, 'update'])
+            ->name('task.update');
+        Route::delete('/peserta/{participant}/task/{task}', [TaskController::class, 'destroy'])
+            ->name('task.destroy');
     });
 
 

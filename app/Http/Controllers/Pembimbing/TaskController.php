@@ -11,13 +11,6 @@ use Illuminate\Support\Facades\Auth;
 
 class TaskController extends Controller
 {
-    /**
-     * Dapatkan internship aktif milik supervisor untuk peserta ini.
-     * Hanya mengembalikan internship yang:
-     * - id_pembimbing = supervisor login
-     * - terhubung ke participant lewat pivot internship_participant
-     * - (opsional) status_magang = 'Aktif'
-     */
     protected function getActiveInternshipFor(Participant $participant)
     {
         $supervisor = Auth::user()->supervisor;
@@ -32,9 +25,6 @@ class TaskController extends Controller
             ->first();
     }
 
-    /**
-     * Cek akses: peserta harus berada dalam internship milik supervisor login.
-     */
     protected function ensureAccess(Participant $participant): void
     {
         $supervisor = Auth::user()->supervisor;
@@ -47,9 +37,6 @@ class TaskController extends Controller
         abort_unless($has, 403, 'Anda tidak berwenang mengakses peserta ini.');
     }
 
-    /**
-     * List penugasan untuk peserta bimbingan.
-     */
     public function index(Participant $participant)
     {
         $this->ensureAccess($participant);
@@ -57,7 +44,6 @@ class TaskController extends Controller
         $tasks = Task::query()
             ->where('participant_id', $participant->id)
             ->whereHas('internship', function ($q) use ($participant) {
-                // hanya task dari internship pembimbing login
                 $q->where('id_pembimbing', Auth::user()->supervisor->id)
                   ->whereHas('participants', fn($p) => $p->where('participants.id', $participant->id));
             })
@@ -67,28 +53,20 @@ class TaskController extends Controller
         return view('pembimbing.task.index', compact('participant', 'tasks'));
     }
 
-    /**
-     * Form buat penugasan baru.
-     */
     public function create(Participant $participant)
     {
         $this->ensureAccess($participant);
-
         $internship = $this->getActiveInternshipFor($participant);
-        abort_unless($internship, 422, 'Tidak ditemukan internship aktif untuk peserta ini di bawah bimbingan Anda.');
+        abort_unless($internship, 422, 'Tidak ada internship aktif untuk peserta ini.');
 
         return view('pembimbing.task.create', compact('participant', 'internship'));
     }
 
-    /**
-     * Simpan penugasan baru.
-     */
     public function store(Request $request, Participant $participant)
     {
         $this->ensureAccess($participant);
-
         $internship = $this->getActiveInternshipFor($participant);
-        abort_unless($internship, 422, 'Tidak ditemukan internship aktif untuk peserta ini di bawah bimbingan Anda.');
+        abort_unless($internship, 422, 'Tidak ada internship aktif untuk peserta ini.');
 
         $validated = $request->validate([
             'title'       => ['required', 'string', 'max:255'],
@@ -98,7 +76,7 @@ class TaskController extends Controller
             'feedback'    => ['nullable', 'string'],
         ]);
 
-        $task = Task::create([
+        Task::create([
             'internship_id' => $internship->id,
             'participant_id'=> $participant->id,
             'title'         => $validated['title'],
@@ -108,8 +86,66 @@ class TaskController extends Controller
             'feedback'      => $validated['feedback'] ?? null,
         ]);
 
-        return redirect()
-            ->route('pembimbing.task.index', $participant)
-            ->with('success', 'Penugasan berhasil dibuat.');
+        return redirect()->route('pembimbing.task.index', $participant)
+            ->with('success', 'Task berhasil dibuat.');
+    }
+
+    public function edit(Participant $participant, Task $task)
+    {
+        $this->ensureAccess($participant);
+
+        abort_unless(
+            $task->participant_id === $participant->id
+            && $task->internship
+            && $task->internship->id_pembimbing === Auth::user()->supervisor->id,
+            403,
+            'Anda tidak berhak mengedit task ini.'
+        );
+
+        return view('pembimbing.task.edit', compact('participant', 'task'));
+    }
+
+    public function update(Request $request, Participant $participant, Task $task)
+    {
+        $this->ensureAccess($participant);
+
+        abort_unless(
+            $task->participant_id === $participant->id
+            && $task->internship
+            && $task->internship->id_pembimbing === Auth::user()->supervisor->id,
+            403,
+            'Anda tidak berhak mengubah task ini.'
+        );
+
+        $validated = $request->validate([
+            'title'       => ['required', 'string', 'max:255'],
+            'description' => ['nullable', 'string'],
+            'task_date'   => ['required', 'date'],
+            'status'      => ['required', 'in:Selesai,Dikerjakan,Revisi'],
+            'feedback'    => ['nullable', 'string'],
+        ]);
+
+        $task->update($validated);
+
+        return redirect()->route('pembimbing.task.index', $participant)
+            ->with('success', 'Task berhasil diperbarui.');
+    }
+
+    public function destroy(Participant $participant, Task $task)
+    {
+        $this->ensureAccess($participant);
+
+        abort_unless(
+            $task->participant_id === $participant->id
+            && $task->internship
+            && $task->internship->id_pembimbing === Auth::user()->supervisor->id,
+            403,
+            'Anda tidak berhak menghapus task ini.'
+        );
+
+        $task->delete();
+
+        return redirect()->route('pembimbing.task.index', $participant)
+            ->with('success', 'Task berhasil dihapus.');
     }
 }
