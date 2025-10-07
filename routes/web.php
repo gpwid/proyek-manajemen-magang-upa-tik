@@ -113,10 +113,10 @@ Route::middleware(['auth', 'verified', 'role:admin'])
         // QR Code Absensi
         Route::get('/attendance/qrcode', [AdminAttendanceController::class, 'showQrCode'])->name('attendance.qrcode');
 
-    // -- Profil Pengguna (dari Breeze) --
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-});
+        // -- Profil Pengguna (dari Breeze) --
+        Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+        Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    });
 
 /*
 |--------------------------------------------------------------------------
@@ -138,10 +138,10 @@ Route::middleware(['auth', 'role:pemagang'])
 
         Route::get('/attendance', [\App\Http\Controllers\Pemagang\AttendanceController::class, 'index'])->name('attendance.index');
 
-    // -- Profil Pengguna (dari Breeze) --
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-});
+        // -- Profil Pengguna (dari Breeze) --
+        Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+        Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    });
 
 /*
 |--------------------------------------------------------------------------
@@ -200,10 +200,10 @@ Route::middleware(['auth', 'role:atasan'])
             ->names('penugasan')
             ->parameters(['penugasan' => 'task']);
 
-    // -- Profil Pengguna (dari Breeze) --
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-});
+        // -- Profil Pengguna (dari Breeze) --
+        Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+        Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    });
 
 /*
 |--------------------------------------------------------------------------
