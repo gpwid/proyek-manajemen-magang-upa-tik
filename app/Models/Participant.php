@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Participant extends Model
@@ -26,23 +27,31 @@ class Participant extends Model
         'user_id',
         'keterangan',
         'supervisor_id',
+        'email',
     ];
 
     public function permohonan(): BelongsTo
     {
-        return $this->belongsTo(\App\Models\Permohonan::class, 'permohonan_id');
+        return $this->belongsTo(Permohonan::class, 'permohonan_id');
     }
 
-    public function user()
+    public function user(): BelongsTo
     {
-        return $this->belongsTo(\App\Models\User::class, 'user_id');
+        return $this->belongsTo(User::class, 'user_id');
     }
 
-    public function internships(): HasMany
+    // relasi many-to-many via pivot
+    public function internships(): BelongsToMany
     {
-        return $this->hasMany(Internship::class);
+        return $this->belongsToMany(
+            Internship::class,
+            'internship_participant',
+            'participant_id',
+            'internship_id'
+        )->withTimestamps();
     }
 
+    // optional: jika masih ada kolom supervisor_id di participants
     public function supervisor(): BelongsTo
     {
         return $this->belongsTo(Supervisor::class);

@@ -4,7 +4,6 @@ namespace App\Policies;
 
 use App\Models\User;
 use App\Models\Participant;
-use App\Models\Internship;
 
 class ParticipantPolicy
 {
@@ -14,9 +13,9 @@ class ParticipantPolicy
             return false;
         }
 
-        return Internship::query()
-            ->where('participant_id', $participant->id)
-            ->where('supervisor_id', $user->supervisor->id)
+        // peserta boleh diakses jika ia punya internship yg id_pembimbing = supervisor login
+        return $participant->internships()
+            ->where('internship.id_pembimbing', $user->supervisor->id)
             ->exists();
     }
 }

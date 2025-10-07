@@ -1,5 +1,3 @@
- 
-
 <?php $__env->startSection('title', 'Peserta Bimbingan'); ?>
 
 <?php $__env->startSection('content'); ?>
@@ -8,7 +6,7 @@
 
     <form method="GET" class="mb-3">
         <div class="input-group" style="max-width:420px;">
-            <input type="text" name="q" value="<?php echo e($q); ?>" class="form-control" placeholder="Cari nama/NIM/email">
+            <input type="text" name="q" value="<?php echo e($q); ?>" class="form-control" placeholder="Cari nama/NISNIM/email">
             <button class="btn btn-primary" type="submit">Cari</button>
         </div>
     </form>
@@ -21,7 +19,7 @@
                         <tr>
                             <th style="width:40px;">#</th>
                             <th>Nama</th>
-                            <th>NIM</th>
+                            <th>NISNIM</th>
                             <th>Email</th>
                             <th class="text-center">Logbook</th>
                             <th class="text-center">Absen</th>
@@ -29,12 +27,12 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <?php $__empty_1 = true; $__currentLoopData = $peserta; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $i => $p): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
+                        <?php $__empty_1 = true; $__currentLoopData = $participants; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $i => $p): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
                             <tr>
-                                <td><?php echo e($peserta->firstItem() + $i); ?></td>
-                                <td><?php echo e($p->name); ?></td>
-                                <td><?php echo e($p->student_id); ?></td>
-                                <td><?php echo e($p->email); ?></td>
+                                <td><?php echo e($participants->firstItem() + $i); ?></td>
+                                <td><?php echo e($p->nama); ?></td>
+                                <td><?php echo e($p->nisnim); ?></td>
+                                <td><?php echo e($p->email ?? '-'); ?></td>
                                 <td class="text-center"><?php echo e($p->logbooks_count); ?></td>
                                 <td class="text-center"><?php echo e($p->attendances_count); ?></td>
                                 <td class="text-end">
@@ -53,9 +51,9 @@
             </div>
         </div>
 
-        <?php if($peserta->hasPages()): ?>
+        <?php if($participants->hasPages()): ?>
             <div class="card-footer">
-                <?php echo e($peserta->links()); ?>
+                <?php echo e($participants->links()); ?>
 
             </div>
         <?php endif; ?>

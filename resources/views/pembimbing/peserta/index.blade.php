@@ -1,4 +1,4 @@
-@extends('pembimbing.layoutspembimbing.main') {{-- atau layouts.main sesuai project-mu --}}
+@extends('pembimbing.layoutspembimbing.main')
 
 @section('title', 'Peserta Bimbingan')
 
@@ -8,7 +8,7 @@
 
     <form method="GET" class="mb-3">
         <div class="input-group" style="max-width:420px;">
-            <input type="text" name="q" value="{{ $q }}" class="form-control" placeholder="Cari nama/NIM/email">
+            <input type="text" name="q" value="{{ $q }}" class="form-control" placeholder="Cari nama/NISNIM/email">
             <button class="btn btn-primary" type="submit">Cari</button>
         </div>
     </form>
@@ -21,7 +21,7 @@
                         <tr>
                             <th style="width:40px;">#</th>
                             <th>Nama</th>
-                            <th>NIM</th>
+                            <th>NISNIM</th>
                             <th>Email</th>
                             <th class="text-center">Logbook</th>
                             <th class="text-center">Absen</th>
@@ -29,28 +29,23 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @forelse ($internships as $i => $intern)
-                            @php $p = $intern->participant; @endphp
+                        @forelse ($participants as $i => $p)
                             <tr>
-                                <td>{{ $internships->firstItem() + $i }}</td>
-                                <td>{{ $p?->name ?? '-' }}</td>
-                                <td>{{ $p?->student_id ?? '-' }}</td>
-                                <td>{{ $p?->email ?? '-' }}</td>
-                                <td class="text-center">{{ $p?->logbooks_count ?? 0 }}</td>
-                                <td class="text-center">{{ $p?->attendances_count ?? 0 }}</td>
+                                <td>{{ $participants->firstItem() + $i }}</td>
+                                <td>{{ $p->nama }}</td>
+                                <td>{{ $p->nisnim }}</td>
+                                <td>{{ $p->email ?? '-' }}</td>
+                                <td class="text-center">{{ $p->logbooks_count }}</td>
+                                <td class="text-center">{{ $p->attendances_count }}</td>
                                 <td class="text-end">
-                                    @if($p)
-                                        <a href="{{ route('pembimbing.peserta.show', $p) }}" class="btn btn-sm btn-outline-primary">
-                                            Detail
-                                        </a>
-                                    @else
-                                        <span class="text-muted">Data peserta hilang</span>
-                                    @endif
+                                    <a href="{{ route('pembimbing.peserta.show', $p) }}" class="btn btn-sm btn-outline-primary">
+                                        Detail
+                                    </a>
                                 </td>
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="7" class="text-center py-4">Tidak ada peserta bimbingan aktif.</td>
+                                <td colspan="7" class="text-center py-4">Tidak ada peserta bimbingan.</td>
                             </tr>
                         @endforelse
                     </tbody>
@@ -58,9 +53,9 @@
             </div>
         </div>
 
-        @if ($internships->hasPages())
+        @if ($participants->hasPages())
             <div class="card-footer">
-                {{ $internships->links() }}
+                {{ $participants->links() }}
             </div>
         @endif
     </div>

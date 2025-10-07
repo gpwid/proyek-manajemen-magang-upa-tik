@@ -16,22 +16,18 @@ class Supervisor extends Model
     protected $fillable = [
         'nama',
         'nip',
-        'email',     // <— tambah
-        'user_id',   // <— pastikan ada jika belum
+        'email',
+        'user_id',
     ];
 
     public function user(): BelongsTo
     {
-        return $this->belongsTo(\App\Models\User::class);
+        return $this->belongsTo(User::class);
     }
 
-    public function participants(): HasMany
-    {
-        return $this->hasMany(Participant::class);
-    }
-
+    // internship yang dipegang supervisor ini
     public function internships(): HasMany
     {
-        return $this->hasMany(Internship::class);
+        return $this->hasMany(Internship::class, 'id_pembimbing');
     }
 }
