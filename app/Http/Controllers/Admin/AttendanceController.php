@@ -12,11 +12,11 @@ class AttendanceController extends Controller
     {
         // Membuat URL yang hanya valid selama 60 detik
         $checkInUrl = URL::temporarySignedRoute(
-            'pemagang.attendance.record', now()->addSeconds(300), ['type' => 'check-in']
+            'pemagang.attendance.record', now()->addSeconds(120), ['type' => 'check-in']
         );
 
         $checkOutUrl = URL::temporarySignedRoute(
-            'pemagang.attendance.record', now()->addSeconds(300), ['type' => 'check-out']
+            'pemagang.attendance.record', now()->addSeconds(120), ['type' => 'check-out']
         );
 
         return view('admin.attendance.qrcode', compact('checkInUrl', 'checkOutUrl'));

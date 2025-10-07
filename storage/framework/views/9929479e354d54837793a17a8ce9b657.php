@@ -1,0 +1,8 @@
+<footer class="sticky-footer bg-white">
+                <div class="container my-auto">
+                    <div class="copyright text-center my-auto">
+                        <span>&copy; UPA TIK 2025. All rights reserved.</span>
+                    </div>
+                </div>
+            </footer>
+<?php /**PATH C:\wamp64\www\proyek-manajemen-magang-upa-tik\resources\views/pembimbing/layoutspembimbing/footer.blade.php ENDPATH**/ ?>

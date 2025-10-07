@@ -9,7 +9,7 @@ use App\Models\Task;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
-class TaskController extends Controller
+class TaskOverviewController extends Controller
 {
     protected function getActiveInternshipFor(Participant $participant)
     {
@@ -17,7 +17,7 @@ class TaskController extends Controller
 
         return Internship::query()
             ->where('id_pembimbing', $supervisor->id)
-            ->whereHas('participants', fn($q) => $q->where('participants.id', $participant->id))
+            ->whereHas('participants', fn ($q) => $q->where('participants.id', $participant->id))
             ->where(function ($q) {
                 $q->where('status_magang', 'Aktif')->orWhereNull('status_magang');
             })
@@ -53,7 +53,7 @@ class TaskController extends Controller
             // hitung ringkasan
             ->withCount([
                 'tasks as tasks_count' => function ($tq) use ($supervisor) {
-                    $tq->whereHas('internship', fn($iq) => $iq->where('id_pembimbing', $supervisor->id));
+                    $tq->whereHas('internship', fn ($iq) => $iq->where('id_pembimbing', $supervisor->id));
                 },
                 'logbooks as logbooks_count',
                 'attendances as attendances_count',
@@ -62,8 +62,8 @@ class TaskController extends Controller
             ->when($q !== '', function ($qry) use ($q) {
                 $qry->where(function ($w) use ($q) {
                     $w->where('nama', 'like', "%{$q}%")
-                      ->orWhere('nisnim', 'like', "%{$q}%")
-                      ->orWhere('email', 'like', "%{$q}%");
+                        ->orWhere('nisnim', 'like', "%{$q}%")
+                        ->orWhere('email', 'like', "%{$q}%");
                 });
             })
             ->orderBy('nama')
@@ -72,7 +72,7 @@ class TaskController extends Controller
 
         return view('pembimbing.task.participants', [
             'participants' => $participants,
-            'q'            => $q,
+            'q' => $q,
         ]);
     }
 
@@ -92,21 +92,21 @@ class TaskController extends Controller
         abort_unless($internship, 422, 'Tidak ada internship aktif untuk peserta ini.');
 
         $validated = $request->validate([
-            'title'       => ['required', 'string', 'max:255'],
+            'title' => ['required', 'string', 'max:255'],
             'description' => ['nullable', 'string'],
-            'task_date'   => ['required', 'date'],
-            'status'      => ['required', 'in:Selesai,Dikerjakan,Revisi'],
-            'feedback'    => ['nullable', 'string'],
+            'task_date' => ['required', 'date'],
+            'status' => ['required', 'in:Selesai,Dikerjakan,Revisi'],
+            'feedback' => ['nullable', 'string'],
         ]);
 
         Task::create([
             'internship_id' => $internship->id,
-            'participant_id'=> $participant->id,
-            'title'         => $validated['title'],
-            'description'   => $validated['description'] ?? null,
-            'task_date'     => $validated['task_date'],
-            'status'        => $validated['status'],
-            'feedback'      => $validated['feedback'] ?? null,
+            'participant_id' => $participant->id,
+            'title' => $validated['title'],
+            'description' => $validated['description'] ?? null,
+            'task_date' => $validated['task_date'],
+            'status' => $validated['status'],
+            'feedback' => $validated['feedback'] ?? null,
         ]);
 
         return redirect()->route('pembimbing.task.index', $participant)
@@ -142,11 +142,11 @@ class TaskController extends Controller
         );
 
         $validated = $request->validate([
-            'title'       => ['required', 'string', 'max:255'],
+            'title' => ['required', 'string', 'max:255'],
             'description' => ['nullable', 'string'],
-            'task_date'   => ['required', 'date'],
-            'status'      => ['required', 'in:Selesai,Dikerjakan,Revisi'],
-            'feedback'    => ['nullable', 'string'],
+            'task_date' => ['required', 'date'],
+            'status' => ['required', 'in:Selesai,Dikerjakan,Revisi'],
+            'feedback' => ['nullable', 'string'],
         ]);
 
         $task->update($validated);
