@@ -3,17 +3,12 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Task extends Model
 {
-    protected $guarded = ['id'];
-
-    protected $table = 'tasks';
-
-    protected $casts = [
-        'task_date' => 'date',
-    ];
+    use HasFactory;
 
     protected $fillable = [
         'internship_id',
@@ -25,6 +20,10 @@ class Task extends Model
         'feedback',
     ];
 
+    protected $casts = [
+        'task_date' => 'date',
+    ];
+
     public function internship(): BelongsTo
     {
         return $this->belongsTo(Internship::class);
@@ -33,10 +32,5 @@ class Task extends Model
     public function participant(): BelongsTo
     {
         return $this->belongsTo(Participant::class);
-    }
-
-    public function logbooks()
-    {
-        return $this->hasMany(Logbook::class);
     }
 }

@@ -6,12 +6,9 @@ use App\Http\Controllers\Controller;
 use App\Models\Participant;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
-class ParticipantController extends Controller
+class TaskOverviewController extends Controller
 {
-    use AuthorizesRequests;
-
     public function index(Request $request)
     {
         $user = Auth::user();
@@ -20,12 +17,19 @@ class ParticipantController extends Controller
 
         $q = trim((string) $request->get('q'));
 
+        // Ambil peserta yang terhubung dengan internship milik supervisor login
         $participants = Participant::query()
-            // peserta yg terhubung ke internship milik supervisor login
             ->whereHas('internships', function ($iq) use ($supervisor) {
                 $iq->where('internship.id_pembimbing', $supervisor->id);
             })
-            ->withCount(['logbooks', 'attendances'])
+            // hitung jumlah task utk peserta ini DI bawah internship supervisor login
+            ->withCount([
+                'tasks as tasks_count' => function ($tq) use ($supervisor) {
+                    $tq->whereHas('internship', fn($iq) => $iq->where('id_pembimbing', $supervisor->id));
+                },
+                'logbooks as logbooks_count',
+                'attendances as attendances_count',
+            ])
             ->when($q !== '', function ($qry) use ($q) {
                 $qry->where(function ($w) use ($q) {
                     $w->where('nama', 'like', "%{$q}%")
@@ -37,24 +41,9 @@ class ParticipantController extends Controller
             ->paginate(10)
             ->withQueryString();
 
-        return view('pembimbing.peserta.index', [
+        return view('pembimbing.task.participants', [
             'participants' => $participants,
-            'q' => $q,
+            'q'            => $q,
         ]);
-    }
-
-    public function show(Participant $participant)
-    {
-        $this->authorize('view', $participant);
-
-        $participant->load([
-            // ambil internship-nya (untuk info pembimbing)
-            'internships.supervisor',
-            // data detail
-            'logbooks'    => fn($q) => $q->latest('date'),
-            'attendances' => fn($q) => $q->latest('date'),
-        ]);
-
-        return view('pembimbing.peserta.show', compact('participant'));
     }
 }

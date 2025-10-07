@@ -3,70 +3,113 @@
 namespace App\Http\Controllers\Pembimbing;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\StoreTugasRequest;
+use App\Models\Internship;
 use App\Models\Participant;
-use App\Models\Supervisor;
 use App\Models\Task;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 
 class TaskController extends Controller
 {
     /**
-     * Pastikan participant ini memang dibina oleh pembimbing (user) yang login.
-     * Di sini asumsi mapping: supervisors.user_id -> users.id
-     * dan participants.supervisor_id -> supervisors.id
+     * Dapatkan internship aktif milik supervisor untuk peserta ini.
+     * Hanya mengembalikan internship yang:
+     * - id_pembimbing = supervisor login
+     * - terhubung ke participant lewat pivot internship_participant
+     * - (opsional) status_magang = 'Aktif'
      */
-    protected function ensureMentorOwns(Participant $participant, int $userId): void
+    protected function getActiveInternshipFor(Participant $participant)
     {
-        $supervisorId = Supervisor::where('user_id', $userId)->value('id');
-        abort_unless($supervisorId && (int)$participant->supervisor_id === (int)$supervisorId, 403, 'Anda tidak memiliki akses ke peserta ini.');
+        $supervisor = Auth::user()->supervisor;
+
+        return Internship::query()
+            ->where('id_pembimbing', $supervisor->id)
+            ->whereHas('participants', fn($q) => $q->where('participants.id', $participant->id))
+            ->where(function ($q) {
+                $q->where('status_magang', 'Aktif')->orWhereNull('status_magang');
+            })
+            ->latest('id')
+            ->first();
     }
 
-    public function index(Request $request, Participant $participant)
+    /**
+     * Cek akses: peserta harus berada dalam internship milik supervisor login.
+     */
+    protected function ensureAccess(Participant $participant): void
     {
-        $this->ensureMentorOwns($participant, $request->user()->id);
+        $supervisor = Auth::user()->supervisor;
+        abort_unless($supervisor, 403, 'Akun ini tidak memiliki profil pembimbing.');
 
-        $tasks = Task::where('participant_id', $participant->id)
-            ->latest()
+        $has = $participant->internships()
+            ->where('internship.id_pembimbing', $supervisor->id)
+            ->exists();
+
+        abort_unless($has, 403, 'Anda tidak berwenang mengakses peserta ini.');
+    }
+
+    /**
+     * List penugasan untuk peserta bimbingan.
+     */
+    public function index(Participant $participant)
+    {
+        $this->ensureAccess($participant);
+
+        $tasks = Task::query()
+            ->where('participant_id', $participant->id)
+            ->whereHas('internship', function ($q) use ($participant) {
+                // hanya task dari internship pembimbing login
+                $q->where('id_pembimbing', Auth::user()->supervisor->id)
+                  ->whereHas('participants', fn($p) => $p->where('participants.id', $participant->id));
+            })
+            ->latest('task_date')
             ->paginate(10);
 
         return view('pembimbing.task.index', compact('participant', 'tasks'));
     }
 
-    public function create(Request $request, Participant $participant)
+    /**
+     * Form buat penugasan baru.
+     */
+    public function create(Participant $participant)
     {
-        $this->ensureMentorOwns($participant, $request->user()->id);
+        $this->ensureAccess($participant);
 
-        // Ambil daftar internship yang TERKAIT ke participant via pivot internship_participant
-        // Tabel utama: internship (singular sesuai migrasi kamu)
-        $internships = DB::table('internship')
-            ->join('internship_participant', 'internship_participant.internship_id', '=', 'internship.id')
-            ->where('internship_participant.participant_id', $participant->id)
-            ->orderByDesc('internship.id')
-            ->get(['internship.id']);
+        $internship = $this->getActiveInternshipFor($participant);
+        abort_unless($internship, 422, 'Tidak ditemukan internship aktif untuk peserta ini di bawah bimbingan Anda.');
 
-        return view('pembimbing.task.create', compact('participant', 'internships'));
+        return view('pembimbing.task.create', compact('participant', 'internship'));
     }
 
-    public function store(StoreTugasRequest $request, Participant $participant)
+    /**
+     * Simpan penugasan baru.
+     */
+    public function store(Request $request, Participant $participant)
     {
-        $this->ensureMentorOwns($participant, $request->user()->id);
+        $this->ensureAccess($participant);
 
-        DB::transaction(function () use ($request, $participant) {
-            Task::create([
-                'internship_id' => $request->validated('internship_id'),
-                'participant_id'=> $participant->id,
-                'title'         => $request->validated('title'),
-                'description'   => $request->validated('description'), // wajib (migrasi kamu NOT NULL)
-                'task_date'     => $request->validated('task_date'),   // wajib (migrasi kamu NOT NULL)
-                'status'        => $request->validated('status', 'Dikerjakan'),
-                'feedback'      => $request->validated('feedback'),
-            ]);
-        });
+        $internship = $this->getActiveInternshipFor($participant);
+        abort_unless($internship, 422, 'Tidak ditemukan internship aktif untuk peserta ini di bawah bimbingan Anda.');
+
+        $validated = $request->validate([
+            'title'       => ['required', 'string', 'max:255'],
+            'description' => ['nullable', 'string'],
+            'task_date'   => ['required', 'date'],
+            'status'      => ['required', 'in:Selesai,Dikerjakan,Revisi'],
+            'feedback'    => ['nullable', 'string'],
+        ]);
+
+        $task = Task::create([
+            'internship_id' => $internship->id,
+            'participant_id'=> $participant->id,
+            'title'         => $validated['title'],
+            'description'   => $validated['description'] ?? null,
+            'task_date'     => $validated['task_date'],
+            'status'        => $validated['status'],
+            'feedback'      => $validated['feedback'] ?? null,
+        ]);
 
         return redirect()
             ->route('pembimbing.task.index', $participant)
-            ->with('success', 'Tugas berhasil dibuat.');
+            ->with('success', 'Penugasan berhasil dibuat.');
     }
 }

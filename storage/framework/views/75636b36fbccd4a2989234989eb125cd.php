@@ -42,6 +42,13 @@
                 <span>Penugasan</span>
             </a>
         </li>
+
+        <li class="nav-item <?php echo $__env->yieldContent('qrcode-active'); ?>">
+            <a class="nav-link" href="<?php echo e(route('admin.attendance.qrcode')); ?>">
+                <i class="fa-solid fa-briefcase"></i>
+                <span>QR Code Absensi</span>
+            </a>
+        </li>
     <?php endif; ?>
 
     
