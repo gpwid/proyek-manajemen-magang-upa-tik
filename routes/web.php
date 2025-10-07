@@ -8,10 +8,6 @@ use App\Http\Controllers\Admin\PermohonanController;
 use App\Http\Controllers\Admin\SupervisorController;
 use App\Http\Controllers\Admin\TaskController;
 use App\Http\Controllers\Admin\UsersController;
-use App\Http\Controllers\Pemagang\DashboardController as PemagangDashboardController;
-use App\Http\Controllers\Pemagang\LogbookController;
-use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\RedirectController;
 use App\Http\Controllers\Atasan\DashboardController as AtasanDashboardController;
 use App\Http\Controllers\Atasan\InstituteController as AtasanInstituteController;
 use App\Http\Controllers\Atasan\InternshipController as AtasanInternshipController;
@@ -19,8 +15,12 @@ use App\Http\Controllers\Atasan\ParticipantController as AtasanParticipantContro
 use App\Http\Controllers\Atasan\PermohonanController as AtasanPermohonanController;
 use App\Http\Controllers\Atasan\SupervisorController as AtasanSupervisorController;
 use App\Http\Controllers\Atasan\TaskController as AtasanTaskController;
+use App\Http\Controllers\Pemagang\DashboardController as PemagangDashboardController;
+use App\Http\Controllers\Pemagang\LogbookController;
 use App\Http\Controllers\Pembimbing\ParticipantController as PembimbingParticipantController;
 use App\Http\Controllers\Pembimbing\TaskController as PembimbingTaskController;
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\RedirectController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -101,7 +101,6 @@ Route::middleware(['auth', 'verified', 'role:admin'])->prefix('admin')->name('ad
     // -- Profil Pengguna (dari Breeze) --
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
 // BUNGKUS SEMUA ROUTE PEMAGANG DALAM MIDDLEWARE AUTH
@@ -119,7 +118,6 @@ Route::middleware(['auth', 'role:pemagang'])->prefix('pemagang')->name('pemagang
     // -- Profil Pengguna (dari Breeze) --
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
 // BUNGKUS SEMUA ROUTE ATASAN DI DALAM MIDDLEWARE 'auth'
@@ -169,7 +167,6 @@ Route::middleware(['auth', 'role:atasan'])->prefix('atasan')->name('atasan.')->g
     // -- Profil Pengguna (dari Breeze) --
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
 // PEMBIMBING

@@ -30,7 +30,7 @@
             <!-- Dropdown - User Information -->
             <ul class="dropdown-menu dropdown-menu-end shadow animated--grow-in" aria-labelledby="userDropdown">
                 <li>
-                    <a class="dropdown-item" href="#">
+                    <a class="dropdown-item" href="<?php echo e(route('pemagang.profile.edit')); ?>">
                         <i class="fas fa-user fa-sm fa-fw me-2 text-gray-400"></i>
                         Profile
                     </a>

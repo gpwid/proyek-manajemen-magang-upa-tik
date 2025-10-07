@@ -17,9 +17,14 @@ class Participant extends Model
         'nama',
         'nik',
         'nisnim',
+        'email',
         'jenis_kelamin',
         'jurusan',
         'kontak_peserta',
+        'institute_id',
+        'alamat_asal',
+        'nama_wali',
+        'kontak_wali',
         'tahun_aktif',
         'status',
         'user_id',
@@ -45,5 +50,10 @@ class Participant extends Model
     public function supervisor(): BelongsTo
     {
         return $this->belongsTo(Supervisor::class);
+    }
+
+    public function institute(): BelongsTo
+    {
+        return $this->belongsTo(Institute::class, 'institute_id');
     }
 }

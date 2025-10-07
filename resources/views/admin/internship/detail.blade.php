@@ -82,13 +82,9 @@
 
                             <div class="col-md-6">
                                 <div class="info-item">
-                                    <label class="info-label text-body-secondary my-0">Status</label>
+                                    <label class="info-label text-body-secondary my-0">Pembimbing Magang</label>
                                     <div class="info-value fw-bold">
-                                        @if ($internship->status_magang === 'Aktif')
-                                            <span class="badge bg-success">{{ $internship->status_magang }}</span>
-                                        @else
-                                            <span class="badge bg-secondary">{{ $internship->status_magang }}</span>
-                                        @endif
+                                        {{ $internship->supervisor?->nama ?? '-' }}
                                     </div>
                                 </div>
                             </div>
@@ -105,6 +101,19 @@
                                                     <li>{{ $i + 1 }}. {{ $pm->nama }}</li>
                                                 @endforeach
                                             </ul>
+                                        @endif
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="info-item">
+                                    <label class="info-label text-body-secondary my-0">Status</label>
+                                    <div class="info-value fw-bold">
+                                        @if ($internship->status_magang === 'Aktif')
+                                            <span class="badge bg-success">{{ $internship->status_magang }}</span>
+                                        @else
+                                            <span class="badge bg-secondary">{{ $internship->status_magang }}</span>
                                         @endif
                                     </div>
                                 </div>

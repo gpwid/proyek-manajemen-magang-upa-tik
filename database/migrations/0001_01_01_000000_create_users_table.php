@@ -21,6 +21,7 @@ return new class extends Migration
             $table->string('password');
             $table->enum('role', ['admin', 'atasan', 'pembimbing', 'pemagang'])->default('admin');
             $table->enum('status', ['active', 'inactive'])->default('active');
+            $table->boolean('profile_completed')->default(false);
             $table->rememberToken();
             $table->timestamps();
         });
