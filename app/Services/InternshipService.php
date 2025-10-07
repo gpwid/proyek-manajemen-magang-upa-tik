@@ -26,9 +26,21 @@ class InternshipService
             ]);
 
             $internship->participants()->attach($validatedData['id_peserta']);
+            $existingParticipants = Participant::where('permohonan_id', $validatedData['id_permohonan'])
+                ->whereNotIn('id', $validatedData['id_peserta'])
+                ->pluck('id')
+                ->toArray();
+
+            if (! empty($existingParticipants)) {
+                $internship->participants()->attach($existingParticipants);
+            }
+            $permohonan = \App\Models\Permohonan::find($validatedData['id_permohonan']);
+            $instituteId = $permohonan ? $permohonan->id_institute : null;
 
             Participant::whereIn('id', $validatedData['id_peserta'])
-                ->update(['permohonan_id' => $validatedData['id_permohonan']]);
+                ->update(['permohonan_id' => $validatedData['id_permohonan'],
+                    'institute_id' => $instituteId,
+                ]);
 
             return $internship;
         });

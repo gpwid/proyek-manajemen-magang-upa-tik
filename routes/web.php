@@ -1,9 +1,7 @@
 <?php
 
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Route;
-
 // Admin
+use App\Http\Controllers\Admin\AttendanceController as AdminAttendanceController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\InstituteController;
 use App\Http\Controllers\Admin\InternshipController;
@@ -12,9 +10,6 @@ use App\Http\Controllers\Admin\PermohonanController;
 use App\Http\Controllers\Admin\SupervisorController;
 use App\Http\Controllers\Admin\TaskController;
 use App\Http\Controllers\Admin\UsersController;
-use App\Http\Controllers\Admin\AttendanceController as AdminAttendanceController;
-
-// Atasan
 use App\Http\Controllers\Atasan\DashboardController as AtasanDashboardController;
 use App\Http\Controllers\Atasan\InstituteController as AtasanInstituteController;
 use App\Http\Controllers\Atasan\InternshipController as AtasanInternshipController;
@@ -22,20 +17,14 @@ use App\Http\Controllers\Atasan\ParticipantController as AtasanParticipantContro
 use App\Http\Controllers\Atasan\PermohonanController as AtasanPermohonanController;
 use App\Http\Controllers\Atasan\SupervisorController as AtasanSupervisorController;
 use App\Http\Controllers\Atasan\TaskController as AtasanTaskController;
-
-// Pemagang
+use App\Http\Controllers\Pemagang\AttendanceController as PemagangAttendanceController;
 use App\Http\Controllers\Pemagang\DashboardController as PemagangDashboardController;
 use App\Http\Controllers\Pemagang\LogbookController;
-use App\Http\Controllers\Pemagang\AttendanceController as PemagangAttendanceController;
-
-// Pembimbing
-use App\Http\Controllers\Pembimbing\DashboardController as PembimbingDashboardController;
-use App\Http\Controllers\Pembimbing\ParticipantController as PembimbingParticipantController;
-use App\Http\Controllers\Pembimbing\TaskController as PembimbingTaskController;
-
-// Umum
+use App\Http\Controllers\Pembimbing\TaskOverviewController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RedirectController;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -48,6 +37,7 @@ Route::get('/', function () {
     if (Auth::check()) {
         return redirect()->route('dashboard');
     }
+
     return view('auth.login');
 });
 
@@ -123,10 +113,9 @@ Route::middleware(['auth', 'verified', 'role:admin'])
         // QR Code Absensi
         Route::get('/attendance/qrcode', [AdminAttendanceController::class, 'showQrCode'])->name('attendance.qrcode');
 
-        // Profil (Breeze)
+        // -- Profil Pengguna (dari Breeze) --
         Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
         Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-        Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     });
 
 /*
@@ -147,10 +136,11 @@ Route::middleware(['auth', 'role:pemagang'])
         Route::get('/attendance/record', [PemagangAttendanceController::class, 'record'])->name('attendance.record');
         Route::get('/attendance', [PemagangAttendanceController::class, 'index'])->name('attendance.index');
 
-        // Profil (Breeze)
+        Route::get('/attendance', [\App\Http\Controllers\Pemagang\AttendanceController::class, 'index'])->name('attendance.index');
+
+        // -- Profil Pengguna (dari Breeze) --
         Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
         Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-        Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     });
 
 /*
@@ -210,10 +200,10 @@ Route::middleware(['auth', 'role:atasan'])
             ->names('penugasan')
             ->parameters(['penugasan' => 'task']);
 
-        // Profil (Breeze)
+        // -- Profil Pengguna (dari Breeze) --
         Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
         Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-        Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
     });
 
 /*
@@ -253,6 +243,5 @@ Route::middleware(['auth', 'role:pembimbing'])
             ->name('task.destroy');
     });
 
-
 // Route autentikasi Breeze
-require __DIR__ . '/auth.php';
+require __DIR__.'/auth.php';
