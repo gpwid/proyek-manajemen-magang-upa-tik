@@ -19,8 +19,6 @@ use App\Http\Controllers\Atasan\SupervisorController as AtasanSupervisorControll
 use App\Http\Controllers\Atasan\TaskController as AtasanTaskController;
 use App\Http\Controllers\Pemagang\DashboardController as PemagangDashboardController;
 use App\Http\Controllers\Pemagang\LogbookController;
-use App\Http\Controllers\Pembimbing\ParticipantController as PembimbingParticipantController;
-use App\Http\Controllers\Pembimbing\TaskController as PembimbingTaskController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RedirectController;
 use Illuminate\Support\Facades\Auth;
