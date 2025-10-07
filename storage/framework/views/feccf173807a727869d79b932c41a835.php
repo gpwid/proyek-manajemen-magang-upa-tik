@@ -1,62 +1,54 @@
-<?php
-    // Ambil user dari guard admin jika ada, kalau tidak pakai default
-    $user = Auth::user();
-    $name = $user?->name ?? 'Guest';
-    $avatar = $user?->avatar_url ?? null;
-    $initial = mb_strtoupper(mb_substr($name, 0, 1));
-?>
+<nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow topbar">
 
-<nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm border-bottom" style="
-margin-bottom: 12pt;
-">
-    <div class="container-fluid">
-        
-        <div class="navbar-brand fw-semibold"><?php echo $__env->yieldContent('title'); ?></div>
+    
+    <button id="pembimbingOpenSidebarBtn" class="btn btn-link d-lg-none rounded-circle mr-3" type="button" title="Menu">
+        <i class="fa fa-bars"></i>
+    </button>
+
+    
+    <h1 class="h6 mb-0 text-gray-800 d-none d-lg-inline">Panel Admin</h1>
+
+    <!-- Topbar Navbar -->
+    <ul class="navbar-nav ms-auto">
 
         
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#topbarNav"
-            aria-controls="topbarNav" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
+        <div class="topbar-divider d-none d-sm-block"></div>
 
         
-        <div class="collapse navbar-collapse" id="topbarNav">
+        <li class="nav-item dropdown no-arrow">
+            <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="userDropdown"
+                role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                <span class="me-2 d-none d-lg-inline text-gray-600 small">
+                    <?php echo e(Auth::user()->name ?? 'User'); ?>
 
-            
-            <ul class="navbar-nav ms-auto">
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="userMenu"
-                        role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        <?php if($avatar): ?>
-                            <img src="<?php echo e($avatar); ?>" alt="avatar" width="32" height="32"
-                                class="rounded-circle me-2" style="object-fit: cover;">
-                        <?php else: ?>
-                            <span
-                                class="rounded-circle bg-secondary text-white d-inline-flex align-items-center justify-content-center me-2"
-                                style="width:32px;height:32px;"><?php echo e($initial); ?></span>
-                        <?php endif; ?>
-                        <span class="fw-medium"><?php echo e($name); ?></span>
+                </span>
+                <img class="img-profile rounded-circle"
+                    src="https://ui-avatars.com/api/?name=<?php echo e(urlencode(Auth::user()->name ?? 'User')); ?>&background=4F46E5&color=fff"
+                    alt="avatar" style="width: 32px; height: 32px;">
+            </a>
+
+            <!-- Dropdown - User Information -->
+            <ul class="dropdown-menu dropdown-menu-end shadow animated--grow-in" aria-labelledby="userDropdown">
+                <li>
+                    <a class="dropdown-item" href="#">
+                        <i class="fas fa-user fa-sm fa-fw me-2 text-gray-400"></i>
+                        Profile
                     </a>
-
-                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userMenu">
-                        <li><a class="dropdown-item" href="<?php echo e(route('admin.profile.edit')); ?>">Profil</a></li>
-                        <li>
-                            <hr class="dropdown-divider">
-                        </li>
-                        <?php if(auth()->guard()->check()): ?>
-                            <li>
-                                <form method="POST" action="<?php echo e(route('logout')); ?>">
-                                    <?php echo csrf_field(); ?>
-                                    <button type="submit" class="dropdown-item">Keluar</button>
-                                </form>
-                            </li>
-                        <?php else: ?>
-                            <li><a class="dropdown-item" href="<?php echo e(route('login')); ?>">Masuk</a></li>
-                        <?php endif; ?>
-                    </ul>
+                </li>
+                <li>
+                    <hr class="dropdown-divider">
+                </li>
+                <li>
+                    <form action="<?php echo e(route('logout') ?? '#'); ?>" method="POST" class="m-0 p-0">
+                        <?php echo csrf_field(); ?>
+                        <button type="submit" class="dropdown-item">
+                            <i class="fas fa-sign-out-alt fa-sm fa-fw me-2 text-gray-400"></i>
+                            Logout
+                        </button>
+                    </form>
                 </li>
             </ul>
-        </div>
-    </div>
+        </li>
+    </ul>
 </nav>
 <?php /**PATH C:\wamp64\www\proyek-manajemen-magang-upa-tik\resources\views/admin/layoutsadmin/navbar.blade.php ENDPATH**/ ?>
