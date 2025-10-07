@@ -91,15 +91,6 @@
 
                             <div class="col-md-6">
                                 <div class="info-item">
-                                    <label class="info-label text-body-secondary my-0">Pembimbing</label>
-                                    <div class="info-value fw-bold">
-                                        {{ $internship->supervisor?->nama ?? '-' }}
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="col-md-6">
-                                <div class="info-item">
                                     <label class="info-label text-body-secondary my-0">Nama-nama Pemagang</label>
                                     <div class="info-value fw-bold">
                                         @if ($internship->participants->isEmpty())
