@@ -40,7 +40,7 @@ class Participant extends Model
         return $this->belongsTo(User::class, 'user_id');
     }
 
-    // relasi many-to-many via pivot
+    // many-to-many dengan internship lewat pivot internship_participant
     public function internships(): BelongsToMany
     {
         return $this->belongsToMany(
@@ -51,7 +51,6 @@ class Participant extends Model
         )->withTimestamps();
     }
 
-    // optional: jika masih ada kolom supervisor_id di participants
     public function supervisor(): BelongsTo
     {
         return $this->belongsTo(Supervisor::class);
@@ -65,5 +64,11 @@ class Participant extends Model
     public function attendances(): HasMany
     {
         return $this->hasMany(Attendance::class);
+    }
+
+    // ==== TAMBAHAN: relasi ke Task (by participant_id) ====
+    public function tasks(): HasMany
+    {
+        return $this->hasMany(Task::class);
     }
 }

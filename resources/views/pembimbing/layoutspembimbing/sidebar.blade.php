@@ -3,7 +3,7 @@
 
     <!-- Sidebar - Brand -->
     <a class="sidebar-brand d-flex flex-column align-items-center justify-content-center my-3"
-       href="{{ route('pembimbing.dashboard.index') ?? '#' }}">
+        href="{{ route('pembimbing.dashboard.index') ?? '#' }}">
         <div class="sidebar-brand-text mx-3 text-uppercase font-weight-bold">SIMBA</div>
         <div class="small">Panel Pembimbing</div>
     </a>
@@ -36,8 +36,8 @@
     <div class="sidebar-heading">Administrasi</div>
 
     <li class="nav-item @yield('penugasan-active')">
-        <a class="nav-link" href="#">
-            <i class="fas fa-list-check"></i>
+        <a class="nav-link" href="{{ route('pembimbing.task.participants') }}">
+            <i class="fas fa-fw fa-clipboard-list"></i>
             <span>Penugasan</span>
         </a>
     </li>
