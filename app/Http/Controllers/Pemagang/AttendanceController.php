@@ -9,6 +9,7 @@ use App\Models\Attendance;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
 
 class AttendanceController extends Controller
 {
@@ -22,10 +23,6 @@ class AttendanceController extends Controller
         return view('pemagang.attendance.index', compact('attendances'));
     }
 
-    // --- DAFTAR IP WIFI KANTOR/KAMPUS YANG DIIZINKAN ---
-    // Ganti dengan alamat IP publik dari jaringan Anda
-    private $allowedIps = ['127.0.0.1', '172.16.20.143', '172.16.20.147']; // Contoh: IP lokal & IP publik UNRI
-
     public function record(Request $request)
     {
         // 1. Validasi URL yang ditandatangani (dari QR Code)
@@ -33,9 +30,14 @@ class AttendanceController extends Controller
             return '<h1>URL Absensi Tidak Valid atau Telah Kedaluwarsa!</h1>';
         }
 
+        $clientIp = $request->ip();
+        $isIpAllowed = Str::startsWith($clientIp, '172.') || $clientIp === '127.0.0.1';
+
         // 2. Validasi Alamat IP
-        if (! in_array($request->ip(), $this->allowedIps)) {
-            return "<h1>Akses Ditolak!</h1><p>Anda harus terhubung ke jaringan WiFi yang diizinkan untuk melakukan absensi. IP Anda: {$request->ip()}</p>";
+        if (! $isIpAllowed) {
+            $message = "Anda harus terhubung ke jaringan WiFi kampus yang diizinkan untuk melakukan absensi. (IP Anda: {$clientIp})";
+
+            return view('pemagang.attendance.result', ['isError' => true, 'message' => $message]);
         }
 
         $participant = Auth::user()->participant;
