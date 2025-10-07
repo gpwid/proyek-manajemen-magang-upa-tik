@@ -24,7 +24,7 @@
     <div class="sidebar-heading">Kelola Magang</div>
 
     <li class="nav-item <?php echo $__env->yieldContent('peserta-active'); ?>">
-        <a class="nav-link" href="#">
+        <a class="nav-link" href="<?php echo e(route('pembimbing.peserta.index') ?? '#'); ?>">
             <i class="fas fa-users"></i>
             <span>Peserta</span>
         </a>

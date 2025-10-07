@@ -18,6 +18,10 @@ class Logbook extends Model
         'description',
     ];
 
+    protected $casts = [
+        'date' => 'date',
+    ];
+
     public function internship()
     {
         return $this->belongsTo(Internship::class, 'internship_id');

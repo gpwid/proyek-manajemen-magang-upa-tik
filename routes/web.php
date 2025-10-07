@@ -182,7 +182,7 @@ Route::middleware(['auth']) // tambahkan 'role:pembimbing' jika pakai Spatie
 
         Route::get('/peserta', [PembimbingParticipantController::class, 'index'])
             ->name('peserta.index');
-
+        Route::get('/peserta/{participant}', [PembimbingParticipantController::class, 'show'])->name('peserta.show');
         Route::get('/peserta/{participant}/tugas', [PembimbingTaskController::class, 'index'])
             ->name('tugas.index');
         Route::get('/peserta/{participant}/tugas/create', [PembimbingTaskController::class, 'create'])
@@ -192,4 +192,4 @@ Route::middleware(['auth']) // tambahkan 'role:pembimbing' jika pakai Spatie
     });
 
 // Memuat route-route autentikasi dari Breeze
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';
