@@ -17,12 +17,10 @@ use App\Http\Controllers\Atasan\ParticipantController as AtasanParticipantContro
 use App\Http\Controllers\Atasan\PermohonanController as AtasanPermohonanController;
 use App\Http\Controllers\Atasan\SupervisorController as AtasanSupervisorController;
 use App\Http\Controllers\Atasan\TaskController as AtasanTaskController;
-// Pemagang
-use App\Http\Controllers\Pemagang\AttendanceController as PemagangAttendanceController;
 use App\Http\Controllers\Pemagang\DashboardController as PemagangDashboardController;
 use App\Http\Controllers\Pemagang\LogbookController;
-// Pembimbing
-use App\Http\Controllers\Pembimbing\TaskOverviewController;
+use App\Http\Controllers\Pembimbing\ParticipantController as PembimbingParticipantController;
+use App\Http\Controllers\Pembimbing\TaskController as PembimbingTaskController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RedirectController;
 use Illuminate\Support\Facades\Auth;
