@@ -112,22 +112,12 @@ class ParticipantController extends Controller
     {
         $data = $request->validated();
 
+        Participant::create($data);
+
         if (! empty($data['permohonan_id'])) {
-            $permohonan = \App\Models\Permohonan::find($data['permohonan_id']);
-            if ($permohonan) {
-                $data['institute_id'] = $permohonan->id_institute;
-            }
-
-        }
-
-        $participant = Participant::create($data);
-
-        $internship = \App\Models\Internship::where('id_permohonan', $data['permohonan_id'])->first();
-        if ($internship) {
-            // Tambahkan peserta ke internship jika belum ada
-            if (! $internship->participants()->where('participants.id', $participant->id)->exists()) {
-                $internship->participants()->attach($participant->id);
-            }
+            return redirect()
+                ->route('admin.permohonan.show', $data['permohonan_id'])
+                ->with('success', 'Peserta berhasil ditambahkan.');
         }
 
         return redirect()

@@ -31,7 +31,6 @@ class StoreInternshipRequest extends FormRequest
             'id_pembimbing' => 'required|integer|exists:supervisors,id',
             'id_peserta' => 'required|array|min:1',
             'id_peserta.*' => 'integer|exists:participants,id',
-            
         ];
     }
 

@@ -28,10 +28,8 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
+        // Redirect pengguna berdasarkan peran mereka setelah login berhasil
         $user = Auth::user();
-        if ($user->role === 'pemagang' && ! $user->profile_completed) {
-            return redirect()->route('pemagang.profile.edit');
-        }
 
         return redirect()->route('dashboard');
     }

@@ -15,7 +15,6 @@ use App\Services\InternshipService;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
 use Maatwebsite\Excel\Facades\Excel;
 use Yajra\DataTables\Facades\DataTables;
@@ -119,22 +118,8 @@ class InternshipController extends Controller
             ->where('status', 'Aktif')
             ->orderBy('tgl_surat', 'desc')
             ->get();
-        $assignedSupervisorIds = Internship::where('status_magang', 'Aktif')
-            ->whereNotNull('id_pembimbing')
-            ->pluck('id_pembimbing')
-            ->unique();
-
-        // Ambil semua supervisor yang ID-nya TIDAK ADA dalam daftar yang sudah ditugaskan.
-        $supervisors = Supervisor::whereNotIn('id', $assignedSupervisorIds)->orderBy('nama')->get();
-
-        // Dapatkan ID semua peserta yang sudah terdaftar di magang yang sedang 'Aktif'.
-        $activeInternshipIds = Internship::where('status_magang', 'Aktif')->pluck('id');
-        $assignedParticipantIds = DB::table('internship_participant')
-            ->whereIn('internship_id', $activeInternshipIds)
-            ->pluck('participant_id');
-
-        // Ambil semua peserta yang ID-nya TIDAK ADA dalam daftar yang sudah ditugaskan.
-        $participants = Participant::whereNotIn('id', $assignedParticipantIds)->orderBy('nama')->get();
+        $supervisors = Supervisor::all();
+        $participants = Participant::all();
 
         return view('admin.internship.create', compact('permohonan', 'supervisors', 'participants'));
     }

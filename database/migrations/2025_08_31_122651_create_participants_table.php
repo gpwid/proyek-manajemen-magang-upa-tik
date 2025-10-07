@@ -16,12 +16,8 @@ return new class extends Migration
             $table->string('nisnim', 20)->unique();
             $table->string('email')->unique()->nullable();
             $table->enum('jenis_kelamin', ['L', 'P']);
-            $table->foreignId('institute_id')->nullable()->constrained('institutes')->onDelete('set null');
-            $table->string('jurusan', 50)->nullable();
-            $table->string('kontak_peserta', 13)->nullable();
-            $table->string('alamat_asal', 255)->nullable();
-            $table->string('nama_wali', 50)->nullable();
-            $table->string('kontak_wali', 13)->nullable();
+            $table->string('jurusan', 50);
+            $table->string('kontak_peserta', 13);
             $table->year('tahun_aktif', 4);
             $table->enum('status', ['pending', 'approved', 'rejected', 'nonactive'])->default('pending');
             $table->string('keterangan', 255)->nullable();
