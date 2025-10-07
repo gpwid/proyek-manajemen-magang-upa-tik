@@ -10,6 +10,10 @@ use App\Http\Controllers\Admin\PermohonanController;
 use App\Http\Controllers\Admin\SupervisorController;
 use App\Http\Controllers\Admin\TaskController;
 use App\Http\Controllers\Admin\UsersController;
+use App\Http\Controllers\Pemagang\DashboardController as PemagangDashboardController;
+use App\Http\Controllers\Pemagang\LogbookController;
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\RedirectController;
 use App\Http\Controllers\Atasan\DashboardController as AtasanDashboardController;
 use App\Http\Controllers\Atasan\InstituteController as AtasanInstituteController;
 use App\Http\Controllers\Atasan\InternshipController as AtasanInternshipController;
@@ -17,11 +21,16 @@ use App\Http\Controllers\Atasan\ParticipantController as AtasanParticipantContro
 use App\Http\Controllers\Atasan\PermohonanController as AtasanPermohonanController;
 use App\Http\Controllers\Atasan\SupervisorController as AtasanSupervisorController;
 use App\Http\Controllers\Atasan\TaskController as AtasanTaskController;
+<<<<<<< HEAD
 use App\Http\Controllers\Pemagang\AttendanceController as PemagangAttendanceController;
 use App\Http\Controllers\Pemagang\DashboardController as PemagangDashboardController;
 use App\Http\Controllers\Pemagang\LogbookController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RedirectController;
+=======
+use App\Http\Controllers\Pembimbing\ParticipantController as PembimbingParticipantController;
+use App\Http\Controllers\Pembimbing\TaskController as PembimbingTaskController;
+>>>>>>> parent of 2c931f7 (Feat : profile dan peserta done beserta fix bug)
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -112,10 +121,18 @@ Route::middleware(['auth', 'verified', 'role:admin'])
         // QR Code Absensi
         Route::get('/attendance/qrcode', [AdminAttendanceController::class, 'showQrCode'])->name('attendance.qrcode');
 
+<<<<<<< HEAD
         // -- Profil Pengguna (dari Breeze) --
         Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
         Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     });
+=======
+    // -- Profil Pengguna (dari Breeze) --
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+});
+>>>>>>> parent of 2c931f7 (Feat : profile dan peserta done beserta fix bug)
 
 /*
 |--------------------------------------------------------------------------
@@ -137,10 +154,18 @@ Route::middleware(['auth', 'role:pemagang'])
 
         Route::get('/attendance', [\App\Http\Controllers\Pemagang\AttendanceController::class, 'index'])->name('attendance.index');
 
+<<<<<<< HEAD
         // -- Profil Pengguna (dari Breeze) --
         Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
         Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     });
+=======
+    // -- Profil Pengguna (dari Breeze) --
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+});
+>>>>>>> parent of 2c931f7 (Feat : profile dan peserta done beserta fix bug)
 
 /*
 |--------------------------------------------------------------------------
@@ -199,10 +224,18 @@ Route::middleware(['auth', 'role:atasan'])
             ->names('penugasan')
             ->parameters(['penugasan' => 'task']);
 
+<<<<<<< HEAD
         // -- Profil Pengguna (dari Breeze) --
         Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
         Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     });
+=======
+    // -- Profil Pengguna (dari Breeze) --
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+});
+>>>>>>> parent of 2c931f7 (Feat : profile dan peserta done beserta fix bug)
 
 /*
 |--------------------------------------------------------------------------
