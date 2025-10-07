@@ -203,7 +203,6 @@ Route::middleware(['auth', 'role:atasan'])
         // -- Profil Pengguna (dari Breeze) --
         Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
         Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-
     });
 
 /*
