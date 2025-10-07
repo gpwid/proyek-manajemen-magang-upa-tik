@@ -21,8 +21,8 @@
                     <div class="mb-2">
                         <strong>Pembimbing:</strong>
                         <?php
-                            $firstIntern = $participant->internships->first();
-                            $pembimbing = optional($firstIntern?->supervisor)->nama;
+                        $firstIntern = $participant->internships->first();
+                        $pembimbing = optional($firstIntern?->supervisor)->nama;
                         ?>
                         <?php echo e($pembimbing ?? '-'); ?>
 
@@ -39,12 +39,14 @@
                 <div class="card-body">
                     <ul class="nav nav-tabs" id="pesertaTab" role="tablist">
                         <li class="nav-item" role="presentation">
-                            <button class="nav-link active" id="logbook-tab" data-bs-toggle="tab" data-bs-target="#tab-logbook" type="button" role="tab">
+                            <button class="nav-link active" id="logbook-tab" data-bs-toggle="tab"
+                                data-bs-target="#tab-logbook" type="button" role="tab">
                                 Logbook
                             </button>
                         </li>
                         <li class="nav-item" role="presentation">
-                            <button class="nav-link" id="absen-tab" data-bs-toggle="tab" data-bs-target="#tab-absen" type="button" role="tab">
+                            <button class="nav-link" id="absen-tab" data-bs-toggle="tab" data-bs-target="#tab-absen"
+                                type="button" role="tab">
                                 Riwayat Absen
                             </button>
                         </li>
@@ -54,64 +56,70 @@
                         
                         <div class="tab-pane fade show active" id="tab-logbook" role="tabpanel">
                             <?php if($participant->logbooks->isEmpty()): ?>
-                                <div class="text-muted">Belum ada logbook.</div>
+                            <div class="text-muted">Belum ada logbook.</div>
                             <?php else: ?>
-                                <div class="table-responsive">
-                                    <table class="table table-striped">
-                                        <thead class="table-light">
-                                            <tr>
-                                                <th style="width:50px;">#</th>
-                                                <th>Tanggal</th>
-                                                <th>Tugas/Dikerjakan</th>
-                                                <th>Deskripsi</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <?php $__currentLoopData = $participant->logbooks; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $i => $lb): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                                <tr>
-                                                    <td><?php echo e($i+1); ?></td>
-                                                    <td><?php echo e(optional($lb->date)->format('d M Y') ?? '-'); ?></td>
-                                                    <td><?php echo e(Str::limit($lb->tasks_completed, 80)); ?></td>
-                                                    <td><?php echo e(Str::limit($lb->description, 120)); ?></td>
-                                                </tr>
-                                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                                        </tbody>
-                                    </table>
-                                </div>
+                            <div class="table-responsive">
+                                <table class="table table-striped">
+                                    <thead class="table-light">
+                                        <tr>
+                                            <th style="width:50px;">#</th>
+                                            <th>Tanggal</th>
+                                            <th>Tugas/Dikerjakan</th>
+                                            <th>Deskripsi</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <?php $__currentLoopData = $participant->logbooks; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $i => $lb): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                        <tr>
+                                            <td><?php echo e($i+1); ?></td>
+                                            <td><?php echo e(optional($lb->date)->format('d M Y') ?? '-'); ?></td>
+                                            <td><?php echo e(Str::limit($lb->tasks_completed, 80)); ?></td>
+                                            <td><?php echo e(Str::limit($lb->description, 120)); ?></td>
+                                        </tr>
+                                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                    </tbody>
+                                </table>
+                            </div>
                             <?php endif; ?>
                         </div>
 
                         
                         <div class="tab-pane fade" id="tab-absen" role="tabpanel">
                             <?php if($participant->attendances->isEmpty()): ?>
-                                <div class="text-muted">Belum ada riwayat absen.</div>
+                            <div class="text-muted">Belum ada riwayat absen.</div>
                             <?php else: ?>
-                                <div class="table-responsive">
-                                    <table class="table table-striped">
-                                        <thead class="table-light">
-                                            <tr>
-                                                <th style="width:50px;">#</th>
-                                                <th>Tanggal</th>
-                                                <th>Masuk</th>
-                                                <th>Pulang</th>
-                                                <th>IP Masuk</th>
-                                                <th>IP Pulang</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <?php $__currentLoopData = $participant->attendances; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $i => $ab): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                                <tr>
-                                                    <td><?php echo e($i+1); ?></td>
-                                                    <td><?php echo e(optional($ab->date)->format('d M Y') ?? '-'); ?></td>
-                                                    <td><?php echo e(optional($ab->check_in_time)->format('H:i') ?? '-'); ?></td>
-                                                    <td><?php echo e(optional($ab->check_out_time)->format('H:i') ?? '-'); ?></td>
-                                                    <td><?php echo e($ab->check_in_ip_address ?? '-'); ?></td>
-                                                    <td><?php echo e($ab->check_out_ip_address ?? '-'); ?></td>
-                                                </tr>
-                                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                                        </tbody>
-                                    </table>
-                                </div>
+                            <div class="table-responsive">
+                                <table class="table table-striped">
+                                    <thead class="table-light">
+                                        <tr>
+                                            <th style="width:50px;">#</th>
+                                            <th>Tanggal</th>
+                                            <th>Masuk</th>
+                                            <th>Pulang</th>
+                                            <th>IP Masuk</th>
+                                            <th>IP Pulang</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <?php $__currentLoopData = $participant->attendances; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $i => $ab): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                        <tr>
+                                            <td><?php echo e($i+1); ?></td>
+                                            <td><?php echo e(\Carbon\Carbon::parse($ab->date)->translatedFormat('l, d F Y')); ?>
+
+                                            </td>
+                                            <td><?php echo e($ab->check_in_time ? \Carbon\Carbon::parse($ab->check_in_time)->format('H:i:s') : '-'); ?>
+
+                                            </td>
+                                            <td><?php echo e($ab->check_out_time ? \Carbon\Carbon::parse($ab->check_out_time)->format('H:i:s') : '-'); ?>
+
+                                            </td>
+                                            <td><?php echo e($ab->check_in_ip_address ?? '-'); ?></td>
+                                            <td><?php echo e($ab->check_out_ip_address ?? '-'); ?></td>
+                                        </tr>
+                                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                    </tbody>
+                                </table>
+                            </div>
                             <?php endif; ?>
                         </div>
                     </div> <!-- tab-content -->
