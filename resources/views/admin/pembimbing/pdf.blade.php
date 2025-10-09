@@ -1,4 +1,3 @@
-{{-- resources/views/admin/peserta/pdf.blade.php --}}
 <!DOCTYPE html>
 <html>
 <head>
@@ -13,13 +12,14 @@
     </style>
 </head>
 <body>
-    <h2>Data Peserta</h2>
-    @if($subtitle)<p style="margin-top:-6px;">{{ $subtitle }}</p>@endif
+    <h2>Data Pembimbing</h2>
+    @if(!empty($subtitle))<p style="margin-top:-6px;">{{ $subtitle }}</p>@endif
     <table>
         <thead>
             <tr>
                 <th>No</th>
                 <th>Nama</th>
+                <th>Email</th>
                 <th>NIP</th>
             </tr>
         </thead>
@@ -28,6 +28,7 @@
             <tr>
                 <td>{{ $i+1 }}</td>
                 <td>{{ $p->nama }}</td>
+                <td>{{ $p->email }}</td>
                 <td>{{ $p->nip }}</td>
             </tr>
             @endforeach
