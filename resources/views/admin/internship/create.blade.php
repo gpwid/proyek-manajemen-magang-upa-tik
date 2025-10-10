@@ -63,7 +63,7 @@
                         @foreach ($participants as $peserta)
                             <option value="{{ $peserta->id }}"
                                 {{ in_array($peserta->id, old('id_peserta', [])) ? 'selected' : '' }}>
-                                {{ $peserta->nama }} ({{ $peserta->nik }})
+                                {{ $peserta->nama }} ({{ $peserta->nisnim }})
                             </option>
                         @endforeach
                     </select>

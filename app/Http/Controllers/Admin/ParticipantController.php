@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Exports\ParticipantsExport;
+use App\Exports\Participant\LogbooksExport;
+use App\Exports\Participant\AttendancesExport;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreParticipantController;
 use App\Http\Requests\UpdateParticipantRequest;
@@ -25,7 +27,6 @@ class ParticipantController extends Controller
             'perempuan' => Participant::where('jenis_kelamin', 'P')->count(),
         ];
 
-        // daftar tahun untuk dropdown (distinct & desc)
         $years = Participant::whereNotNull('tahun_aktif')
             ->select('tahun_aktif')
             ->distinct()
@@ -39,17 +40,14 @@ class ParticipantController extends Controller
     {
         $query = Participant::query();
 
-        // Filter Jenis Kelamin
         if ($request->filled('jenis_kelamin')) {
             $query->where('jenis_kelamin', $request->jenis_kelamin);
         }
 
-        // Filter Tahun Aktif
         if ($request->filled('tahun_aktif')) {
             $query->where('tahun_aktif', (int) $request->tahun_aktif);
         }
 
-        // Filter Search Custom
         if ($request->filled('searchbox')) {
             $search = $request->searchbox;
             $query->where(function ($q) use ($search) {
@@ -66,26 +64,20 @@ class ParticipantController extends Controller
             ->addColumn('actions', function ($p) {
                 $buttons = "
                     <div class='flex gap-2'>
-                    <a href='".route('admin.peserta.edit', $p->id)."'
+                    <a href='" . route('admin.peserta.edit', $p->id) . "'
                        class='btn btn-sm btn-primary text-white'
-                       data-bs-toggle='tooltip'
-                       data-bs-placement='top'
                        title='Edit'>
                         <i class='fa-solid fa-pen-to-square'></i> Edit
                     </a>
-                    <a href='".route('admin.peserta.show', $p->id)."'
-                       class='btn btn-sm btn-info'
-                       data-bs-toggle='tooltip'
-                       data-bs-placement='top'
+                    <a href='" . route('admin.peserta.show', $p->id) . "'
+                       class='btn btn-sm btn-info text-white'
                        title='Detail'>
                         <i class='fa-solid fa-eye'></i> Detail
                     </a>";
                 if ($p->status !== 'approved') {
                     $buttons .= "
-                    <a href='".route('admin.peserta.approve', $p->id)."'
+                    <a href='" . route('admin.peserta.approve', $p->id) . "'
                        class='btn btn-sm btn-success text-white'
-                       data-bs-toggle='tooltip'
-                       data-bs-placement='top'
                        title='Setujui'>
                         <i class='fa-solid fa-check'></i> Setujui
                     </a>";
@@ -100,6 +92,13 @@ class ParticipantController extends Controller
 
     public function show(Participant $participant): View
     {
+        // muat relasi untuk tab logbook & absensi (urut terbaru)
+        $participant->load([
+            'institute',
+            'logbooks'    => fn($q) => $q->orderByDesc('date')->orderByDesc('id'),
+            'attendances' => fn($q) => $q->orderByDesc('date')->orderByDesc('id'),
+        ]);
+
         return view('admin.peserta.detail', compact('participant'));
     }
 
@@ -117,14 +116,12 @@ class ParticipantController extends Controller
             if ($permohonan) {
                 $data['institute_id'] = $permohonan->id_institute;
             }
-
         }
 
         $participant = Participant::create($data);
 
         $internship = \App\Models\Internship::where('id_permohonan', $data['permohonan_id'])->first();
         if ($internship) {
-            // Tambahkan peserta ke internship jika belum ada
             if (! $internship->participants()->where('participants.id', $participant->id)->exists()) {
                 $internship->participants()->attach($participant->id);
             }
@@ -147,12 +144,10 @@ class ParticipantController extends Controller
         return redirect()->route('admin.peserta.index')->with('sukses', 'Data berhasil diperbarui');
     }
 
+    // ===== Export list peserta (sudah ada) =====
     public function exportExcel(Request $request)
     {
-        // ParticipantsExport kamu sudah menerima $request → biarkan
-        // (pastikan di export memperhatikan 'tahun_aktif' juga)
-        $filename = 'peserta_'.now()->format('Ymd_His').'.xlsx';
-
+        $filename = 'peserta_' . now()->format('Ymd_His') . '.xlsx';
         return Excel::download(new ParticipantsExport($request), $filename);
     }
 
@@ -161,15 +156,11 @@ class ParticipantController extends Controller
         $q = Participant::query();
 
         $gender = $request->get('jenis_kelamin');
-        $year = $request->get('tahun_aktif');
+        $year   = $request->get('tahun_aktif');
         $search = $request->get('search');
 
-        if ($gender) {
-            $q->where('jenis_kelamin', $gender);
-        }
-        if ($year) {
-            $q->where('tahun_aktif', (int) $year);
-        }
+        if ($gender) $q->where('jenis_kelamin', $gender);
+        if ($year)   $q->where('tahun_aktif', (int) $year);
         if ($search) {
             $q->where(function ($x) use ($search) {
                 $x->where('nama', 'like', "%{$search}%")
@@ -183,33 +174,72 @@ class ParticipantController extends Controller
         $data = $q->orderBy('nama')->get();
 
         $subtitle = [];
-        if ($gender) {
-            $subtitle[] = 'Jenis kelamin: '.($gender === 'L' ? 'Laki-laki' : 'Perempuan');
-        }
-        if ($year) {
-            $subtitle[] = 'Tahun aktif: '.$year;
-        }
-        if ($search) {
-            $subtitle[] = 'Pencarian: "'.$search.'"';
-        }
+        if ($gender) $subtitle[] = 'Jenis kelamin: ' . ($gender === 'L' ? 'Laki-laki' : 'Perempuan');
+        if ($year)   $subtitle[] = 'Tahun aktif: ' . $year;
+        if ($search) $subtitle[] = 'Pencarian: "' . $search . '"';
         $subtitle = implode(' · ', $subtitle);
 
-        $pdf = Pdf::loadView('admin.peserta.pdf', compact('data', 'subtitle'))
+        $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('admin.peserta.pdf', compact('data', 'subtitle'))
             ->setPaper('a4', 'portrait');
 
-        return $pdf->download('peserta_'.now()->format('Ymd_His').'.pdf');
+        return $pdf->download('peserta_' . now()->format('Ymd_His') . '.pdf');
     }
 
-    public function approve(Participant $participant, ParticipantService $service): RedirectResponse
+    // ====== NEW: Export riwayat logbook / absensi untuk satu peserta ======
+    public function exportLogbookExcel(Participant $participant)
+    {
+        $filename = 'logbook_' . $participant->id . '_' . now()->format('Ymd_His') . '.xlsx';
+        return Excel::download(new LogbooksExport($participant), $filename);
+    }
+
+    public function exportLogbookPdf(Participant $participant)
+    {
+        $participant->load(['logbooks' => fn($q) => $q->orderByDesc('date')->orderByDesc('id')]);
+
+        $pdf = Pdf::loadView('admin.peserta.exports.logbook_pdf', [
+            'participant' => $participant,
+            'logbooks'    => $participant->logbooks,
+        ])->setPaper('a4', 'portrait');
+
+        return $pdf->download('logbook_' . $participant->id . '_' . now()->format('Ymd_His') . '.pdf');
+    }
+
+    public function exportAttendanceExcel(Participant $participant)
+    {
+        $filename = 'absensi_' . $participant->id . '_' . now()->format('Ymd_His') . '.xlsx';
+        return Excel::download(new AttendancesExport($participant), $filename);
+    }
+
+    public function exportAttendancePdf(\App\Models\Participant $participant)
+    {
+        $attendances = $participant->attendances()
+            ->orderByDesc('date')
+            ->get([
+                'date',
+                'status',
+                'note',
+                'check_in_time',
+                'check_out_time',
+                'check_in_ip_address',
+                'check_out_ip_address'
+            ]);
+
+        $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('admin.peserta.exports.attendance_pdf', [
+            'participant' => $participant,
+            'attendances' => $attendances,
+        ])->setPaper('a4', 'portrait');
+
+        return $pdf->download('absensi_' . $participant->id . '_' . now()->format('Ymd_His') . '.pdf');
+    }
+
+
+    public function approve(Participant $participant, \App\Services\ParticipantService $service): RedirectResponse
     {
         try {
             $password = $service->approveParticipant($participant);
-
             $message = "Peserta {$participant->nama} berhasil disetujui. Akun telah dibuat. Password sementara: {$password}";
-
             return redirect()->route('admin.peserta.index')->with('success', $message);
         } catch (\Exception $e) {
-            // Jika service melempar error (misal: sudah disetujui), tampilkan pesannya
             return redirect()->route('admin.peserta.index')->with('error', $e->getMessage());
         }
     }
