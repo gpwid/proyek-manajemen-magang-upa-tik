@@ -1,32 +1,30 @@
-{{-- resources/views/admin/peserta/detail.blade.php --}}
-@extends('admin.layoutsadmin.main')
-@section('title', 'Detail Peserta')
-@section('peserta-active', 'active')
+<?php $__env->startSection('title', 'Detail Peserta'); ?>
+<?php $__env->startSection('peserta-active', 'active'); ?>
 
-@section('content')
+<?php $__env->startSection('content'); ?>
 <div class="container-fluid">
 
-    {{-- Header + Tombol Aksi --}}
+    
     <div class="d-flex flex-wrap align-items-center justify-content-between mb-3">
         <h1 class="h3 mb-2 text-gray-800">Detail Peserta</h1>
         <div class="d-flex flex-wrap gap-2">
-            {{-- Shortcut: Absensi Manual Izin/Sakit --}}
-            <a href="{{ route('admin.attendance.manual.create', ['participant_id' => $participant->id]) }}"
+            
+            <a href="<?php echo e(route('admin.attendance.manual.create', ['participant_id' => $participant->id])); ?>"
                class="btn btn-warning">
                 <i class="fas fa-clipboard-check me-1"></i> Input Izin/Sakit
             </a>
 
-            <a href="{{ route('admin.peserta.edit', $participant->id) }}" class="btn btn-primary">
+            <a href="<?php echo e(route('admin.peserta.edit', $participant->id)); ?>" class="btn btn-primary">
                 <i class="fas fa-edit me-1"></i> Edit
             </a>
-            <a href="{{ route('admin.peserta.index') }}" class="btn btn-secondary">
+            <a href="<?php echo e(route('admin.peserta.index')); ?>" class="btn btn-secondary">
                 <i class="fas fa-arrow-left me-1"></i> Kembali
             </a>
         </div>
     </div>
 
     <div class="row g-3">
-        {{-- Kartu Informasi Peserta --}}
+        
         <div class="col-12">
             <div class="card shadow-sm border-0 mb-2">
                 <div class="card-header bg-primary text-white py-3">
@@ -39,19 +37,19 @@
                         <div class="col-12 col-md-6">
                             <div class="info-item">
                                 <label class="info-label">Nama Lengkap</label>
-                                <div class="info-value">{{ $participant->nama }}</div>
+                                <div class="info-value"><?php echo e($participant->nama); ?></div>
                             </div>
                         </div>
                         <div class="col-12 col-md-3">
                             <div class="info-item">
                                 <label class="info-label">NIK</label>
-                                <div class="info-value">{{ $participant->nik }}</div>
+                                <div class="info-value"><?php echo e($participant->nik); ?></div>
                             </div>
                         </div>
                         <div class="col-12 col-md-3">
                             <div class="info-item">
                                 <label class="info-label">NISN / NIM</label>
-                                <div class="info-value">{{ $participant->nisnim }}</div>
+                                <div class="info-value"><?php echo e($participant->nisnim); ?></div>
                             </div>
                         </div>
 
@@ -59,13 +57,13 @@
                             <div class="info-item">
                                 <label class="info-label">Jenis Kelamin</label>
                                 <div class="info-value">
-                                    @if ($participant->jenis_kelamin === 'L')
+                                    <?php if($participant->jenis_kelamin === 'L'): ?>
                                         Laki-laki
-                                    @elseif($participant->jenis_kelamin === 'P')
+                                    <?php elseif($participant->jenis_kelamin === 'P'): ?>
                                         Perempuan
-                                    @else
+                                    <?php else: ?>
                                         <span class="text-muted">-</span>
-                                    @endif
+                                    <?php endif; ?>
                                 </div>
                             </div>
                         </div>
@@ -73,35 +71,35 @@
                         <div class="col-12 col-md-3">
                             <div class="info-item">
                                 <label class="info-label">Sekolah/Instansi Asal</label>
-                                <div class="info-value">{{ $participant->institute->nama_instansi ?? '-' }}</div>
+                                <div class="info-value"><?php echo e($participant->institute->nama_instansi ?? '-'); ?></div>
                             </div>
                         </div>
 
                         <div class="col-12 col-md-3">
                             <div class="info-item">
                                 <label class="info-label">Jurusan</label>
-                                <div class="info-value">{{ $participant->jurusan ?? '-' }}</div>
+                                <div class="info-value"><?php echo e($participant->jurusan ?? '-'); ?></div>
                             </div>
                         </div>
 
                         <div class="col-12 col-md-3">
                             <div class="info-item">
                                 <label class="info-label">Tahun Aktif</label>
-                                <div class="info-value">{{ $participant->tahun_aktif ?? '-' }}</div>
+                                <div class="info-value"><?php echo e($participant->tahun_aktif ?? '-'); ?></div>
                             </div>
                         </div>
 
                         <div class="col-12 col-md-4">
                             <div class="info-item">
                                 <label class="info-label">Kontak Peserta</label>
-                                <div class="info-value">{{ $participant->kontak_peserta ?? '-' }}</div>
+                                <div class="info-value"><?php echo e($participant->kontak_peserta ?? '-'); ?></div>
                             </div>
                         </div>
 
                         <div class="col-12 col-md-8">
                             <div class="info-item">
                                 <label class="info-label">Alamat</label>
-                                <div class="info-value">{{ $participant->alamat_asal ?? '-' }}</div>
+                                <div class="info-value"><?php echo e($participant->alamat_asal ?? '-'); ?></div>
                             </div>
                         </div>
 
@@ -109,7 +107,7 @@
                             <div class="info-item">
                                 <label class="info-label">Wali yang dapat dihubungi</label>
                                 <div class="info-value">
-                                    {{ $participant->nama_wali ?? '-' }} ({{ $participant->kontak_wali ?? '-' }})
+                                    <?php echo e($participant->nama_wali ?? '-'); ?> (<?php echo e($participant->kontak_wali ?? '-'); ?>)
                                 </div>
                             </div>
                         </div>
@@ -118,21 +116,21 @@
                             <div class="info-item">
                                 <label class="info-label">Keterangan</label>
                                 <div class="info-value">
-                                    @if ($participant->keterangan)
-                                        <div class="bg-light p-3 rounded">{{ $participant->keterangan }}</div>
-                                    @else
+                                    <?php if($participant->keterangan): ?>
+                                        <div class="bg-light p-3 rounded"><?php echo e($participant->keterangan); ?></div>
+                                    <?php else: ?>
                                         <span class="text-muted">Tidak ada keterangan</span>
-                                    @endif
+                                    <?php endif; ?>
                                 </div>
                             </div>
                         </div>
 
-                    </div> {{-- row --}}
+                    </div> 
                 </div>
             </div>
         </div>
 
-        {{-- Tabs: Logbook & Absensi --}}
+        
         <div class="col-12">
             <div class="card shadow-sm border-0">
                 <div class="card-body">
@@ -152,25 +150,25 @@
 
                     <div class="tab-content pt-3">
 
-                        {{-- ===== TAB LOGBOOK ===== --}}
+                        
                         <div class="tab-pane fade show active" id="tab-logbook" role="tabpanel" aria-labelledby="logbook-tab">
                             <div class="d-flex flex-wrap justify-content-between align-items-center mb-3">
-                                <h5 class="mb-2 mb-md-0">Total Logbook: {{ $participant->logbooks->count() }}</h5>
+                                <h5 class="mb-2 mb-md-0">Total Logbook: <?php echo e($participant->logbooks->count()); ?></h5>
                                 <div class="d-flex gap-2">
                                     <a class="btn btn-success btn-sm"
-                                       href="{{ route('admin.peserta.logbook.export.excel', $participant->id) }}">
+                                       href="<?php echo e(route('admin.peserta.logbook.export.excel', $participant->id)); ?>">
                                         <i class="fas fa-file-excel me-1"></i> Export Excel
                                     </a>
                                     <a class="btn btn-danger btn-sm"
-                                       href="{{ route('admin.peserta.logbook.export.pdf', $participant->id) }}">
+                                       href="<?php echo e(route('admin.peserta.logbook.export.pdf', $participant->id)); ?>">
                                         <i class="fas fa-file-pdf me-1"></i> Export PDF
                                     </a>
                                 </div>
                             </div>
 
-                            @if($participant->logbooks->isEmpty())
+                            <?php if($participant->logbooks->isEmpty()): ?>
                                 <div class="text-muted">Belum ada logbook.</div>
-                            @else
+                            <?php else: ?>
                                 <div class="table-responsive">
                                     <table class="table table-striped">
                                         <thead class="table-light">
@@ -181,38 +179,38 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            @foreach($participant->logbooks->sortByDesc('date') as $lb)
+                                            <?php $__currentLoopData = $participant->logbooks->sortByDesc('date'); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $lb): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                                 <tr>
-                                                    <td>{{ optional($lb->date)->format('d M Y') ?? '-' }}</td>
-                                                    <td>{{ $lb->tasks_completed }}</td>
-                                                    <td>{{ $lb->description }}</td>
+                                                    <td><?php echo e(optional($lb->date)->format('d M Y') ?? '-'); ?></td>
+                                                    <td><?php echo e($lb->tasks_completed); ?></td>
+                                                    <td><?php echo e($lb->description); ?></td>
                                                 </tr>
-                                            @endforeach
+                                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                         </tbody>
                                     </table>
                                 </div>
-                            @endif
+                            <?php endif; ?>
                         </div>
 
-                        {{-- ===== TAB ABSENSI ===== --}}
+                        
                         <div class="tab-pane fade" id="tab-absen" role="tabpanel" aria-labelledby="absen-tab">
                             <div class="d-flex flex-wrap justify-content-between align-items-center mb-3">
-                                <h5 class="mb-2 mb-md-0">Total Absen: {{ $participant->attendances->count() }}</h5>
+                                <h5 class="mb-2 mb-md-0">Total Absen: <?php echo e($participant->attendances->count()); ?></h5>
                                 <div class="d-flex gap-2">
                                     <a class="btn btn-success btn-sm"
-                                       href="{{ route('admin.peserta.absen.export.excel', $participant->id) }}">
+                                       href="<?php echo e(route('admin.peserta.absen.export.excel', $participant->id)); ?>">
                                         <i class="fas fa-file-excel me-1"></i> Export Excel
                                     </a>
                                     <a class="btn btn-danger btn-sm"
-                                       href="{{ route('admin.peserta.absen.export.pdf', $participant->id) }}">
+                                       href="<?php echo e(route('admin.peserta.absen.export.pdf', $participant->id)); ?>">
                                         <i class="fas fa-file-pdf me-1"></i> Export PDF
                                     </a>
                                 </div>
                             </div>
 
-                            @if($participant->attendances->isEmpty())
+                            <?php if($participant->attendances->isEmpty()): ?>
                                 <div class="text-muted">Belum ada riwayat absen.</div>
-                            @else
+                            <?php else: ?>
                                 <div class="table-responsive">
                                     <table class="table table-striped align-middle">
                                         <thead class="table-light">
@@ -227,37 +225,37 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            @foreach($participant->attendances->sortByDesc('date') as $ab)
-                                                @php
+                                            <?php $__currentLoopData = $participant->attendances->sortByDesc('date'); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $ab): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                                <?php
                                                     $badge = $ab->status === 'Hadir' ? 'bg-success'
                                                             : ($ab->status === 'Izin' ? 'bg-warning'
                                                             : ($ab->status === 'Sakit' ? 'bg-info' : 'bg-secondary'));
-                                                @endphp
+                                                ?>
                                                 <tr>
-                                                    <td>{{ \Carbon\Carbon::parse($ab->date)->translatedFormat('d M Y') }}</td>
-                                                    <td><span class="badge {{ $badge }}">{{ $ab->status }}</span></td>
-                                                    <td>{{ $ab->check_in_time ? \Carbon\Carbon::parse($ab->check_in_time)->format('H:i:s') : '-' }}</td>
-                                                    <td>{{ $ab->check_out_time ? \Carbon\Carbon::parse($ab->check_out_time)->format('H:i:s') : '-' }}</td>
-                                                    <td>{{ $ab->check_in_ip_address ?? '-' }}</td>
-                                                    <td>{{ $ab->check_out_ip_address ?? '-' }}</td>
-                                                    <td>{{ $ab->note ?? '-' }}</td>
+                                                    <td><?php echo e(\Carbon\Carbon::parse($ab->date)->translatedFormat('d M Y')); ?></td>
+                                                    <td><span class="badge <?php echo e($badge); ?>"><?php echo e($ab->status); ?></span></td>
+                                                    <td><?php echo e($ab->check_in_time ? \Carbon\Carbon::parse($ab->check_in_time)->format('H:i:s') : '-'); ?></td>
+                                                    <td><?php echo e($ab->check_out_time ? \Carbon\Carbon::parse($ab->check_out_time)->format('H:i:s') : '-'); ?></td>
+                                                    <td><?php echo e($ab->check_in_ip_address ?? '-'); ?></td>
+                                                    <td><?php echo e($ab->check_out_ip_address ?? '-'); ?></td>
+                                                    <td><?php echo e($ab->note ?? '-'); ?></td>
                                                 </tr>
-                                            @endforeach
+                                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                         </tbody>
                                     </table>
                                 </div>
-                            @endif
+                            <?php endif; ?>
                         </div>
 
-                    </div> {{-- tab-content --}}
+                    </div> 
                 </div>
             </div>
         </div>
 
-    </div> {{-- row --}}
+    </div> 
 </div>
 
-{{-- Minimal CSS --}}
+
 <style>
     .info-item { margin-bottom: .75rem; }
     .info-label {
@@ -268,4 +266,6 @@
     .card { border-radius: .5rem; }
     .card-header { border-bottom: none; }
 </style>
-@endsection
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('admin.layoutsadmin.main', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\laragon\www\magang\resources\views/admin/peserta/detail.blade.php ENDPATH**/ ?>
