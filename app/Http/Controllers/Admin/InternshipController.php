@@ -69,6 +69,18 @@ class InternshipController extends Controller
             );
         }
 
+        if ($request->filled('searchbox')) {
+            $search = $request->searchbox;
+            $query->where(function ($q) use ($search) {
+                $q->where('id', 'like', "%{$search}%")
+                    ->orWhere('status_magang', 'like', "%{$search}%")
+                    ->orWhereHas('participants', fn ($sub) => $sub->where('nama', 'like', "%{$search}%"))
+                    ->orWhereHas('supervisor', fn ($sub) => $sub->where('nama', 'like', "%{$search}%"))
+                    ->orWhereHas('permohonan', fn ($sub) => $sub->where('no_surat', 'like', "%{$search}%"))
+                    ->orWhereHas('permohonan.institute', fn ($sub) => $sub->where('nama_instansi', 'like', "%{$search}%"));
+            });
+        }
+
         return DataTables::of($query)
             ->addColumn('instansi', fn ($i) => $i->permohonan?->institute?->nama_instansi ?? '-')
             ->addColumn('no_surat', fn ($i) => $i->permohonan?->no_surat ?? '-')
@@ -91,17 +103,6 @@ class InternshipController extends Controller
                     <a href='{$url1}' class='btn btn-sm btn-primary text-white'><i class='fa-solid fa-pen-to-square'></i> Edit</a>
                     <a href='{$url2}' class='btn btn-sm btn-info text-white'><i class='fa-solid fa-eye'></i> Detail</a>
                 </div>";
-            })
-            ->filter(function ($query) use ($request) {
-                if ($request->has('search') && $request->search['value'] != '') {
-                    $keyword = $request->search['value'];
-                    $query->where(function ($q) use ($keyword) {
-                        $q->where('id', 'like', "%{$keyword}%")
-                            ->orWhere('status_magang', 'like', "%{$keyword}%")
-                            ->orWhereHas('participants', fn ($sub) => $sub->where('nama', 'like', "%{$keyword}%"))
-                            ->orWhereHas('supervisor', fn ($sub) => $sub->where('nama', 'like', "%{$keyword}%"));
-                    });
-                }
             })
             ->rawColumns(['status_magang', 'aksi'])
             ->make(true);

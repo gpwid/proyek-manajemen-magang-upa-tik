@@ -50,7 +50,7 @@
                             @endforeach
                         </select>
                     </div>
-                    <div class="col-md-8 mb-3">
+                    <div class="col-md-4 mb-3">
                         <label class="form-label">Instansi</label>
                         <select name="id_institute" class="form-select select2-filter">
                             <option value="">Semua instansi…</option>
@@ -59,6 +59,26 @@
                                 </option>
                             @endforeach
                         </select>
+                    </div>
+                    {{-- Search --}}
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label">Pencarian</label>
+                        <div class="search-wrapper">
+                            <span class="search-icon" aria-hidden="true">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+                                    <circle cx="11" cy="11" r="7" stroke="#94A3B8" stroke-width="2" />
+                                    <line x1="16.65" y1="16.65" x2="21" y2="21" stroke="#94A3B8"
+                                        stroke-width="2" stroke-linecap="round" />
+                                </svg>
+                            </span>
+                            <input type="text" id="searchbox" class="form-control search-control" placeholder="Cari...">
+                            <button type="button" id="clearSearch" class="clear-btn" aria-label="Bersihkan">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                                    <path d="M18 6L6 18M6 6l12 12" stroke="#9CA3AF" stroke-width="2"
+                                        stroke-linecap="round" />
+                                </svg>
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -104,6 +124,54 @@
 
     #internshipTable_wrapper .row {
         align-items: center;
+    }
+
+    /* Searchbar */
+    .search-wrapper {
+        position: relative;
+    }
+
+    .search-icon {
+        position: absolute;
+        left: 12px;
+        top: 50%;
+        transform: translateY(-50%);
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 20px;
+        height: 20px;
+        pointer-events: none;
+    }
+
+    .clear-btn {
+        position: absolute;
+        right: 10px;
+        top: 50%;
+        transform: translateY(-50%);
+        border: 0;
+        background: transparent;
+        display: none;
+        padding: 0;
+        line-height: 0;
+    }
+
+    .search-control {
+        height: 42px !important;
+        border-radius: 12px !important;
+        border: 1px solid #e5e7eb !important;
+        padding-left: 2.6rem !important;
+        padding-right: 2.4rem !important;
+        box-shadow: 0 1px 2px rgba(16, 24, 40, .04) !important;
+    }
+
+    .search-control::placeholder {
+        color: #9ca3af;
+    }
+
+    .search-control:focus {
+        border-color: #c7d2fe !important;
+        box-shadow: 0 0 0 .2rem rgba(99, 102, 241, .2) !important;
     }
 
     /* Tabel umum */
@@ -265,7 +333,8 @@
             function buildQueryInternship() {
                 const params = {
                     status_magang: $('select[name="status_magang"]').val() || '',
-                    id_institute: $('select[name="id_institute"]').val() || ''
+                    id_institute: $('select[name="id_institute"]').val() || '',
+                    searchbox: $('#searchbox').val() || ''
                 };
                 Object.keys(params).forEach(k => {
                     if (!params[k]) delete params[k];
@@ -284,6 +353,7 @@
                     data: d => {
                         d.status_magang = $('select[name="status_magang"]').val();
                         d.id_institute = $('select[name="id_institute"]').val();
+                        d.searchbox = $('#searchbox').val();
                     }
                 },
                 columns: [{ // No.
@@ -334,8 +404,21 @@
                 initComplete: function() {
                     initFilterSelect2();
                     initLengthSelect2();
+                    buildQueryInternship();
                 }
             });
+
+            $('#searchbox').off('keyup input');
+            $('#searchbox').on('keyup', () => internshipTable.ajax.reload());
+            $('#searchbox').on('input', function() {
+                $('#clearSearch').toggle(this.value.length > 0);
+            });
+            $('#clearSearch').off('click').on('click', function() {
+                $('#searchbox').val('');
+                $(this).hide();
+                internshipTable.ajax.reload();
+            }).hide();
+
 
             // ===== Filter -> reload =====
             $('#filterForm').find('select').off('change').on('change', () => internshipTable.ajax.reload());

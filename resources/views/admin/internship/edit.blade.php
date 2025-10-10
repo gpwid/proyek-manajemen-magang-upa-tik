@@ -66,7 +66,7 @@
                     @endphp
 
                     <select name="id_peserta[]" class="form-control select2 @error('id_peserta') is-invalid @enderror"
-                        multiple required>
+                        multiple>
                         @foreach ($participants as $peserta)
                             <option value="{{ $peserta->id }}"
                                 {{ in_array($peserta->id, $selectedParticipants) ? 'selected' : '' }}>
@@ -108,6 +108,7 @@
         </div>
     </div>
 @endsection
+
 
 <style>
     /* ====== Modernize Select2 (single select) ====== */
@@ -205,16 +206,11 @@
 
 @push('scripts')
     <script>
-        $(function() {
+        $(document).ready(function() {
             $('.select2').select2({
-                theme: 'bootstrap-5',
-                width: '100%',
-                placeholder: '-- Pilih --',
+                placeholder: "-- Pilih --",
                 allowClear: true,
-                language: {
-                    inputTooShort: () => 'Ketik untuk mencari…',
-                    noResults: () => 'Tidak ada data'
-                }
+                width: '100%'
             });
         });
     </script>

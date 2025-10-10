@@ -175,13 +175,106 @@
     </div>
 </x-guest-layout>
 
+<style>
+    /* ====== Modernize Select2 (single select) ====== */
+    .select2-container .select2-selection--single {
+        height: 44px !important;
+        border-radius: 12px !important;
+        border: 1px solid #e5e7eb !important;
+        /* abu-abu lembut */
+        display: flex !important;
+        align-items: center !important;
+        padding: 0 .75rem !important;
+        position: relative !important;
+        /* untuk posisikan clear btn */
+        box-shadow: 0 1px 2px rgba(16, 24, 40, .04);
+    }
+
+    .select2-container--bootstrap4 .select2-selection--single,
+    .select2-container--bootstrap-5 .select2-selection--single {
+        padding-right: 2.25rem !important;
+        /* ruang untuk ikon panah/clear */
+    }
+
+    .select2-container .select2-selection--single .select2-selection__rendered {
+        line-height: 1.4 !important;
+        padding-left: 0 !important;
+    }
+
+    .select2-container .select2-selection--single .select2-selection__arrow {
+        height: 100% !important;
+        right: .75rem !important;
+    }
+
+    .select2-container .select2-selection--single .select2-selection__clear {
+        position: absolute !important;
+        right: 2rem !important;
+        /* di kiri panah */
+        top: 50% !important;
+        transform: translateY(-50%) !important;
+        margin: 0 !important;
+        font-size: 18px !important;
+        color: #9ca3af !important;
+    }
+
+    .select2-container .select2-selection--single .select2-selection__clear:hover {
+        color: #111827 !important;
+    }
+
+    /* Fokus: warna & ring halus */
+    .select2-container--default.select2-container--focus .select2-selection--single,
+    .select2-container--bootstrap4.select2-container--focus .select2-selection--single,
+    .select2-container--bootstrap-5.select2-container--focus .select2-selection--single {
+        border-color: #c7d2fe !important;
+        box-shadow: 0 0 0 .2rem rgba(99, 102, 241, .2) !important;
+        /* indigo ring */
+    }
+
+    /* Dropdown: lebih lega & modern */
+    .select2-results__option {
+        padding: .55rem .75rem !important;
+        border-radius: .5rem !important;
+        margin: 2px !important;
+    }
+
+    .select2-results__option--highlighted {
+        background: #eef2ff !important;
+        color: #1f2937 !important;
+    }
+
+    /* Placeholder agar abu-abu muda */
+    .select2-container .select2-selection__placeholder {
+        color: #9ca3af !important;
+    }
+
+    /* ---- Select2 clear (single select) jadi merah ---- */
+    .select2-container--bootstrap-5 .select2-selection--single .select2-selection__clear,
+    .select2-container--bootstrap4 .select2-selection--single .select2-selection__clear {
+        color: #dc3545 !important;
+        /* Bootstrap danger */
+        opacity: 1 !important;
+        cursor: pointer;
+        font-weight: 700;
+        /* (opsional) bikin area klik sedikit lebih besar & bundar */
+        padding: 2px 6px;
+        border-radius: 9999px;
+    }
+
+    /* Hover state: lebih tegas */
+    .select2-container--bootstrap-5 .select2-selection--single .select2-selection__clear:hover,
+    .select2-container--bootstrap4 .select2-selection--single .select2-selection__clear:hover {
+        color: #b02a37 !important;
+        /* darker danger */
+        background: rgba(220, 53, 69, .08);
+    }
+</style>
+
 @push('scripts')
     <script>
         // Inisialisasi Select2 untuk elemen dengan kelas 'select2-filter'
         $(document).ready(function() {
             $('.select2-filter').select2({
                 theme: 'bootstrap-5',
-                width: '100%',
                 placeholder: '-- Pilih Instansi --',
                 allowClear: true,
             });

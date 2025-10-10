@@ -181,10 +181,12 @@ class PermohonanController extends Controller
             $existingInternship = Internship::where('id_permohonan', $application->id)->exists();
 
             if (! $existingInternship) {
-                Internship::create([
+                $internship = Internship::create([
                     'id_permohonan' => $application->id,
                     'status_magang' => 'Aktif',
                 ]);
+
+                $internship->participants()->attach($application->participants->pluck('id')->toArray());
             }
         }
 

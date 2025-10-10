@@ -153,6 +153,27 @@
     .select2-container .select2-selection__placeholder {
         color: #9ca3af !important;
     }
+
+    /* ---- Select2 clear (single select) jadi merah ---- */
+    .select2-container--bootstrap-5 .select2-selection--single .select2-selection__clear,
+    .select2-container--bootstrap4 .select2-selection--single .select2-selection__clear {
+        color: #dc3545 !important;
+        /* Bootstrap danger */
+        opacity: 1 !important;
+        cursor: pointer;
+        font-weight: 700;
+        /* (opsional) bikin area klik sedikit lebih besar & bundar */
+        padding: 2px 6px;
+        border-radius: 9999px;
+    }
+
+    /* Hover state: lebih tegas */
+    .select2-container--bootstrap-5 .select2-selection--single .select2-selection__clear:hover,
+    .select2-container--bootstrap4 .select2-selection--single .select2-selection__clear:hover {
+        color: #b02a37 !important;
+        /* darker danger */
+        background: rgba(220, 53, 69, .08);
+    }
 </style>
 
 @push('scripts')
