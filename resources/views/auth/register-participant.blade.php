@@ -83,8 +83,8 @@
                     <div class="row">
                         <div class="col-md-12 mb-3">
                             <label class="form-label">Asal Instansi <span class="text-danger">*</span></label>
-                            <select name="institute_id" class="form-select @error('institute_id') is-invalid @enderror"
-                                required>
+                            <select name="institute_id"
+                                class="form-select select2-filter @error('institute_id') is-invalid @enderror" required>
                                 <option value="">-- Pilih Instansi --</option>
                                 @forelse ($institutes as $x)
                                     <option value="{{ $x->id }}"
@@ -174,3 +174,16 @@
         </div>
     </div>
 </x-guest-layout>
+
+@push('scripts')
+    <script>
+        // Inisialisasi Select2 untuk elemen dengan kelas 'select2-filter'
+        $(document).ready(function() {
+            $('.select2-filter').select2({
+                theme: 'bootstrap-5',
+                width: '100%',
+                placeholder: '-- Pilih Instansi --',
+                allowClear: true,
+            });
+        });
+    </script>

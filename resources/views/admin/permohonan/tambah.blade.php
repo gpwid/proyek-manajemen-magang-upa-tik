@@ -98,8 +98,8 @@
                         <div class="row g-3 row-split">
                             <div class="col-md-6">
                                 <label class="form-label">Instansi <span class="text-danger">*</span></label>
-                                <select name="id_institute" class="form-select @error('id_institute') is-invalid @enderror"
-                                    required>
+                                <select name="id_institute"
+                                    class="form-select select2-filter @error('id_institute') is-invalid @enderror" required>
                                     <option value="">-- Pilih Instansi --</option>
                                     @forelse ($data as $x)
                                         <option value="{{ $x->id }}"
@@ -254,3 +254,17 @@
         </div>
     </div>
 @endsection
+
+@push('scripts')
+    <script>
+        // Inisialisasi Select2
+        $(document).ready(function() {
+            $('.select2-filter').select2({
+                theme: 'bootstrap-5',
+                width: '100%',
+                placeholder: '-- Pilih Instansi --',
+                allowClear: true,
+            });
+        });
+    </script>
+@endpush

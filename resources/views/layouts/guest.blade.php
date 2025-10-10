@@ -15,7 +15,9 @@
         rel="stylesheet">
 
     <link href="{{ asset('asset/css/sb-admin-2.min.css') }}" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 </head>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
 <body
     style="background-image: linear-gradient(rgba(78, 115, 223, 0.85), rgba(78, 115, 223, 0.85)), url('{{ 'images/bg-unri.jpg' }}'); background-size: cover; background-position: center; background-repeat: no-repeat;">
@@ -36,11 +38,12 @@
             </div>
         </div>
     </div>
-
     <script src="{{ asset('asset/vendor/jquery/jquery.min.js') }}"></script>
     <script src="{{ asset('asset/vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
     <script src="{{ asset('asset/vendor/jquery-easing/jquery.easing.min.js') }}"></script>
     <script src="{{ asset('asset/js/sb-admin-2.min.js') }}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    @stack('scripts')
 </body>
 
 </html>
