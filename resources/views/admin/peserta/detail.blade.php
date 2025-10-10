@@ -1,162 +1,271 @@
+{{-- resources/views/admin/peserta/detail.blade.php --}}
 @extends('admin.layoutsadmin.main')
 @section('title', 'Detail Peserta')
 @section('peserta-active', 'active')
 
 @section('content')
-    <div class="container-fluid">
+<div class="container-fluid">
 
-        <div class="row">
-            <!-- Main Information Card -->
-            <div class="col-md-12">
-                <div class="card shadow-sm border-0 mb-4">
-                    <div class="card-header bg-primary text-white py-3">
-                        <h5 class="card-title mb-0">
-                            <i class="fas fa-user me-2"></i> Informasi Peserta
-                        </h5>
-                    </div>
-                    <div class="card-body p-4">
-                        <div class="row g-4">
-                            <!-- Nama Lengkap -->
-                            <div class="col-12">
-                                <div class="info-item">
-                                    <label class="info-label">Nama Lengkap</label>
-                                    <div class="info-value">{{ $participant->nama }}</div>
-                                </div>
-                            </div>
+    {{-- Header + Tombol Aksi --}}
+    <div class="d-flex flex-wrap align-items-center justify-content-between mb-3">
+        <h1 class="h3 mb-2 text-gray-800">Detail Peserta</h1>
+        <div class="d-flex flex-wrap gap-2">
+            {{-- Shortcut: Absensi Manual Izin/Sakit --}}
+            <a href="{{ route('admin.attendance.manual.create', ['participant_id' => $participant->id]) }}"
+               class="btn btn-warning">
+                <i class="fas fa-clipboard-check me-1"></i> Input Izin/Sakit
+            </a>
 
-                            <!-- NIK & NISN/NIM -->
-                            <div class="col-md-6">
-                                <div class="info-item">
-                                    <label class="info-label">NIK</label>
-                                    <div class="info-value">{{ $participant->nik }}</div>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="info-item">
-                                    <label class="info-label">NISN / NIM</label>
-                                    <div class="info-value">{{ $participant->nisnim }}</div>
-                                </div>
-                            </div>
-
-                            <div class="col-md-6">
-                                <div class="info-item">
-                                    <label class="info-label">Jenis Kelamin</label>
-                                    <div class="info-value">
-                                        @if ($participant->jenis_kelamin === 'L')
-                                            <p>Laki-laki</p>
-                                        @elseif($participant->jenis_kelamin === 'P')
-                                            <p>Perempuan</p>
-                                        @else
-                                            <span class="text-muted">-</span>
-                                        @endif
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="info-item">
-                                    <label class="info-label">Alamat</label>
-                                    <div class="info-value">
-                                        {{ $participant->alamat_asal ?? '-' }}
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="col-md-6">
-                                <div class="info-item">
-                                    <label class="info-label">Sekolah Asal</label>
-                                    <div class="info-value">{{ $participant->institute->nama_instansi ?? '-' }}</div>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="info-item">
-                                    <label class="info-label">Jurusan</label>
-                                    <div class="info-value">{{ $participant->jurusan }}</div>
-                                </div>
-                            </div>
-
-                            <div class="col-md-6">
-                                <div class="info-item">
-                                    <label class="info-label">Kontak</label>
-                                    <div class="info-value">
-                                        {{ $participant->kontak_peserta ?? '-' }}
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="col-md-6">
-                                <div class="info-item">
-                                    <label class="info-label">Wali yang dapat dihubungi</label>
-                                    <div class="info-value">
-                                        {{ $participant->nama_wali ?? '-' }} ({{ $participant->kontak_wali ?? '-' }})
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Tahun Aktif -->
-                            <div class="col-md-6">
-                                <div class="info-item">
-                                    <label class="info-label">Tahun Aktif</label>
-                                    <div class="info-value">
-                                        {{ $participant->tahun_aktif ?? '-' }}
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Keterangan -->
-                            <div class="col-12">
-                                <div class="info-item">
-                                    <label class="info-label">Keterangan</label>
-                                    <div class="info-value">
-                                        @if ($participant->keterangan)
-                                            <div class="bg-light p-3 rounded">
-                                                {{ $participant->keterangan }}
-                                            </div>
-                                        @else
-                                            <span class="text-muted">Tidak ada keterangan</span>
-                                        @endif
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="mt-4 text-end">
-                            <a href="{{ route('admin.peserta.edit', $participant->id) }}"
-                                class="btn btn-primary me-2">Edit</a>
-                            <a href="{{ route('admin.peserta.index') }}" class="btn btn-secondary">Kembali</a>
-                        </div>
-
-                    </div>
-                </div>
-            </div>
+            <a href="{{ route('admin.peserta.edit', $participant->id) }}" class="btn btn-primary">
+                <i class="fas fa-edit me-1"></i> Edit
+            </a>
+            <a href="{{ route('admin.peserta.index') }}" class="btn btn-secondary">
+                <i class="fas fa-arrow-left me-1"></i> Kembali
+            </a>
         </div>
     </div>
 
-    <!-- Minimal CSS -->
-    <style>
-        .info-item {
-            margin-bottom: 0.75rem;
-        }
+    <div class="row g-3">
+        {{-- Kartu Informasi Peserta --}}
+        <div class="col-12">
+            <div class="card shadow-sm border-0 mb-2">
+                <div class="card-header bg-primary text-white py-3">
+                    <h5 class="card-title mb-0">
+                        <i class="fas fa-user me-2"></i> Informasi Peserta
+                    </h5>
+                </div>
+                <div class="card-body p-4">
+                    <div class="row g-4">
+                        <div class="col-12 col-md-6">
+                            <div class="info-item">
+                                <label class="info-label">Nama Lengkap</label>
+                                <div class="info-value">{{ $participant->nama }}</div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-3">
+                            <div class="info-item">
+                                <label class="info-label">NIK</label>
+                                <div class="info-value">{{ $participant->nik }}</div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-3">
+                            <div class="info-item">
+                                <label class="info-label">NISN / NIM</label>
+                                <div class="info-value">{{ $participant->nisnim }}</div>
+                            </div>
+                        </div>
 
-        .info-label {
-            font-size: 0.9rem;
-            font-weight: 600;
-            color: #6c757d;
-            margin-bottom: 0.25rem;
-            display: block;
-        }
+                        <div class="col-12 col-md-3">
+                            <div class="info-item">
+                                <label class="info-label">Jenis Kelamin</label>
+                                <div class="info-value">
+                                    @if ($participant->jenis_kelamin === 'L')
+                                        Laki-laki
+                                    @elseif($participant->jenis_kelamin === 'P')
+                                        Perempuan
+                                    @else
+                                        <span class="text-muted">-</span>
+                                    @endif
+                                </div>
+                            </div>
+                        </div>
 
-        .info-value {
-            font-size: 1rem;
-            color: #343a40;
-            min-height: 1.2rem;
-        }
+                        <div class="col-12 col-md-3">
+                            <div class="info-item">
+                                <label class="info-label">Sekolah/Instansi Asal</label>
+                                <div class="info-value">{{ $participant->institute->nama_instansi ?? '-' }}</div>
+                            </div>
+                        </div>
 
-        .card {
-            border-radius: 0.5rem;
-        }
+                        <div class="col-12 col-md-3">
+                            <div class="info-item">
+                                <label class="info-label">Jurusan</label>
+                                <div class="info-value">{{ $participant->jurusan ?? '-' }}</div>
+                            </div>
+                        </div>
 
-        .card-header {
-            border-bottom: none;
-        }
-    </style>
+                        <div class="col-12 col-md-3">
+                            <div class="info-item">
+                                <label class="info-label">Tahun Aktif</label>
+                                <div class="info-value">{{ $participant->tahun_aktif ?? '-' }}</div>
+                            </div>
+                        </div>
+
+                        <div class="col-12 col-md-4">
+                            <div class="info-item">
+                                <label class="info-label">Kontak Peserta</label>
+                                <div class="info-value">{{ $participant->kontak_peserta ?? '-' }}</div>
+                            </div>
+                        </div>
+
+                        <div class="col-12 col-md-8">
+                            <div class="info-item">
+                                <label class="info-label">Alamat</label>
+                                <div class="info-value">{{ $participant->alamat_asal ?? '-' }}</div>
+                            </div>
+                        </div>
+
+                        <div class="col-12 col-md-6">
+                            <div class="info-item">
+                                <label class="info-label">Wali yang dapat dihubungi</label>
+                                <div class="info-value">
+                                    {{ $participant->nama_wali ?? '-' }} ({{ $participant->kontak_wali ?? '-' }})
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-12">
+                            <div class="info-item">
+                                <label class="info-label">Keterangan</label>
+                                <div class="info-value">
+                                    @if ($participant->keterangan)
+                                        <div class="bg-light p-3 rounded">{{ $participant->keterangan }}</div>
+                                    @else
+                                        <span class="text-muted">Tidak ada keterangan</span>
+                                    @endif
+                                </div>
+                            </div>
+                        </div>
+
+                    </div> {{-- row --}}
+                </div>
+            </div>
+        </div>
+
+        {{-- Tabs: Logbook & Absensi --}}
+        <div class="col-12">
+            <div class="card shadow-sm border-0">
+                <div class="card-body">
+
+                    <ul class="nav nav-tabs" id="detailTab" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link active" id="logbook-tab" data-bs-toggle="tab" data-bs-target="#tab-logbook" type="button" role="tab">
+                                Logbook
+                            </button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="absen-tab" data-bs-toggle="tab" data-bs-target="#tab-absen" type="button" role="tab">
+                                Riwayat Absensi
+                            </button>
+                        </li>
+                    </ul>
+
+                    <div class="tab-content pt-3">
+
+                        {{-- ===== TAB LOGBOOK ===== --}}
+                        <div class="tab-pane fade show active" id="tab-logbook" role="tabpanel" aria-labelledby="logbook-tab">
+                            <div class="d-flex flex-wrap justify-content-between align-items-center mb-3">
+                                <h5 class="mb-2 mb-md-0">Total Logbook: {{ $participant->logbooks->count() }}</h5>
+                                <div class="d-flex gap-2">
+                                    <a class="btn btn-success btn-sm"
+                                       href="{{ route('admin.peserta.logbook.export.excel', $participant->id) }}">
+                                        <i class="fas fa-file-excel me-1"></i> Export Excel
+                                    </a>
+                                    <a class="btn btn-danger btn-sm"
+                                       href="{{ route('admin.peserta.logbook.export.pdf', $participant->id) }}">
+                                        <i class="fas fa-file-pdf me-1"></i> Export PDF
+                                    </a>
+                                </div>
+                            </div>
+
+                            @if($participant->logbooks->isEmpty())
+                                <div class="text-muted">Belum ada logbook.</div>
+                            @else
+                                <div class="table-responsive">
+                                    <table class="table table-striped">
+                                        <thead class="table-light">
+                                            <tr>
+                                                <th style="width:80px;">Tanggal</th>
+                                                <th style="min-width:240px;">Tugas/Dikerjakan</th>
+                                                <th>Deskripsi</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach($participant->logbooks->sortByDesc('date') as $lb)
+                                                <tr>
+                                                    <td>{{ optional($lb->date)->format('d M Y') ?? '-' }}</td>
+                                                    <td>{{ $lb->tasks_completed }}</td>
+                                                    <td>{{ $lb->description }}</td>
+                                                </tr>
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+                                </div>
+                            @endif
+                        </div>
+
+                        {{-- ===== TAB ABSENSI ===== --}}
+                        <div class="tab-pane fade" id="tab-absen" role="tabpanel" aria-labelledby="absen-tab">
+                            <div class="d-flex flex-wrap justify-content-between align-items-center mb-3">
+                                <h5 class="mb-2 mb-md-0">Total Absen: {{ $participant->attendances->count() }}</h5>
+                                <div class="d-flex gap-2">
+                                    <a class="btn btn-success btn-sm"
+                                       href="{{ route('admin.peserta.absen.export.excel', $participant->id) }}">
+                                        <i class="fas fa-file-excel me-1"></i> Export Excel
+                                    </a>
+                                    <a class="btn btn-danger btn-sm"
+                                       href="{{ route('admin.peserta.absen.export.pdf', $participant->id) }}">
+                                        <i class="fas fa-file-pdf me-1"></i> Export PDF
+                                    </a>
+                                </div>
+                            </div>
+
+                            @if($participant->attendances->isEmpty())
+                                <div class="text-muted">Belum ada riwayat absen.</div>
+                            @else
+                                <div class="table-responsive">
+                                    <table class="table table-striped align-middle">
+                                        <thead class="table-light">
+                                            <tr>
+                                                <th style="width:120px;">Tanggal</th>
+                                                <th style="width:110px;">Status</th>
+                                                <th style="width:100px;">Check-in</th>
+                                                <th style="width:100px;">Check-out</th>
+                                                <th>IP Masuk</th>
+                                                <th>IP Pulang</th>
+                                                <th>Keterangan</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach($participant->attendances->sortByDesc('date') as $ab)
+                                                @php
+                                                    $badge = $ab->status === 'Hadir' ? 'bg-success'
+                                                            : ($ab->status === 'Izin' ? 'bg-warning'
+                                                            : ($ab->status === 'Sakit' ? 'bg-info' : 'bg-secondary'));
+                                                @endphp
+                                                <tr>
+                                                    <td>{{ \Carbon\Carbon::parse($ab->date)->translatedFormat('d M Y') }}</td>
+                                                    <td><span class="badge {{ $badge }}">{{ $ab->status }}</span></td>
+                                                    <td>{{ $ab->check_in_time ? \Carbon\Carbon::parse($ab->check_in_time)->format('H:i:s') : '-' }}</td>
+                                                    <td>{{ $ab->check_out_time ? \Carbon\Carbon::parse($ab->check_out_time)->format('H:i:s') : '-' }}</td>
+                                                    <td>{{ $ab->check_in_ip_address ?? '-' }}</td>
+                                                    <td>{{ $ab->check_out_ip_address ?? '-' }}</td>
+                                                    <td>{{ $ab->note ?? '-' }}</td>
+                                                </tr>
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+                                </div>
+                            @endif
+                        </div>
+
+                    </div> {{-- tab-content --}}
+                </div>
+            </div>
+        </div>
+
+    </div> {{-- row --}}
+</div>
+
+{{-- Minimal CSS --}}
+<style>
+    .info-item { margin-bottom: .75rem; }
+    .info-label {
+        font-size: .9rem; font-weight: 600; color: #6c757d;
+        margin-bottom: .25rem; display: block;
+    }
+    .info-value { font-size: 1rem; color: #343a40; min-height: 1.2rem; }
+    .card { border-radius: .5rem; }
+    .card-header { border-bottom: none; }
+</style>
 @endsection

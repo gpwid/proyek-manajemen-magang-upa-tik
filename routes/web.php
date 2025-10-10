@@ -123,6 +123,25 @@ Route::middleware(['auth', 'verified', 'role:admin'])
         // -- Profil Pengguna (dari Breeze) --
         Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
         Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+
+        // -- Peserta --
+        Route::get('/peserta/data', [ParticipantController::class, 'data'])->name('peserta.data');
+        Route::resource('peserta', ParticipantController::class)->names('peserta')->parameters(['peserta' => 'participant']);
+        Route::get('/peserta/{participant}/approve', [ParticipantController::class, 'approve'])->name('peserta.approve');
+        Route::get('/peserta/export/excel', [ParticipantController::class, 'exportExcel'])->name('peserta.export.excel');
+        Route::get('/peserta/export/pdf', [ParticipantController::class, 'exportPdf'])->name('peserta.export.pdf');
+
+        // === NEW: export riwayat logbook & absensi per peserta ===
+        Route::get('/peserta/{participant}/logbook/export/excel', [ParticipantController::class, 'exportLogbookExcel'])->name('peserta.logbook.export.excel');
+        Route::get('/peserta/{participant}/logbook/export/pdf',   [ParticipantController::class, 'exportLogbookPdf'])->name('peserta.logbook.export.pdf');
+        Route::get('/peserta/{participant}/absen/export/excel',   [ParticipantController::class, 'exportAttendanceExcel'])->name('peserta.absen.export.excel');
+        Route::get('/peserta/{participant}/absen/export/pdf',     [ParticipantController::class, 'exportAttendancePdf'])->name('peserta.absen.export.pdf');
+
+        // ===== Absensi Manual (Admin) =====
+        Route::get('/attendance/manual/create', [\App\Http\Controllers\Admin\ManualAttendanceController::class, 'create'])
+            ->name('attendance.manual.create');
+        Route::post('/attendance/manual', [\App\Http\Controllers\Admin\ManualAttendanceController::class, 'store'])
+            ->name('attendance.manual.store');
     });
 
 /*
@@ -250,4 +269,4 @@ Route::middleware(['auth', 'role:pembimbing'])
     });
 
 // Route autentikasi Breeze
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';
