@@ -17,6 +17,7 @@ use App\Http\Controllers\Atasan\ParticipantController as AtasanParticipantContro
 use App\Http\Controllers\Atasan\PermohonanController as AtasanPermohonanController;
 use App\Http\Controllers\Atasan\SupervisorController as AtasanSupervisorController;
 use App\Http\Controllers\Atasan\TaskController as AtasanTaskController;
+use App\Http\Controllers\ParticipantRegistrationController;
 use App\Http\Controllers\Pemagang\AttendanceController as PemagangAttendanceController;
 use App\Http\Controllers\Pemagang\DashboardController as PemagangDashboardController;
 use App\Http\Controllers\Pemagang\LogbookController;
@@ -48,6 +49,9 @@ Route::get('/', function () {
 Route::get('/dashboard', [RedirectController::class, 'dashboard'])
     ->middleware(['auth', 'verified'])
     ->name('dashboard');
+
+Route::get('/register-participant', [ParticipantRegistrationController::class, 'create'])->name('participant.register');
+Route::post('/register-participant', [ParticipantRegistrationController::class, 'store'])->name('participant.store');
 
 /*
 |--------------------------------------------------------------------------

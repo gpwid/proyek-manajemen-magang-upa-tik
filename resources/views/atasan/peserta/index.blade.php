@@ -29,7 +29,7 @@
                         <select id="tahun_aktif_filter" class="form-control">
                             <option value="">Semua tahun</option>
                             @isset($years)
-                                @foreach($years as $y)
+                                @foreach ($years as $y)
                                     <option value="{{ $y }}">{{ $y }}</option>
                                 @endforeach
                             @endisset
@@ -43,13 +43,15 @@
                             <span class="search-icon" aria-hidden="true">
                                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
                                     <circle cx="11" cy="11" r="7" stroke="#94A3B8" stroke-width="2" />
-                                    <line x1="16.65" y1="16.65" x2="21" y2="21" stroke="#94A3B8" stroke-width="2" stroke-linecap="round" />
+                                    <line x1="16.65" y1="16.65" x2="21" y2="21" stroke="#94A3B8"
+                                        stroke-width="2" stroke-linecap="round" />
                                 </svg>
                             </span>
                             <input type="text" id="searchbox" class="form-control search-control" placeholder="Cari...">
                             <button type="button" id="clearSearch" class="clear-btn" aria-label="Bersihkan">
                                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-                                    <path d="M18 6L6 18M6 6l12 12" stroke="#9CA3AF" stroke-width="2" stroke-linecap="round" />
+                                    <path d="M18 6L6 18M6 6l12 12" stroke="#9CA3AF" stroke-width="2"
+                                        stroke-linecap="round" />
                                 </svg>
                             </button>
                         </div>
@@ -67,7 +69,8 @@
                 </div>
 
                 <!-- Tabel -->
-                <table id="participants-table" class="display table table-striped table-hover align-middle" style="width:100%">
+                <table id="participants-table" class="display table table-striped table-hover align-middle"
+                    style="width:100%">
                     <thead>
                         <tr>
                             <th>No.</th>
@@ -89,61 +92,160 @@
 
 {{-- ====== STYLE ====== --}}
 <style>
-    .card .card-body { padding: 1.25rem 1.25rem 1rem; }
-    #participants-table_wrapper .row { align-items: center; }
+    .card .card-body {
+        padding: 1.25rem 1.25rem 1rem;
+    }
+
+    #participants-table_wrapper .row {
+        align-items: center;
+    }
 
     /* Searchbar */
-    .search-wrapper { position: relative; }
+    .search-wrapper {
+        position: relative;
+    }
+
     .search-icon {
-        position: absolute; left: 12px; top: 50%; transform: translateY(-50%);
-        display: inline-flex; align-items: center; justify-content: center; width: 20px; height: 20px; pointer-events: none;
+        position: absolute;
+        left: 12px;
+        top: 50%;
+        transform: translateY(-50%);
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 20px;
+        height: 20px;
+        pointer-events: none;
     }
+
     .clear-btn {
-        position: absolute; right: 10px; top: 50%; transform: translateY(-50%);
-        border: 0; background: transparent; display: none; padding: 0; line-height: 0;
+        position: absolute;
+        right: 10px;
+        top: 50%;
+        transform: translateY(-50%);
+        border: 0;
+        background: transparent;
+        display: none;
+        padding: 0;
+        line-height: 0;
     }
+
     .search-control {
-        height: 42px !important; border-radius: 12px !important; border: 1px solid #e5e7eb !important;
-        padding-left: 2.6rem !important; padding-right: 2.4rem !important; box-shadow: 0 1px 2px rgba(16,24,40,.04) !important;
+        height: 42px !important;
+        border-radius: 12px !important;
+        border: 1px solid #e5e7eb !important;
+        padding-left: 2.6rem !important;
+        padding-right: 2.4rem !important;
+        box-shadow: 0 1px 2px rgba(16, 24, 40, .04) !important;
     }
-    .search-control::placeholder { color: #9ca3af; }
-    .search-control:focus { border-color: #c7d2fe !important; box-shadow: 0 0 0 .2rem rgba(99,102,241,.2) !important; }
+
+    .search-control::placeholder {
+        color: #9ca3af;
+    }
+
+    .search-control:focus {
+        border-color: #c7d2fe !important;
+        box-shadow: 0 0 0 .2rem rgba(99, 102, 241, .2) !important;
+    }
 
     /* Select2 look */
     .select2-container .select2-selection--single {
-        height: 42px !important; border-radius: 12px !important; border: 1px solid #e5e7eb !important;
-        padding: .35rem .75rem; box-shadow: 0 1px 2px rgba(16,24,40,.04);
+        height: 42px !important;
+        border-radius: 12px !important;
+        border: 1px solid #e5e7eb !important;
+        padding: .35rem .75rem;
+        box-shadow: 0 1px 2px rgba(16, 24, 40, .04);
     }
-    .select2-container--default .select2-selection--single .select2-selection__arrow { top: 7px !important; right: 10px !important; }
+
+    .select2-container--default .select2-selection--single .select2-selection__arrow {
+        top: 7px !important;
+        right: 10px !important;
+    }
 
     /* Table polish */
-    #participants-table { border-radius: 14px; overflow: hidden; }
-    #participants-table thead th { background: #f8fafc; font-weight: 700; border-bottom: 1px solid #e9ecef; }
-    #participants-table tbody td { vertical-align: middle; }
-    #participants-table.table-hover tbody tr:hover { background: #f6f9ff; }
-    .text-nowrap { white-space: nowrap; }
+    #participants-table {
+        border-radius: 14px;
+        overflow: hidden;
+    }
+
+    #participants-table thead th {
+        background: #f8fafc;
+        font-weight: 700;
+        border-bottom: 1px solid #e9ecef;
+    }
+
+    #participants-table tbody td {
+        vertical-align: middle;
+    }
+
+    #participants-table.table-hover tbody tr:hover {
+        background: #f6f9ff;
+    }
+
+    .text-nowrap {
+        white-space: nowrap;
+    }
 
     /* Gender badges */
-    .badge-pill { border-radius: 999px; padding: .35rem .6rem; font-weight: 600; }
-    .badge-gender-l { background: #e0f2fe !important; color: #0369a1 !important; }
-    .badge-gender-p { background: #fce7f3 !important; color: #be185d !important; }
+    .badge-pill {
+        border-radius: 999px;
+        padding: .35rem .6rem;
+        font-weight: 600;
+    }
+
+    .badge-gender-l {
+        background: #e0f2fe !important;
+        color: #0369a1 !important;
+    }
+
+    .badge-gender-p {
+        background: #fce7f3 !important;
+        color: #be185d !important;
+    }
 
     /* Pagination */
-    .dataTables_info { color: #6b7280; }
-    .dataTables_paginate { text-align: right; }
-    .dataTables_paginate .paginate_button {
-        border: 1px solid #e5e7eb !important; border-radius: 9999px !important;
-        padding: .48rem .9rem !important; margin: 0 .2rem !important; background: #fff !important;
-        color: #334155 !important; font-weight: 600 !important;
+    .dataTables_info {
+        color: #6b7280;
     }
-    .dataTables_paginate .paginate_button.previous::before { content: '‹'; margin-right: .35rem; font-weight: 800; }
-    .dataTables_paginate .paginate_button.next::after { content: '›'; margin-left: .35rem; font-weight: 800; }
+
+    .dataTables_paginate {
+        text-align: right;
+    }
+
+    .dataTables_paginate .paginate_button {
+        border: 1px solid #e5e7eb !important;
+        border-radius: 9999px !important;
+        padding: .48rem .9rem !important;
+        margin: 0 .2rem !important;
+        background: #fff !important;
+        color: #334155 !important;
+        font-weight: 600 !important;
+    }
+
+    .dataTables_paginate .paginate_button.previous::before {
+        content: '‹';
+        margin-right: .35rem;
+        font-weight: 800;
+    }
+
+    .dataTables_paginate .paginate_button.next::after {
+        content: '›';
+        margin-left: .35rem;
+        font-weight: 800;
+    }
+
     .dataTables_paginate .paginate_button.current,
     .dataTables_paginate .paginate_button:hover {
-        background: #eef2ff !important; border-color: #c7d2fe !important; color: #3730a3 !important;
-        box-shadow: 0 1px 2px rgba(16,24,40,.08);
+        background: #eef2ff !important;
+        border-color: #c7d2fe !important;
+        color: #3730a3 !important;
+        box-shadow: 0 1px 2px rgba(16, 24, 40, .08);
     }
-    .dataTables_paginate .paginate_button.disabled { opacity: .55; cursor: default !important; }
+
+    .dataTables_paginate .paginate_button.disabled {
+        opacity: .55;
+        cursor: default !important;
+    }
 </style>
 
 {{-- ====== SCRIPTS ====== --}}
@@ -156,7 +258,7 @@
                 icon: 'success',
                 title: "{{ session('sukses') }}",
                 showConfirmButton: false,
-                timer: 1500
+                timer: 4000
             });
         </script>
     @endif
@@ -178,16 +280,28 @@
                         url: '{!! route('atasan.peserta.data') !!}',
                         data: d => {
                             d.jenis_kelamin = $('#jenis_kelamin_filter').val();
-                            d.tahun_aktif   = $('#tahun_aktif_filter').val();
-                            d.searchbox     = $('#searchbox').val();
+                            d.tahun_aktif = $('#tahun_aktif_filter').val();
+                            d.searchbox = $('#searchbox').val();
                         }
                     },
-                    columns: [
-                        { data: 'DT_RowIndex', name: 'DT_RowIndex', orderable: false, searchable: false },
-                        { data: 'nama', name: 'nama' },
-                        { data: 'nisnim', name: 'nisnim', className: 'text-nowrap' },
+                    columns: [{
+                            data: 'DT_RowIndex',
+                            name: 'DT_RowIndex',
+                            orderable: false,
+                            searchable: false
+                        },
                         {
-                            data: 'jenis_kelamin', name: 'jenis_kelamin',
+                            data: 'nama',
+                            name: 'nama'
+                        },
+                        {
+                            data: 'nisnim',
+                            name: 'nisnim',
+                            className: 'text-nowrap'
+                        },
+                        {
+                            data: 'jenis_kelamin',
+                            name: 'jenis_kelamin',
                             render: (data, type) => {
                                 if (type === 'display') {
                                     const isL = (data || '').toUpperCase() === 'L';
@@ -198,20 +312,43 @@
                                 return data;
                             }
                         },
-                        { data: 'jurusan', name: 'jurusan' },
-                        { data: 'kontak_peserta', name: 'kontak_peserta', className: 'text-nowrap' },
-                        { data: 'tahun_aktif', name: 'tahun_aktif', className: 'text-nowrap' },
-                        { data: 'actions', name: 'actions', orderable: false, searchable: false, className: 'text-nowrap' }
+                        {
+                            data: 'jurusan',
+                            name: 'jurusan'
+                        },
+                        {
+                            data: 'kontak_peserta',
+                            name: 'kontak_peserta',
+                            className: 'text-nowrap'
+                        },
+                        {
+                            data: 'tahun_aktif',
+                            name: 'tahun_aktif',
+                            className: 'text-nowrap'
+                        },
+                        {
+                            data: 'actions',
+                            name: 'actions',
+                            orderable: false,
+                            searchable: false,
+                            className: 'text-nowrap'
+                        }
                     ],
                     pageLength: 10,
-                    lengthMenu: [[10,25,50,-1],[10,25,50,'Semua']],
+                    lengthMenu: [
+                        [10, 25, 50, -1],
+                        [10, 25, 50, 'Semua']
+                    ],
                     dom: "<'row align-items-center mb-2'<'col-md-6'l><'col-md-6'>>" +
-                         "<'row'<'col-12'tr>>" +
-                         "<'row mt-2'<'col-md-4'i><'col-md-8'p>>",
+                        "<'row'<'col-12'tr>>" +
+                        "<'row mt-2'<'col-md-4'i><'col-md-8'p>>",
                     language: {
                         url: '//cdn.datatables.net/plug-ins/1.13.6/i18n/id.json',
                         lengthMenu: 'Tampilkan _MENU_',
-                        paginate: { previous: 'Sebelumnya', next: 'Berikutnya' }
+                        paginate: {
+                            previous: 'Sebelumnya',
+                            next: 'Berikutnya'
+                        }
                     },
                     responsive: true,
                     autoWidth: false,
@@ -219,16 +356,27 @@
                         // Select2 untuk length
                         const $len = $('.dataTables_length select');
                         if ($len.data('select2')) $len.select2('destroy');
-                        $len.select2({ minimumResultsForSearch: Infinity, width: 'style' });
+                        $len.select2({
+                            minimumResultsForSearch: Infinity,
+                            width: 'style'
+                        });
 
                         // Select2 untuk filters
                         const $jk = $('#jenis_kelamin_filter');
                         if ($jk.data('select2')) $jk.select2('destroy');
-                        $jk.select2({ placeholder: 'Pilih jenis kelamin', allowClear: true, width: '100%' });
+                        $jk.select2({
+                            placeholder: 'Pilih jenis kelamin',
+                            allowClear: true,
+                            width: '100%'
+                        });
 
                         const $ta = $('#tahun_aktif_filter');
                         if ($ta.data('select2')) $ta.select2('destroy');
-                        $ta.select2({ placeholder: 'Semua tahun', allowClear: true, width: '100%' });
+                        $ta.select2({
+                            placeholder: 'Semua tahun',
+                            allowClear: true,
+                            width: '100%'
+                        });
                     }
                 });
 
@@ -256,8 +404,8 @@
             function buildQuery() {
                 return $.param({
                     jenis_kelamin: $('#jenis_kelamin_filter').val() || '',
-                    tahun_aktif:   $('#tahun_aktif_filter').val()   || '',
-                    search:        $('#searchbox').val()            || ''
+                    tahun_aktif: $('#tahun_aktif_filter').val() || '',
+                    search: $('#searchbox').val() || ''
                 });
             }
 

@@ -27,7 +27,13 @@ class AttendanceController extends Controller
     {
         // 1. Validasi URL yang ditandatangani (dari QR Code)
         if (! $request->hasValidSignature()) {
-            return '<h1>URL Absensi Tidak Valid atau Telah Kedaluwarsa!</h1>';
+            $redirectUrl = route('dashboard');
+            $message = 'URL absensi tidak valid atau telah kedaluwarsa. Silakan coba lagi dengan memindai QR code terbaru.';
+
+            return response()->view('errors.invalid_absen', [
+                'message' => $message,
+                'redirectUrl' => $redirectUrl,
+            ], 403);
         }
 
         $clientIp = $request->ip();

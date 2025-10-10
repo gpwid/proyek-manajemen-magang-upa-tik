@@ -5,10 +5,17 @@
         <h1 class="h4 text-gray-900 mb-4">Selamat Datang Kembali!</h1>
     </div>
 
-    @if (session('status'))
-        <div class="alert alert-success mb-4">
-            {{ session('status') }}
-        </div>
+    @if (session('success'))
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        <script>
+            Swal.fire({
+                position: 'center',
+                icon: 'success',
+                title: "{{ session('success') }}",
+                showConfirmButton: false,
+                timer: 4000
+            });
+        </script>
     @endif
 
     @if ($errors->any())
@@ -52,6 +59,6 @@
         @endif
     </div>
     <div class="text-center">
-        <a class="small" href="{{ route('register') }}">Buat Akun Baru!</a>
+        <a class="small" href="{{ route('participant.register') }}">Buat Akun (Untuk pemagang)</a>
     </div>
 </x-guest-layout>
