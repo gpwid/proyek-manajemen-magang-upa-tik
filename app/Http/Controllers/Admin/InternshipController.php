@@ -133,8 +133,11 @@ class InternshipController extends Controller
             ->whereIn('internship_id', $activeInternshipIds)
             ->pluck('participant_id');
 
-        // Ambil semua peserta yang ID-nya TIDAK ADA dalam daftar yang sudah ditugaskan.
-        $participants = Participant::whereNotIn('id', $assignedParticipantIds)->orderBy('nama')->get();
+        // Ambil semua peserta yang statusnya 'approved' dan ID-nya TIDAK ADA dalam daftar yang sudah ditugaskan.
+        $participants = Participant::where('status', 'approved')
+            ->whereNotIn('id', $assignedParticipantIds)
+            ->orderBy('nama')
+            ->get();
 
         return view('admin.internship.create', compact('permohonan', 'supervisors', 'participants'));
     }
@@ -170,8 +173,23 @@ class InternshipController extends Controller
             ->where('status', 'Aktif')
             ->orderBy('tgl_surat', 'desc')
             ->get();
-        $supervisors = Supervisor::orderBy('nama')->get();
-        $participants = Participant::orderBy('nama')->get();
+
+        // Logika filter yang sama seperti di `create`, tetapi kita harus menyertakan
+        // supervisor dan peserta yang saat ini terikat pada data magang yang sedang diedit.
+        $assignedSupervisorIds = Internship::where('status_magang', 'Aktif')
+            ->where('id', '!=', $internship->id) // Abaikan data magang saat ini
+            ->whereNotNull('id_pembimbing')
+            ->pluck('id_pembimbing');
+        $supervisors = Supervisor::whereNotIn('id', $assignedSupervisorIds)->orderBy('nama')->get();
+
+        $activeInternshipIds = Internship::where('status_magang', 'Aktif')->where('id', '!=', $internship->id)->pluck('id');
+        $assignedParticipantIds = DB::table('internship_participant')
+            ->whereIn('internship_id', $activeInternshipIds)
+            ->pluck('participant_id');
+        $participants = Participant::where('status', 'approved')
+            ->whereNotIn('id', $assignedParticipantIds)
+            ->orderBy('nama')
+            ->get();
 
         return view('admin.internship.edit', compact(
             'internship',

@@ -28,10 +28,10 @@ class StoreInternshipRequest extends FormRequest
                 'integer',
                 Rule::exists('permohonan', 'id')->where(fn ($query) => $query->where('status', 'Aktif')),
             ],
-            'id_pembimbing' => 'required|integer|exists:supervisors,id',
-            'id_peserta' => 'required|array|min:1',
+            'id_pembimbing' => 'nullable|integer|exists:supervisors,id',
+            'id_peserta' => 'nullable|array|',
             'id_peserta.*' => 'integer|exists:participants,id',
-            
+
         ];
     }
 

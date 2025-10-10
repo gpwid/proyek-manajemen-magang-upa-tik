@@ -30,7 +30,7 @@ class UpdateInternshipRequest extends FormRequest
             ],
             'id_pembimbing' => 'required|integer|exists:supervisors,id',
             'status_magang' => ['required', Rule::in(['Aktif', 'Nonaktif', 'Tidak Selesai'])],
-            'id_peserta' => 'required|array|min:1',
+            'id_peserta' => 'nullable|array',
             'id_peserta.*' => 'integer|exists:participants,id',
         ];
     }

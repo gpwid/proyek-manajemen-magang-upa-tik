@@ -5,86 +5,90 @@
 @section('title', 'Data Magang')
 
 @section('content')
-<div class="container-fluid">
-    <div class="d-sm-flex align-items-center justify-content-between mb-4">
-        <h1 class="h3 mb-0 text-gray-800">Kelola Data Magang</h1>
-    </div>
+    <div class="container-fluid">
+        <div class="d-sm-flex align-items-center justify-content-between mb-4">
+            <h1 class="h3 mb-0 text-gray-800">Kelola Data Magang</h1>
+        </div>
 
-    @if ($errors->any())
-    <div class="alert alert-danger alert-dismissible fade show" role="alert">
-        <ul class="mb-0">@foreach ($errors->all() as $e)<li>{{ $e }}</li>@endforeach</ul>
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-    </div>
-    @endif
+        @if ($errors->any())
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <ul class="mb-0">
+                    @foreach ($errors->all() as $e)
+                        <li>{{ $e }}</li>
+                    @endforeach
+                </ul>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        @endif
 
-    @if (session('success'))
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script>
-        Swal.fire({
-            position: 'center',
-            icon: 'success',
-            title: "{{ session('success') }}",
-            showConfirmButton: false,
-            timer: 1500
-        });
+        @if (session('success'))
+            <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+            <script>
+                Swal.fire({
+                    position: 'center',
+                    icon: 'success',
+                    title: "{{ session('success') }}",
+                    showConfirmButton: false,
+                    timer: 4000
+                });
+            </script>
+        @endif
 
-    </script>
-    @endif
-
-    {{-- Filter --}}
-    <form id="filterForm" method="GET" action="{{ route('atasan.internship.index') }}">
-        <div class="card mb-4">
-            <div class="row align-items-end p-3">
-                <div class="col-md-4 mb-3">
-                    <label class="form-label">Status</label>
-                    <select name="status_magang" class="form-select select2-filter">
-                        <option value="">Semua status…</option>
-                        @foreach (['Aktif','Nonaktif', 'Tidak Selesai'] as $st)
-                        <option value="{{ $st }}" @selected(request('status_magang')===$st)>{{ $st }}</option>
-                        @endforeach
-                    </select>
-                </div>
-                <div class="col-md-8 mb-3">
-                    <label class="form-label">Instansi</label>
-                    <select name="id_institute" class="form-select select2-filter">
-                        <option value="">Semua instansi…</option>
-                        @foreach ($searchinstitutes as $ins)
-                        <option value="{{ $ins->id }}" @selected(request('id_institute')==$ins->
-                            id)>{{ $ins->nama_instansi }}</option>
-                        @endforeach
-                    </select>
+        {{-- Filter --}}
+        <form id="filterForm" method="GET" action="{{ route('atasan.internship.index') }}">
+            <div class="card mb-4">
+                <div class="row align-items-end p-3">
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label">Status</label>
+                        <select name="status_magang" class="form-select select2-filter">
+                            <option value="">Semua status…</option>
+                            @foreach (['Aktif', 'Nonaktif', 'Tidak Selesai'] as $st)
+                                <option value="{{ $st }}" @selected(request('status_magang') === $st)>{{ $st }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="col-md-8 mb-3">
+                        <label class="form-label">Instansi</label>
+                        <select name="id_institute" class="form-select select2-filter">
+                            <option value="">Semua instansi…</option>
+                            @foreach ($searchinstitutes as $ins)
+                                <option value="{{ $ins->id }}" @selected(request('id_institute') == $ins->id)>{{ $ins->nama_instansi }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
                 </div>
             </div>
-        </div>
-    </form>
+        </form>
 
-    <div class="card">
-        <div class="card-body">
+        <div class="card">
+            <div class="card-body">
 
-            {{-- Actions --}}
-            <div class="d-flex flex-wrap gap-2 mb-3">
-                <button id="btnExportExcel" class="btn btn-success"><i class="fas fa-file-excel"></i> Excel</button>
-                <button id="btnExportPdf" class="btn btn-danger"><i class="fas fa-file-pdf"></i> PDF</button>
+                {{-- Actions --}}
+                <div class="d-flex flex-wrap gap-2 mb-3">
+                    <button id="btnExportExcel" class="btn btn-success"><i class="fas fa-file-excel"></i> Excel</button>
+                    <button id="btnExportPdf" class="btn btn-danger"><i class="fas fa-file-pdf"></i> PDF</button>
+                </div>
+
+                <table id="internshipTable" class="display table table-striped table-hover align-middle datatable"
+                    style="width:100%">
+                    <thead>
+                        <tr>
+                            <th>No.</th>
+                            <th>No. Surat</th>
+                            <th>Instansi</th>
+                            <th>Pembimbing</th>
+                            <th>Status</th>
+                            <th>Tanggal Mulai</th>
+                            <th>Tanggal Selesai</th>
+                            <th class="text-nowrap">Aksi</th>
+                        </tr>
+                    </thead>
+                </table>
             </div>
-
-            <table id="internshipTable" class="display table table-striped table-hover align-middle datatable"
-                style="width:100%">
-                <thead>
-                    <tr>
-                        <th>No.</th>
-                        <th>No. Surat</th>
-                        <th>Instansi</th>
-                        <th>Pembimbing</th>
-                        <th>Status</th>
-                        <th>Tanggal Mulai</th>
-                        <th>Tanggal Selesai</th>
-                        <th class="text-nowrap">Aksi</th>
-                    </tr>
-                </thead>
-            </table>
         </div>
     </div>
-</div>
 @endsection
 
 {{-- ==== STYLE (bersih & konsisten) ==== --}}
@@ -222,129 +226,127 @@
         opacity: .55;
         cursor: default !important;
     }
-
 </style>
 
 @push('scripts')
-<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
-<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
-<script>
-    $(function () {
-        // ===== Helpers =====
-        function initFilterSelect2() {
-            const $filters = $('#filterForm .select2-filter');
-            $filters.each(function () {
-                const $el = $(this);
-                if ($el.data('select2')) $el.select2('destroy');
-                $el.select2({
-                    placeholder: $el.find('option:first').text() || 'Pilih…',
-                    allowClear: true,
-                    width: '100%'
+    <script>
+        $(function() {
+            // ===== Helpers =====
+            function initFilterSelect2() {
+                const $filters = $('#filterForm .select2-filter');
+                $filters.each(function() {
+                    const $el = $(this);
+                    if ($el.data('select2')) $el.select2('destroy');
+                    $el.select2({
+                        placeholder: $el.find('option:first').text() || 'Pilih…',
+                        allowClear: true,
+                        width: '100%'
+                    });
                 });
-            });
-        }
-
-        function initLengthSelect2() {
-            const $len = $('.dataTables_length select');
-            if ($len.data('select2')) $len.select2('destroy');
-            $len.select2({
-                minimumResultsForSearch: Infinity,
-                width: 'style'
-            });
-        }
-
-        function buildQueryInternship() {
-            const params = {
-                status_magang: $('select[name="status_magang"]').val() || '',
-                id_institute: $('select[name="id_institute"]').val() || ''
-            };
-            Object.keys(params).forEach(k => {
-                if (!params[k]) delete params[k];
-            });
-            return new URLSearchParams(params).toString();
-        }
-
-        // ===== DataTable =====
-        const internshipTable = $('#internshipTable').DataTable({
-            responsive: true,
-            autoWidth: false,
-            processing: true,
-            serverSide: true,
-            ajax: {
-                url: '{{ route("atasan.internship.data") }}',
-                data: d => {
-                    d.status_magang = $('select[name="status_magang"]').val();
-                    d.id_institute = $('select[name="id_institute"]').val();
-                }
-            },
-            columns: [{ // No.
-                    data: null,
-                    name: 'rownum',
-                    orderable: false,
-                    searchable: false,
-                    render: (data, type, row, meta) => meta.row + meta.settings._iDisplayStart + 1
-                },
-                {
-                    data: 'no_surat',
-                    name: 'no_surat'
-                },
-                {
-                    data: 'instansi',
-                    name: 'instansi'
-                },
-                {
-                    data: 'pembimbing',
-                    name: 'pembimbing'
-                },
-                {
-                    data: 'status_magang',
-                    name: 'status_magang'
-                },
-                {
-                    data: 'tgl_mulai',
-                    name: 'tgl_mulai'
-                },
-                {
-                    data: 'tgl_selesai',
-                    name: 'tgl_selesai'
-                },
-                {
-                    data: 'aksi',
-                    name: 'aksi',
-                    orderable: false,
-                    searchable: false
-                }
-            ],
-            order: [
-                [1, 'desc']
-            ], // urut berdasarkan No. Surat
-            language: {
-                url: 'https://cdn.datatables.net/plug-ins/1.13.8/i18n/id.json'
-            },
-            drawCallback: initLengthSelect2,
-            initComplete: function () {
-                initFilterSelect2();
-                initLengthSelect2();
             }
-        });
 
-        // ===== Filter -> reload =====
-        $('#filterForm').find('select').off('change').on('change', () => internshipTable.ajax.reload());
+            function initLengthSelect2() {
+                const $len = $('.dataTables_length select');
+                if ($len.data('select2')) $len.select2('destroy');
+                $len.select2({
+                    minimumResultsForSearch: Infinity,
+                    width: 'style'
+                });
+            }
 
-        // ===== Export =====
-        $('#btnExportExcel').off('click').on('click', function (e) {
-            e.preventDefault();
-            const qs = buildQueryInternship();
-            window.location.href = '{{ route("atasan.internship.export.excel") }}' + (qs ? '?' + qs :
-            '');
-        });
-        $('#btnExportPdf').off('click').on('click', function (e) {
-            e.preventDefault();
-            const qs = buildQueryInternship();
-            window.location.href = '{{ route("atasan.internship.export.pdf") }}' + (qs ? '?' + qs : '');
-        });
-    });
+            function buildQueryInternship() {
+                const params = {
+                    status_magang: $('select[name="status_magang"]').val() || '',
+                    id_institute: $('select[name="id_institute"]').val() || ''
+                };
+                Object.keys(params).forEach(k => {
+                    if (!params[k]) delete params[k];
+                });
+                return new URLSearchParams(params).toString();
+            }
 
-</script>
+            // ===== DataTable =====
+            const internshipTable = $('#internshipTable').DataTable({
+                responsive: true,
+                autoWidth: false,
+                processing: true,
+                serverSide: true,
+                ajax: {
+                    url: '{{ route('atasan.internship.data') }}',
+                    data: d => {
+                        d.status_magang = $('select[name="status_magang"]').val();
+                        d.id_institute = $('select[name="id_institute"]').val();
+                    }
+                },
+                columns: [{ // No.
+                        data: null,
+                        name: 'rownum',
+                        orderable: false,
+                        searchable: false,
+                        render: (data, type, row, meta) => meta.row + meta.settings._iDisplayStart + 1
+                    },
+                    {
+                        data: 'no_surat',
+                        name: 'no_surat'
+                    },
+                    {
+                        data: 'instansi',
+                        name: 'instansi'
+                    },
+                    {
+                        data: 'pembimbing',
+                        name: 'pembimbing'
+                    },
+                    {
+                        data: 'status_magang',
+                        name: 'status_magang'
+                    },
+                    {
+                        data: 'tgl_mulai',
+                        name: 'tgl_mulai'
+                    },
+                    {
+                        data: 'tgl_selesai',
+                        name: 'tgl_selesai'
+                    },
+                    {
+                        data: 'aksi',
+                        name: 'aksi',
+                        orderable: false,
+                        searchable: false
+                    }
+                ],
+                order: [
+                    [1, 'desc']
+                ], // urut berdasarkan No. Surat
+                language: {
+                    url: 'https://cdn.datatables.net/plug-ins/1.13.8/i18n/id.json'
+                },
+                drawCallback: initLengthSelect2,
+                initComplete: function() {
+                    initFilterSelect2();
+                    initLengthSelect2();
+                }
+            });
+
+            // ===== Filter -> reload =====
+            $('#filterForm').find('select').off('change').on('change', () => internshipTable.ajax.reload());
+
+            // ===== Export =====
+            $('#btnExportExcel').off('click').on('click', function(e) {
+                e.preventDefault();
+                const qs = buildQueryInternship();
+                window.location.href = '{{ route('atasan.internship.export.excel') }}' + (qs ? '?' + qs :
+                    '');
+            });
+            $('#btnExportPdf').off('click').on('click', function(e) {
+                e.preventDefault();
+                const qs = buildQueryInternship();
+                window.location.href = '{{ route('atasan.internship.export.pdf') }}' + (qs ? '?' + qs : '');
+            });
+        });
+    </script>
 @endpush
