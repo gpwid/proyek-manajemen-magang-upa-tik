@@ -1,12 +1,13 @@
 <?php
+
 namespace App\Exports;
 
 use App\Models\Supervisor;
 use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithMapping;
-use Illuminate\Support\Collection;
 
 class SupervisorsExport implements FromCollection, WithHeadings, WithMapping
 {
@@ -16,10 +17,11 @@ class SupervisorsExport implements FromCollection, WithHeadings, WithMapping
     {
         $q = Supervisor::query();
 
-        if ($search = $this->request->get('search')) {
+        if ($search = $this->request->get('searchbox')) {
             $q->where(function($x) use ($search) {
                 $x->where('nama','like',"%{$search}%")
-                  ->orWhere('nip','like',"%{$search}%");
+                  ->orWhere('nip','like',"%{$search}%")
+                  ->orWhere('email','like',"%{$search}%");
             });
         }
 
@@ -28,7 +30,7 @@ class SupervisorsExport implements FromCollection, WithHeadings, WithMapping
 
     public function headings(): array
     {
-        return ['No', 'Nama', 'NIP'];
+        return ['No', 'Nama', 'Email', 'NIP'];
     }
 
     public function map($p): array
@@ -37,6 +39,7 @@ class SupervisorsExport implements FromCollection, WithHeadings, WithMapping
         return [
             $no,
             $p->nama,
+            $p->email,
             $p->nip,
         ];
     }

@@ -11,19 +11,19 @@ use App\Models\Internship;
 use App\Models\Participant;
 use App\Models\Permohonan;
 use App\Models\Supervisor;
+use App\Models\User;
 use App\Services\InternshipService;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
 use Maatwebsite\Excel\Facades\Excel;
 use Yajra\DataTables\Facades\DataTables;
 
 class InternshipController extends Controller
 {
-    //
-
     public function index(Request $request): View
     {
         $totalAktif = Internship::where('status_magang', 'Aktif')->count();
@@ -62,7 +62,7 @@ class InternshipController extends Controller
         if ($request->filled('status_magang')) {
             $query->where('status_magang', $request->status_magang);
         }
-        if ($request->filled('id_institute')) { // ← filter Instansi
+        if ($request->filled('id_institute')) {
             $query->whereHas(
                 'permohonan',
                 fn ($q) => $q->where('id_institute', $request->id_institute)
@@ -98,14 +98,8 @@ class InternshipController extends Controller
                     $query->where(function ($q) use ($keyword) {
                         $q->where('id', 'like', "%{$keyword}%")
                             ->orWhere('status_magang', 'like', "%{$keyword}%")
-                            // Mencari di dalam relasi participants
-                            ->orWhereHas('participants', function ($subQuery) use ($keyword) {
-                                $subQuery->where('nama', 'like', "%{$keyword}%");
-                            })
-                            // Mencari di dalam relasi supervisor
-                            ->orWhereHas('supervisor', function ($subQuery) use ($keyword) {
-                                $subQuery->where('nama', 'like', "%{$keyword}%");
-                            });
+                            ->orWhereHas('participants', fn ($sub) => $sub->where('nama', 'like', "%{$keyword}%"))
+                            ->orWhereHas('supervisor', fn ($sub) => $sub->where('nama', 'like', "%{$keyword}%"));
                     });
                 }
             })
@@ -115,17 +109,21 @@ class InternshipController extends Controller
 
     public function create()
     {
+        // Permohonan aktif
         $permohonan = Permohonan::with('institute')
             ->where('status', 'Aktif')
             ->orderBy('tgl_surat', 'desc')
             ->get();
+
+        // Supervisor yang belum pegang magang aktif (opsional, sesuai logic awalmu)
         $assignedSupervisorIds = Internship::where('status_magang', 'Aktif')
             ->whereNotNull('id_pembimbing')
             ->pluck('id_pembimbing')
             ->unique();
 
-        // Ambil semua supervisor yang ID-nya TIDAK ADA dalam daftar yang sudah ditugaskan.
-        $supervisors = Supervisor::whereNotIn('id', $assignedSupervisorIds)->orderBy('nama')->get();
+        $supervisors = Supervisor::whereNotIn('id', $assignedSupervisorIds)
+            ->orderBy('nama')
+            ->get();
 
         // Dapatkan ID semua peserta yang sudah terdaftar di magang yang sedang 'Aktif'.
         $activeInternshipIds = Internship::where('status_magang', 'Aktif')->pluck('id');
@@ -133,26 +131,40 @@ class InternshipController extends Controller
             ->whereIn('internship_id', $activeInternshipIds)
             ->pluck('participant_id');
 
-        // Ambil semua peserta yang ID-nya TIDAK ADA dalam daftar yang sudah ditugaskan.
-        $participants = Participant::whereNotIn('id', $assignedParticipantIds)->orderBy('nama')->get();
+        // Ambil semua peserta yang statusnya 'approved' dan ID-nya TIDAK ADA dalam daftar yang sudah ditugaskan.
+        $participants = Participant::where('status', 'approved')
+            ->whereNotIn('id', $assignedParticipantIds)
+            ->orderBy('nama')
+            ->get();
 
         return view('admin.internship.create', compact('permohonan', 'supervisors', 'participants'));
     }
 
     public function store(StoreInternshipRequest $request, InternshipService $service): RedirectResponse
     {
+        // Pastikan semua participant_id yang dipilih termasuk yang diizinkan
+        $requestedIds = collect($request->input('participant_ids', []))->filter()->map(fn ($v) => (int) $v)->values();
+        if ($requestedIds->isNotEmpty()) {
+            $allowed = $this->allowedParticipantIdsForNewInternship();
+            $diff = $requestedIds->diff($allowed);
+            if ($diff->isNotEmpty()) {
+                throw ValidationException::withMessages([
+                    'participant_ids' => ['Terdapat peserta yang tidak memenuhi syarat (belum disetujui / akun belum aktif / sudah terdaftar magang aktif).'],
+                ]);
+            }
+        }
+
         try {
             $service->createInternship($request->validated());
 
             return redirect()->route('admin.internship.index')
                 ->with('success', 'Data magang berhasil ditambahkan.');
         } catch (\Exception $e) {
-            // Jika terjadi error, transaction akan di-rollback otomatis
             return back()->with('error', 'Terjadi kesalahan: '.$e->getMessage())->withInput();
         }
     }
 
-    public function show(Internship $internship): \Illuminate\View\View
+    public function show(Internship $internship): View
     {
         $internship->load([
             'permohonan:id,id_institute,no_surat,tgl_mulai,tgl_selesai,jenis_magang',
@@ -166,12 +178,28 @@ class InternshipController extends Controller
 
     public function edit(Internship $internship)
     {
+        // Permohonan aktif
         $permohonan = Permohonan::with('institute')
             ->where('status', 'Aktif')
             ->orderBy('tgl_surat', 'desc')
             ->get();
-        $supervisors = Supervisor::orderBy('nama')->get();
-        $participants = Participant::orderBy('nama')->get();
+
+        // Logika filter yang sama seperti di `create`, tetapi kita harus menyertakan
+        // supervisor dan peserta yang saat ini terikat pada data magang yang sedang diedit.
+        $assignedSupervisorIds = Internship::where('status_magang', 'Aktif')
+            ->where('id', '!=', $internship->id) // Abaikan data magang saat ini
+            ->whereNotNull('id_pembimbing')
+            ->pluck('id_pembimbing');
+        $supervisors = Supervisor::whereNotIn('id', $assignedSupervisorIds)->orderBy('nama')->get();
+
+        $activeInternshipIds = Internship::where('status_magang', 'Aktif')->where('id', '!=', $internship->id)->pluck('id');
+        $assignedParticipantIds = DB::table('internship_participant')
+            ->whereIn('internship_id', $activeInternshipIds)
+            ->pluck('participant_id');
+        $participants = Participant::where('status', 'approved')
+            ->whereNotIn('id', $assignedParticipantIds)
+            ->orderBy('nama')
+            ->get();
 
         return view('admin.internship.edit', compact(
             'internship',
@@ -183,6 +211,20 @@ class InternshipController extends Controller
 
     public function update(UpdateInternshipRequest $request, Internship $internship, InternshipService $service): RedirectResponse
     {
+        // Validasi tambahan untuk peserta BARU yang hendak ditambahkan saat edit:
+        $requestedIds = collect($request->input('participant_ids', []))->filter()->map(fn ($v) => (int) $v)->values();
+        if ($requestedIds->isNotEmpty()) {
+            $allowedForNew = $this->allowedParticipantIdsForNewInternship();
+            $currentIds = $internship->participants()->pluck('participants.id');
+            // peserta yang bukan bawaan internship & tidak di allowed → tolak
+            $diff = $requestedIds->diff($allowedForNew->merge($currentIds));
+            if ($diff->isNotEmpty()) {
+                throw ValidationException::withMessages([
+                    'participant_ids' => ['Terdapat peserta yang tidak memenuhi syarat untuk ditambahkan pada magang ini.'],
+                ]);
+            }
+        }
+
         try {
             $service->updateInternship($internship, $request->validated());
 
@@ -230,18 +272,40 @@ class InternshipController extends Controller
 
     public function updateStatus(Request $request, Internship $internship): RedirectResponse
     {
-        // 1. Validasi input yang masuk
         $validated = $request->validate([
             'status' => 'required|in:Nonaktif,Tidak Selesai',
         ]);
 
-        // 2. Update status magang
         $internship->update([
             'status_magang' => $validated['status'],
         ]);
 
-        // 3. Kembalikan dengan pesan sukses
         return redirect()->route('admin.internship.index')
             ->with('success', "Status magang berhasil diubah menjadi '{$validated['status']}'.");
+    }
+
+    /**
+     * Dapatkan daftar ID peserta yang memenuhi syarat untuk dipilih
+     * pada form tambah magang:
+     *  - participants.status = 'approved'
+     *  - users.status = 'active' (akun aktif)
+     *  - belum terdaftar pada magang 'Aktif'
+     */
+    private function allowedParticipantIdsForNewInternship()
+    {
+        // ID internship aktif
+        $activeInternshipIds = Internship::where('status_magang', 'Aktif')->pluck('id');
+
+        // Peserta yang sudah menempel ke internship aktif
+        $assignedParticipantIds = DB::table('internship_participant')
+            ->whereIn('internship_id', $activeInternshipIds)
+            ->pluck('participant_id');
+
+        // Ambil peserta approved, user aktif, dan belum assigned di magang aktif
+        return Participant::query()
+            ->where('status', 'approved')
+            ->whereHas('user', fn ($q) => $q->where('status', 'active'))
+            ->whereNotIn('id', $assignedParticipantIds)
+            ->pluck('id');
     }
 }
