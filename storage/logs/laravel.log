@@ -3793,15 +3793,15 @@ Stack trace:
 [2025-10-03 08:22:18] local.ERROR: syntax error, unexpected token "<<", expecting end of file {"exception":"[object] (Symfony\\Component\\ErrorHandler\\Error\\FatalError(code: 0): syntax error, unexpected token \"<<\", expecting end of file at C:\\laragon\\www\\magang\\app\\Models\\Participant.php:6)
 [stacktrace]
 #0 {main}
-"} 
+"}
 [2025-10-03 08:27:40] local.ERROR: Cannot use App\Models\User as User because the name is already in use {"exception":"[object] (Symfony\\Component\\ErrorHandler\\Error\\FatalError(code: 0): Cannot use App\\Models\\User as User because the name is already in use at C:\\laragon\\www\\magang\\app\\Http\\Controllers\\Admin\\SupervisorController.php:23)
 [stacktrace]
 #0 {main}
-"} 
+"}
 [2025-10-03 08:27:49] local.ERROR: Cannot use App\Models\User as User because the name is already in use {"exception":"[object] (Symfony\\Component\\ErrorHandler\\Error\\FatalError(code: 0): Cannot use App\\Models\\User as User because the name is already in use at C:\\laragon\\www\\magang\\app\\Http\\Controllers\\Admin\\SupervisorController.php:23)
 [stacktrace]
 #0 {main}
-"} 
+"}
 [2025-10-03 08:47:14] local.ERROR: Call to undefined method App\Http\Controllers\Admin\SupervisorController::show() {"userId":1,"exception":"[object] (Error(code: 0): Call to undefined method App\\Http\\Controllers\\Admin\\SupervisorController::show() at C:\\laragon\\www\\magang\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\ControllerDispatcher.php:47)
 [stacktrace]
 #0 C:\\laragon\\www\\magang\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Route.php(266): Illuminate\\Routing\\ControllerDispatcher->dispatch(Object(Illuminate\\Routing\\Route), Object(App\\Http\\Controllers\\Admin\\SupervisorController), 'show')
@@ -3856,7 +3856,7 @@ Stack trace:
 #49 C:\\laragon\\www\\magang\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(1220): Illuminate\\Foundation\\Http\\Kernel->handle(Object(Illuminate\\Http\\Request))
 #50 C:\\laragon\\www\\magang\\public\\index.php(17): Illuminate\\Foundation\\Application->handleRequest(Object(Illuminate\\Http\\Request))
 #51 {main}
-"} 
+"}
 [2025-10-03 08:47:29] local.ERROR: Call to undefined method App\Http\Controllers\Admin\SupervisorController::show() {"userId":1,"exception":"[object] (Error(code: 0): Call to undefined method App\\Http\\Controllers\\Admin\\SupervisorController::show() at C:\\laragon\\www\\magang\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\ControllerDispatcher.php:47)
 [stacktrace]
 #0 C:\\laragon\\www\\magang\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Route.php(266): Illuminate\\Routing\\ControllerDispatcher->dispatch(Object(Illuminate\\Routing\\Route), Object(App\\Http\\Controllers\\Admin\\SupervisorController), 'show')
@@ -3911,7 +3911,7 @@ Stack trace:
 #49 C:\\laragon\\www\\magang\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(1220): Illuminate\\Foundation\\Http\\Kernel->handle(Object(Illuminate\\Http\\Request))
 #50 C:\\laragon\\www\\magang\\public\\index.php(17): Illuminate\\Foundation\\Application->handleRequest(Object(Illuminate\\Http\\Request))
 #51 {main}
-"} 
+"}
 [2025-10-07 04:39:25] local.ERROR: Route [profile.update] not defined. {"view":{"view":"C:\\wamp64\\www\\proyek-manajemen-magang-upa-tik\\resources\\views\\profile\\partials\\update-profile-information-form.blade.php","data":{"errors":"<pre class=sf-dump id=sf-dump-1879732036 data-indent-pad=\"  \"><span class=sf-dump-note>Illuminate\\Support\\ViewErrorBag</span> {<a class=sf-dump-ref>#1233</a><samp data-depth=1 class=sf-dump-expanded>
   #<span class=sf-dump-protected title=\"Protected property\">bags</span>: []
 </samp>}
@@ -4149,7 +4149,7 @@ Stack trace:
 #68 C:\\wamp64\\www\\proyek-manajemen-magang-upa-tik\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(1220): Illuminate\\Foundation\\Http\\Kernel->handle(Object(Illuminate\\Http\\Request))
 #69 C:\\wamp64\\www\\proyek-manajemen-magang-upa-tik\\public\\index.php(17): Illuminate\\Foundation\\Application->handleRequest(Object(Illuminate\\Http\\Request))
 #70 {main}
-"} 
+"}
 [2025-10-07 04:52:52] local.ERROR: Route [profile.edit] not defined. {"view":{"view":"C:\\wamp64\\www\\proyek-manajemen-magang-upa-tik\\resources\\views\\admin\\layoutsadmin\\navbar.blade.php","data":{"errors":"<pre class=sf-dump id=sf-dump-314953769 data-indent-pad=\"  \"><span class=sf-dump-note>Illuminate\\Support\\ViewErrorBag</span> {<a class=sf-dump-ref>#1182</a><samp data-depth=1 class=sf-dump-expanded>
   #<span class=sf-dump-protected title=\"Protected property\">bags</span>: []
 </samp>}
@@ -4453,7 +4453,7 @@ Stack trace:
 #76 C:\\wamp64\\www\\proyek-manajemen-magang-upa-tik\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(1220): Illuminate\\Foundation\\Http\\Kernel->handle(Object(Illuminate\\Http\\Request))
 #77 C:\\wamp64\\www\\proyek-manajemen-magang-upa-tik\\public\\index.php(17): Illuminate\\Foundation\\Application->handleRequest(Object(Illuminate\\Http\\Request))
 #78 {main}
-"} 
+"}
 [2025-10-07 06:45:24] local.ERROR: SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry 'MANDIRI/UNILAK/XII/2025' for key 'permohonan.permohonan_no_surat_unique' (Connection: mysql, SQL: insert into `permohonan` (`no_surat`, `tgl_surat`, `id_institute`, `tgl_mulai`, `tgl_selesai`, `pembimbing_sekolah`, `kontak_pembimbing`, `jenis_magang`, `file_permohonan`, `catatan`, `status`, `tgl_suratmasuk`, `file_permohonan_nama_asli`, `file_permohonan_size`, `file_permohonan_mime`, `file_suratbalasan`, `file_suratbalasan_nama_asli`, `file_suratbalasan_size`, `file_suratbalasan_mime`, `updated_at`, `created_at`) values (MANDIRI/UNILAK/XII/2025, 2025-10-10 00:00:00, 4, 2025-10-30 00:00:00, 2025-11-30 00:00:00, Zhidan, 081365146162, Mandiri, permohonan/zEsDmQ1kSur97FKDbIA1XPoRUacxC7sbzPj128qA.pdf, ?, Proses, 2025-10-07 06:45:24, Linear transformations and polynomials.pdf, 236893, application/pdf, ?, ?, ?, ?, 2025-10-07 06:45:24, 2025-10-07 06:45:24)) {"userId":17,"exception":"[object] (Illuminate\\Database\\UniqueConstraintViolationException(code: 23000): SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry 'MANDIRI/UNILAK/XII/2025' for key 'permohonan.permohonan_no_surat_unique' (Connection: mysql, SQL: insert into `permohonan` (`no_surat`, `tgl_surat`, `id_institute`, `tgl_mulai`, `tgl_selesai`, `pembimbing_sekolah`, `kontak_pembimbing`, `jenis_magang`, `file_permohonan`, `catatan`, `status`, `tgl_suratmasuk`, `file_permohonan_nama_asli`, `file_permohonan_size`, `file_permohonan_mime`, `file_suratbalasan`, `file_suratbalasan_nama_asli`, `file_suratbalasan_size`, `file_suratbalasan_mime`, `updated_at`, `created_at`) values (MANDIRI/UNILAK/XII/2025, 2025-10-10 00:00:00, 4, 2025-10-30 00:00:00, 2025-11-30 00:00:00, Zhidan, 081365146162, Mandiri, permohonan/zEsDmQ1kSur97FKDbIA1XPoRUacxC7sbzPj128qA.pdf, ?, Proses, 2025-10-07 06:45:24, Linear transformations and polynomials.pdf, 236893, application/pdf, ?, ?, ?, ?, 2025-10-07 06:45:24, 2025-10-07 06:45:24)) at C:\\wamp64\\www\\proyek-manajemen-magang-upa-tik\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Connection.php:820)
 [stacktrace]
 #0 C:\\wamp64\\www\\proyek-manajemen-magang-upa-tik\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Connection.php(779): Illuminate\\Database\\Connection->runQueryCallback('insert into `pe...', Array, Object(Closure))
@@ -4599,7 +4599,7 @@ Stack trace:
 #68 C:\\wamp64\\www\\proyek-manajemen-magang-upa-tik\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(1220): Illuminate\\Foundation\\Http\\Kernel->handle(Object(Illuminate\\Http\\Request))
 #69 C:\\wamp64\\www\\proyek-manajemen-magang-upa-tik\\public\\index.php(17): Illuminate\\Foundation\\Application->handleRequest(Object(Illuminate\\Http\\Request))
 #70 {main}
-"} 
+"}
 [2025-10-07 08:08:31] local.ERROR: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'institute_id' in 'field list' (Connection: mysql, SQL: insert into `participants` (`permohonan_id`, `nama`, `nik`, `nisnim`, `jenis_kelamin`, `tahun_aktif`, `keterangan`, `institute_id`, `updated_at`, `created_at`) values (1, Zhidan Iannov Saaba, 1471110406060001, 2407113145, L, 2025, ?, 1, 2025-10-07 08:08:31, 2025-10-07 08:08:31)) {"userId":17,"exception":"[object] (Illuminate\\Database\\QueryException(code: 42S22): SQLSTATE[42S22]: Column not found: 1054 Unknown column 'institute_id' in 'field list' (Connection: mysql, SQL: insert into `participants` (`permohonan_id`, `nama`, `nik`, `nisnim`, `jenis_kelamin`, `tahun_aktif`, `keterangan`, `institute_id`, `updated_at`, `created_at`) values (1, Zhidan Iannov Saaba, 1471110406060001, 2407113145, L, 2025, ?, 1, 2025-10-07 08:08:31, 2025-10-07 08:08:31)) at C:\\wamp64\\www\\proyek-manajemen-magang-upa-tik\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Connection.php:825)
 [stacktrace]
 #0 C:\\wamp64\\www\\proyek-manajemen-magang-upa-tik\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Connection.php(779): Illuminate\\Database\\Connection->runQueryCallback('insert into `pa...', Array, Object(Closure))
@@ -4743,7 +4743,7 @@ Stack trace:
 #67 C:\\wamp64\\www\\proyek-manajemen-magang-upa-tik\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(1220): Illuminate\\Foundation\\Http\\Kernel->handle(Object(Illuminate\\Http\\Request))
 #68 C:\\wamp64\\www\\proyek-manajemen-magang-upa-tik\\public\\index.php(17): Illuminate\\Foundation\\Application->handleRequest(Object(Illuminate\\Http\\Request))
 #69 {main}
-"} 
+"}
 [2025-10-07 08:10:12] production.ERROR: No application encryption key has been specified. {"exception":"[object] (Illuminate\\Encryption\\MissingAppKeyException(code: 0): No application encryption key has been specified. at C:\\wamp64\\www\\proyek-manajemen-magang-upa-tik\\vendor\\laravel\\framework\\src\\Illuminate\\Encryption\\EncryptionServiceProvider.php:83)
 [stacktrace]
 #0 C:\\wamp64\\www\\proyek-manajemen-magang-upa-tik\\vendor\\laravel\\framework\\src\\Illuminate\\Support\\helpers.php(399): Illuminate\\Encryption\\EncryptionServiceProvider->{closure:Illuminate\\Encryption\\EncryptionServiceProvider::key():81}(NULL)
@@ -4792,7 +4792,7 @@ Stack trace:
 #43 C:\\wamp64\\www\\proyek-manajemen-magang-upa-tik\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(1220): Illuminate\\Foundation\\Http\\Kernel->handle(Object(Illuminate\\Http\\Request))
 #44 C:\\wamp64\\www\\proyek-manajemen-magang-upa-tik\\public\\index.php(17): Illuminate\\Foundation\\Application->handleRequest(Object(Illuminate\\Http\\Request))
 #45 {main}
-"} 
+"}
 [2025-10-07 08:10:12] production.ERROR: No application encryption key has been specified. {"exception":"[object] (Illuminate\\Encryption\\MissingAppKeyException(code: 0): No application encryption key has been specified. at C:\\wamp64\\www\\proyek-manajemen-magang-upa-tik\\vendor\\laravel\\framework\\src\\Illuminate\\Encryption\\EncryptionServiceProvider.php:83)
 [stacktrace]
 #0 C:\\wamp64\\www\\proyek-manajemen-magang-upa-tik\\vendor\\laravel\\framework\\src\\Illuminate\\Support\\helpers.php(399): Illuminate\\Encryption\\EncryptionServiceProvider->{closure:Illuminate\\Encryption\\EncryptionServiceProvider::key():81}(NULL)
@@ -4816,7 +4816,7 @@ Stack trace:
 #18 C:\\wamp64\\www\\proyek-manajemen-magang-upa-tik\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(1222): Illuminate\\Foundation\\Http\\Kernel->terminate(Object(Illuminate\\Http\\Request), Object(Illuminate\\Http\\JsonResponse))
 #19 C:\\wamp64\\www\\proyek-manajemen-magang-upa-tik\\public\\index.php(17): Illuminate\\Foundation\\Application->handleRequest(Object(Illuminate\\Http\\Request))
 #20 {main}
-"} 
+"}
 <<<<<<< HEAD
 [2025-10-09 04:07:13] local.ERROR: Undefined variable $data {"view":{"view":"C:\\wamp64\\www\\proyek-manajemen-magang-upa-tik\\resources\\views\\auth\\register-participant.blade.php","data":{"errors":"<pre class=sf-dump id=sf-dump-1984588574 data-indent-pad=\"  \"><span class=sf-dump-note>Illuminate\\Support\\ViewErrorBag</span> {<a class=sf-dump-ref>#1186</a><samp data-depth=1 class=sf-dump-expanded>
   #<span class=sf-dump-protected title=\"Protected property\">bags</span>: []
@@ -5275,7 +5275,7 @@ Stack trace:
 #54 C:\\wamp64\\www\\proyek-manajemen-magang-upa-tik\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(1220): Illuminate\\Foundation\\Http\\Kernel->handle(Object(Illuminate\\Http\\Request))
 #55 C:\\wamp64\\www\\proyek-manajemen-magang-upa-tik\\public\\index.php(17): Illuminate\\Foundation\\Application->handleRequest(Object(Illuminate\\Http\\Request))
 #56 {main}
-"} 
+"}
 [2025-10-09 04:22:47] local.ERROR: Undefined variable $data {"view":{"view":"C:\\wamp64\\www\\proyek-manajemen-magang-upa-tik\\resources\\views\\auth\\register-participant.blade.php","data":{"errors":"<pre class=sf-dump id=sf-dump-1356094920 data-indent-pad=\"  \"><span class=sf-dump-note>Illuminate\\Support\\ViewErrorBag</span> {<a class=sf-dump-ref>#1186</a><samp data-depth=1 class=sf-dump-expanded>
   #<span class=sf-dump-protected title=\"Protected property\">bags</span>: []
 </samp>}
@@ -5733,7 +5733,7 @@ Stack trace:
 #54 C:\\wamp64\\www\\proyek-manajemen-magang-upa-tik\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(1220): Illuminate\\Foundation\\Http\\Kernel->handle(Object(Illuminate\\Http\\Request))
 #55 C:\\wamp64\\www\\proyek-manajemen-magang-upa-tik\\public\\index.php(17): Illuminate\\Foundation\\Application->handleRequest(Object(Illuminate\\Http\\Request))
 #56 {main}
-"} 
+"}
 [2025-10-09 04:33:29] local.ERROR: Route [register-participant] not defined. {"view":{"view":"C:\\wamp64\\www\\proyek-manajemen-magang-upa-tik\\resources\\views\\auth\\login.blade.php","data":{"errors":"<pre class=sf-dump id=sf-dump-937795927 data-indent-pad=\"  \"><span class=sf-dump-note>Illuminate\\Support\\ViewErrorBag</span> {<a class=sf-dump-ref>#1184</a><samp data-depth=1 class=sf-dump-expanded>
   #<span class=sf-dump-protected title=\"Protected property\">bags</span>: []
 </samp>}
@@ -5857,7 +5857,7 @@ Stack trace:
 #54 C:\\wamp64\\www\\proyek-manajemen-magang-upa-tik\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(1220): Illuminate\\Foundation\\Http\\Kernel->handle(Object(Illuminate\\Http\\Request))
 #55 C:\\wamp64\\www\\proyek-manajemen-magang-upa-tik\\public\\index.php(17): Illuminate\\Foundation\\Application->handleRequest(Object(Illuminate\\Http\\Request))
 #56 {main}
-"} 
+"}
 [2025-10-10 06:23:44] local.ERROR: syntax error, unexpected end of file, expecting "elseif" or "else" or "endif" {"view":{"view":"C:\\wamp64\\www\\proyek-manajemen-magang-upa-tik\\resources\\views\\admin\\pembimbing\\index.blade.php","data":{"errors":"<pre class=sf-dump id=sf-dump-216844802 data-indent-pad=\"  \"><span class=sf-dump-note>Illuminate\\Support\\ViewErrorBag</span> {<a class=sf-dump-ref>#1207</a><samp data-depth=1 class=sf-dump-expanded>
   #<span class=sf-dump-protected title=\"Protected property\">bags</span>: []
 </samp>}
@@ -5987,7 +5987,7 @@ Stack trace:
 #57 C:\\wamp64\\www\\proyek-manajemen-magang-upa-tik\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(1220): Illuminate\\Foundation\\Http\\Kernel->handle(Object(Illuminate\\Http\\Request))
 #58 C:\\wamp64\\www\\proyek-manajemen-magang-upa-tik\\public\\index.php(17): Illuminate\\Foundation\\Application->handleRequest(Object(Illuminate\\Http\\Request))
 #59 {main}
-"} 
+"}
 [2025-10-10 06:47:07] local.ERROR: SQLSTATE[HY000]: General error: 1364 Field 'id_pembimbing' doesn't have a default value (Connection: mysql, SQL: insert into `internship` (`id_permohonan`, `status_magang`, `updated_at`, `created_at`) values (2, Aktif, 2025-10-10 06:47:07, 2025-10-10 06:47:07)) {"userId":17,"exception":"[object] (Illuminate\\Database\\QueryException(code: HY000): SQLSTATE[HY000]: General error: 1364 Field 'id_pembimbing' doesn't have a default value (Connection: mysql, SQL: insert into `internship` (`id_permohonan`, `status_magang`, `updated_at`, `created_at`) values (2, Aktif, 2025-10-10 06:47:07, 2025-10-10 06:47:07)) at C:\\wamp64\\www\\proyek-manajemen-magang-upa-tik\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Connection.php:825)
 [stacktrace]
 #0 C:\\wamp64\\www\\proyek-manajemen-magang-upa-tik\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Connection.php(779): Illuminate\\Database\\Connection->runQueryCallback('insert into `in...', Array, Object(Closure))
@@ -6377,7 +6377,7 @@ Stack trace:
 #61 C:\\laragon\\www\\magang\\public\\index.php(17): Illuminate\\Foundation\\Application->handleRequest(Object(Illuminate\\Http\\Request))
 #62 C:\\laragon\\www\\magang\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\resources\\server.php(23): require_once('C:\\\\laragon\\\\www\\\\...')
 #63 {main}
-"} 
+"}
 [2025-10-10 07:17:13] local.ERROR: Route [admin.peserta.attendance.export.excel] not defined. {"view":{"view":"C:\\laragon\\www\\magang\\resources\\views\\admin\\peserta\\detail.blade.php","data":{"errors":"<pre class=sf-dump id=sf-dump-1551971239 data-indent-pad=\"  \"><span class=sf-dump-note>Illuminate\\Support\\ViewErrorBag</span> {<a class=sf-dump-ref>#1204</a><samp data-depth=1 class=sf-dump-expanded>
   #<span class=sf-dump-protected title=\"Protected property\">bags</span>: []
 </samp>}
@@ -6623,7 +6623,7 @@ Stack trace:
 #61 C:\\laragon\\www\\magang\\public\\index.php(17): Illuminate\\Foundation\\Application->handleRequest(Object(Illuminate\\Http\\Request))
 #62 C:\\laragon\\www\\magang\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\resources\\server.php(23): require_once('C:\\\\laragon\\\\www\\\\...')
 #63 {main}
-"} 
+"}
 [2025-10-10 07:17:50] local.ERROR: Route [admin.peserta.attendance.export.excel] not defined. {"view":{"view":"C:\\laragon\\www\\magang\\resources\\views\\admin\\peserta\\detail.blade.php","data":{"errors":"<pre class=sf-dump id=sf-dump-2101959505 data-indent-pad=\"  \"><span class=sf-dump-note>Illuminate\\Support\\ViewErrorBag</span> {<a class=sf-dump-ref>#1204</a><samp data-depth=1 class=sf-dump-expanded>
   #<span class=sf-dump-protected title=\"Protected property\">bags</span>: []
 </samp>}
@@ -6869,7 +6869,7 @@ Stack trace:
 #61 C:\\laragon\\www\\magang\\public\\index.php(17): Illuminate\\Foundation\\Application->handleRequest(Object(Illuminate\\Http\\Request))
 #62 C:\\laragon\\www\\magang\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\resources\\server.php(23): require_once('C:\\\\laragon\\\\www\\\\...')
 #63 {main}
-"} 
+"}
 [2025-10-10 07:19:42] local.ERROR: View [admin.peserta.exports.attendance_pdf] not found. {"userId":1,"exception":"[object] (InvalidArgumentException(code: 0): View [admin.peserta.exports.attendance_pdf] not found. at C:\\laragon\\www\\magang\\vendor\\laravel\\framework\\src\\Illuminate\\View\\FileViewFinder.php:139)
 [stacktrace]
 #0 C:\\laragon\\www\\magang\\vendor\\laravel\\framework\\src\\Illuminate\\View\\FileViewFinder.php(79): Illuminate\\View\\FileViewFinder->findInPaths('admin.peserta.e...', Array)
@@ -6931,7 +6931,7 @@ Stack trace:
 #56 C:\\laragon\\www\\magang\\public\\index.php(17): Illuminate\\Foundation\\Application->handleRequest(Object(Illuminate\\Http\\Request))
 #57 C:\\laragon\\www\\magang\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\resources\\server.php(23): require_once('C:\\\\laragon\\\\www\\\\...')
 #58 {main}
-"} 
+"}
 [2025-10-10 07:29:34] local.ERROR: View [admin.peserta.attendance_pdf] not found. {"userId":1,"exception":"[object] (InvalidArgumentException(code: 0): View [admin.peserta.attendance_pdf] not found. at C:\\laragon\\www\\magang\\vendor\\laravel\\framework\\src\\Illuminate\\View\\FileViewFinder.php:139)
 [stacktrace]
 #0 C:\\laragon\\www\\magang\\vendor\\laravel\\framework\\src\\Illuminate\\View\\FileViewFinder.php(79): Illuminate\\View\\FileViewFinder->findInPaths('admin.peserta.a...', Array)
@@ -6994,4 +6994,4 @@ Stack trace:
 #57 C:\\laragon\\www\\magang\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\resources\\server.php(23): require_once('C:\\\\laragon\\\\www\\\\...')
 #58 {main}
 >>>>>>> 964116f (Absensi dan izin)
-"} 
+"}
