@@ -26,10 +26,10 @@ class InternshipController extends Controller
 {
     public function index(Request $request): View
     {
-        $totalAktif         = Internship::where('status_magang', 'Aktif')->count();
-        $totalNonaktif      = Internship::where('status_magang', 'Nonaktif')->count();
-        $totalTidakSelesai  = Internship::where('status_magang', 'Tidak Selesai')->count();
-        $totalSemua         = Internship::count();
+        $totalAktif = Internship::where('status_magang', 'Aktif')->count();
+        $totalNonaktif = Internship::where('status_magang', 'Nonaktif')->count();
+        $totalTidakSelesai = Internship::where('status_magang', 'Tidak Selesai')->count();
+        $totalSemua = Internship::count();
 
         $searchinstitutes = Institute::orderBy('nama_instansi')->get();
 
@@ -97,9 +97,9 @@ class InternshipController extends Controller
                     $keyword = $request->search['value'];
                     $query->where(function ($q) use ($keyword) {
                         $q->where('id', 'like', "%{$keyword}%")
-                          ->orWhere('status_magang', 'like', "%{$keyword}%")
-                          ->orWhereHas('participants', fn ($sub) => $sub->where('nama', 'like', "%{$keyword}%"))
-                          ->orWhereHas('supervisor', fn ($sub) => $sub->where('nama', 'like', "%{$keyword}%"));
+                            ->orWhere('status_magang', 'like', "%{$keyword}%")
+                            ->orWhereHas('participants', fn ($sub) => $sub->where('nama', 'like', "%{$keyword}%"))
+                            ->orWhereHas('supervisor', fn ($sub) => $sub->where('nama', 'like', "%{$keyword}%"));
                     });
                 }
             })
@@ -125,14 +125,15 @@ class InternshipController extends Controller
             ->orderBy('nama')
             ->get();
 
-        // Peserta yang:
-        //   - status peserta 'approved'
-        //   - user terkait 'active'
-        //   - BELUM terdaftar pada magang 'Aktif'
-        $allowedParticipantIds = $this->allowedParticipantIdsForNewInternship();
+        // Dapatkan ID semua peserta yang sudah terdaftar di magang yang sedang 'Aktif'.
+        $activeInternshipIds = Internship::where('status_magang', 'Aktif')->pluck('id');
+        $assignedParticipantIds = DB::table('internship_participant')
+            ->whereIn('internship_id', $activeInternshipIds)
+            ->pluck('participant_id');
 
-        $participants = Participant::query()
-            ->whereIn('id', $allowedParticipantIds)
+        // Ambil semua peserta yang statusnya 'approved' dan ID-nya TIDAK ADA dalam daftar yang sudah ditugaskan.
+        $participants = Participant::where('status', 'approved')
+            ->whereNotIn('id', $assignedParticipantIds)
             ->orderBy('nama')
             ->get();
 
@@ -142,7 +143,7 @@ class InternshipController extends Controller
     public function store(StoreInternshipRequest $request, InternshipService $service): RedirectResponse
     {
         // Pastikan semua participant_id yang dipilih termasuk yang diizinkan
-        $requestedIds = collect($request->input('participant_ids', []))->filter()->map(fn($v)=>(int)$v)->values();
+        $requestedIds = collect($request->input('participant_ids', []))->filter()->map(fn ($v) => (int) $v)->values();
         if ($requestedIds->isNotEmpty()) {
             $allowed = $this->allowedParticipantIdsForNewInternship();
             $diff = $requestedIds->diff($allowed);
@@ -159,7 +160,7 @@ class InternshipController extends Controller
             return redirect()->route('admin.internship.index')
                 ->with('success', 'Data magang berhasil ditambahkan.');
         } catch (\Exception $e) {
-            return back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage())->withInput();
+            return back()->with('error', 'Terjadi kesalahan: '.$e->getMessage())->withInput();
         }
     }
 
@@ -183,20 +184,20 @@ class InternshipController extends Controller
             ->orderBy('tgl_surat', 'desc')
             ->get();
 
-        // Semua supervisor (atau pakai rule yang sama seperti create jika mau)
-        $supervisors = Supervisor::orderBy('nama')->get();
+        // Logika filter yang sama seperti di `create`, tetapi kita harus menyertakan
+        // supervisor dan peserta yang saat ini terikat pada data magang yang sedang diedit.
+        $assignedSupervisorIds = Internship::where('status_magang', 'Aktif')
+            ->where('id', '!=', $internship->id) // Abaikan data magang saat ini
+            ->whereNotNull('id_pembimbing')
+            ->pluck('id_pembimbing');
+        $supervisors = Supervisor::whereNotIn('id', $assignedSupervisorIds)->orderBy('nama')->get();
 
-        // Peserta yang diizinkan untuk ditambahkan BARU (approved + user active + belum punya magang aktif)
-        // PLUS peserta yang sudah menempel pada internship ini (agar tetap terlihat saat edit)
-        $allowedForNew = $this->allowedParticipantIdsForNewInternship();
-
-        $currentParticipantIds = $internship->participants()->pluck('participants.id');
-
-        $participants = Participant::query()
-            ->where(function ($q) use ($allowedForNew, $currentParticipantIds) {
-                $q->whereIn('id', $allowedForNew)
-                  ->orWhereIn('id', $currentParticipantIds);
-            })
+        $activeInternshipIds = Internship::where('status_magang', 'Aktif')->where('id', '!=', $internship->id)->pluck('id');
+        $assignedParticipantIds = DB::table('internship_participant')
+            ->whereIn('internship_id', $activeInternshipIds)
+            ->pluck('participant_id');
+        $participants = Participant::where('status', 'approved')
+            ->whereNotIn('id', $assignedParticipantIds)
             ->orderBy('nama')
             ->get();
 
@@ -211,10 +212,10 @@ class InternshipController extends Controller
     public function update(UpdateInternshipRequest $request, Internship $internship, InternshipService $service): RedirectResponse
     {
         // Validasi tambahan untuk peserta BARU yang hendak ditambahkan saat edit:
-        $requestedIds = collect($request->input('participant_ids', []))->filter()->map(fn($v)=>(int)$v)->values();
+        $requestedIds = collect($request->input('participant_ids', []))->filter()->map(fn ($v) => (int) $v)->values();
         if ($requestedIds->isNotEmpty()) {
             $allowedForNew = $this->allowedParticipantIdsForNewInternship();
-            $currentIds    = $internship->participants()->pluck('participants.id');
+            $currentIds = $internship->participants()->pluck('participants.id');
             // peserta yang bukan bawaan internship & tidak di allowed → tolak
             $diff = $requestedIds->diff($allowedForNew->merge($currentIds));
             if ($diff->isNotEmpty()) {
@@ -230,14 +231,15 @@ class InternshipController extends Controller
             return redirect()->route('admin.internship.index')
                 ->with('success', 'Data magang berhasil diperbarui.');
         } catch (\Exception $e) {
-            return back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage())->withInput();
+            return back()->with('error', 'Terjadi kesalahan: '.$e->getMessage())->withInput();
         }
     }
 
     // Export
     public function exportExcel(Request $request)
     {
-        $filename = 'internships_' . now()->format('Ymd_His') . '.xlsx';
+        $filename = 'internships_'.now()->format('Ymd_His').'.xlsx';
+
         return Excel::download(new InternshipsExport($request), $filename);
     }
 
@@ -255,17 +257,17 @@ class InternshipController extends Controller
         $data = $q->latest('created_at')->get();
         $subtitle = [];
         if ($request->status_magang) {
-            $subtitle[] = 'Status: ' . $request->status_magang;
+            $subtitle[] = 'Status: '.$request->status_magang;
         }
         if ($request->id_institute) {
-            $subtitle[] = 'Instansi: ' . $data->first()?->permohonan?->institute?->nama_instansi;
+            $subtitle[] = 'Instansi: '.$data->first()?->permohonan?->institute?->nama_instansi;
         }
         $subtitle = implode(' · ', array_filter($subtitle));
 
         $pdf = Pdf::loadView('admin.internship.pdf', compact('data', 'subtitle'))
             ->setPaper('a4', 'landscape');
 
-        return $pdf->download('internships_' . now()->format('Ymd_His') . '.pdf');
+        return $pdf->download('internships_'.now()->format('Ymd_His').'.pdf');
     }
 
     public function updateStatus(Request $request, Internship $internship): RedirectResponse

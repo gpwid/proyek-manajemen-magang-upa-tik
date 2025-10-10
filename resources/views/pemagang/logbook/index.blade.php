@@ -19,7 +19,7 @@
                     icon: 'error',
                     title: "{{ $errors->first() }}",
                     showConfirmButton: false,
-                    timer: 1500
+                    timer: 4000
                 });
             </script>
         @endif
@@ -32,7 +32,7 @@
                     icon: 'success',
                     title: "{{ session('success') }}",
                     showConfirmButton: false,
-                    timer: 1500
+                    timer: 4000
                 });
             </script>
         @endif
@@ -197,7 +197,7 @@
                     icon: 'success',
                     title: "{{ session('success') }}",
                     showConfirmButton: false,
-                    timer: 1500
+                    timer: 4000
                 });
             @endif
             @if (session('error'))

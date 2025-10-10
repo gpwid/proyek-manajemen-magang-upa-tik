@@ -28,7 +28,7 @@
                     icon: 'success',
                     title: "{{ session('success') }}",
                     showConfirmButton: false,
-                    timer: 1500
+                    timer: 4000
                 });
             </script>
         @endif
@@ -358,7 +358,8 @@
             $('#btnExportPdf').off('click').on('click', function(e) {
                 e.preventDefault();
                 const qs = buildQueryPermohonan();
-                window.location.href = '{{ route('atasan.permohonan.export.pdf') }}' + (qs ? '?' + qs : '');
+                window.location.href = '{{ route('atasan.permohonan.export.pdf') }}' + (qs ? '?' + qs :
+                '');
             });
         });
     </script>
