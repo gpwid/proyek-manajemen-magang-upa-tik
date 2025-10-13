@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('id_institute');
             $table->foreign('id_institute')->references('id')->on('institutes');
-            $table->string('no_surat', 100)->unique()->after('id_institute');
+            $table->string('no_surat', 100)->unique();
             $table->date('tgl_surat');
             $table->date('tgl_mulai');
             $table->date('tgl_selesai');

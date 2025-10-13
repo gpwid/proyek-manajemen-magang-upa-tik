@@ -10,7 +10,7 @@ return new class extends Migration
     {
         Schema::create('supervisors', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->nullable()->unique()->after('id')->constrained('users')->cascadeOnDelete();
+            $table->foreignId('user_id')->nullable()->unique()->constrained('users')->cascadeOnDelete();
             $table->string('nama', 50);
             $table->string('nip', 30)->unique();
             $table->string('email', 191)->unique()->nullable();

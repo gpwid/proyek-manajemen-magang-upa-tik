@@ -10,10 +10,10 @@ return new class extends Migration
     {
         Schema::create('participants', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('user_id')->nullable()->constrained('users')->onDelete('set null');
             $table->foreignId('supervisor_id')->nullable()->constrained('supervisors')->nullOnDelete();
             $table->unsignedBigInteger('permohonan_id')->nullable();
             $table->foreign('permohonan_id')->references('id')->on('permohonan')->onDelete('cascade');
-            $table->foreignId('user_id')->nullable()->constrained('users')->onDelete('set null')->after('id');
             $table->string('nama', 50);
             $table->string('nik', 16)->unique();
             $table->string('nisnim', 20)->unique();

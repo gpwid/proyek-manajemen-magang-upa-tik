@@ -16,9 +16,8 @@ return new class extends Migration
             $table->foreignId('participant_id')->constrained('participants')->onDelete('cascade');
             $table->date('date');
             $table->enum('status', ['Hadir', 'Izin', 'Sakit', 'Alpha'])->default('Hadir');
-            $table->string('note', 255)->nullable()->after('status');
-            $table->foreignId('recorded_by')->nullable()->after('note')
-                ->constrained('users')->nullOnDelete();
+            $table->string('note', 255)->nullable();
+            $table->foreignId('recorded_by')->nullable()->constrained('users')->nullOnDelete();
             $table->timestamp('check_in_time')->nullable();
             $table->string('check_in_ip_address')->nullable();
             $table->timestamp('check_out_time')->nullable();
