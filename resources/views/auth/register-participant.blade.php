@@ -46,6 +46,7 @@
                             @error('nisnim')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
+                            <label class="form-text text-muted">* Isi strip "-" jika tidak memiliki NIS/NIM</label>
                         </div>
                     </div>
                     <div class="row">

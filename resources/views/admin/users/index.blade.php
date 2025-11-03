@@ -84,6 +84,7 @@
                             <th>Nama</th>
                             <th>Role</th>
                             <th>Status</th>
+                            <th>Terakhir Login</th>
                             <th class="text-nowrap">Aksi</th>
                         </tr>
                     </thead>
@@ -277,6 +278,7 @@
                         d.status = $('select[name="status"]').val();
                         d.email = $('select[name="email"]').val();
                         d.name = $('select[name="name"]').val();
+                        d.last_login_at = $('select[name="last_login_at"]').val();
                     }
                 },
                 columns: [{
@@ -298,6 +300,10 @@
                     {
                         data: 'status',
                         name: 'status'
+                    },
+                    {
+                        data: 'last_login_at',
+                        name: 'last_login_at'
                     },
                     {
                         data: 'aksi',

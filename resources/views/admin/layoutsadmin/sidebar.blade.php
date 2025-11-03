@@ -1,5 +1,48 @@
-<ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion sticky-top" id="accordionSidebar"
-    style="height: 100vh; z-index: 1041;">
+<style>
+    /* pastikan sidebar hanya vertical-scroll dan sembunyikan scrollbar visual (tetap bisa digulir dengan mouse/trackpad) */
+    #accordionSidebar {
+        height: calc(100vh - 20px);
+        overflow-y: auto;
+        /* tetap dapat di-scroll */
+        overflow-x: hidden !important;
+        /* jangan tampilkan horizontal scroll */
+        padding-bottom: 80px;
+        box-sizing: border-box;
+
+        /* hide scrollbars (cross-browser) */
+        -ms-overflow-style: none;
+        /* IE 10+ */
+        scrollbar-width: none;
+        /* Firefox */
+    }
+
+    /* WebKit browsers (Chrome, Safari, Edge) */
+    #accordionSidebar::-webkit-scrollbar {
+        width: 0;
+        height: 0;
+        display: none;
+    }
+
+    /* Hide scrollbar untuk Firefox */
+    .element-with-hidden-scrollbar {
+        scrollbar-width: none;
+    }
+
+    /* cegah body menampilkan horizontal scrollbar akibat margin/padding */
+    body {
+        overflow-x: hidden !important;
+    }
+
+    /* potong teks panjang agar tidak mendorong lebar layout */
+    .sidebar .nav-link {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+</style>
+
+<ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion sticky-top overflow-auto element-with-hidden-scrollbar"
+    id="accordionSidebar" style="height: 100vh; z-index: 1041; padding-bottom: 80px; overflow-y: hidden;">
 
     <a class="sidebar-brand d-inline-flex flex-column align-items-center justify-content-center mb-4 mt-3"
         href="{{ route('admin.dashboard.index') }}">
@@ -94,30 +137,15 @@
                 <span>Kelola Pengguna</span>
             </a>
         </li>
-    @endif
 
-    {{-- =================================================== --}}
-    {{-- MENU KHUSUS UNTUK ROLE PEMAGANG (Contoh) --}}
-    {{-- =================================================== --}}
-    @if (Auth::user()->isPemagang())
-        <hr class="sidebar-divider">
-        <div class="sidebar-heading">
-            Aktivitas Saya
-        </div>
-
-        <li class="nav-item">
-            <a class="nav-link" href="#"> {{-- Arahkan ke route logbook nanti --}}
-                <i class="fas fa-book-open"></i>
-                <span>Logbook Harian</span>
-            </a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="#"> {{-- Arahkan ke route absensi nanti --}}
-                <i class="fas fa-fingerprint"></i>
-                <span>Absensi</span>
+        <li class="nav-item @yield('changelog-active')">
+            <a class="nav-link" href="{{ route('admin.changelog.index') }}">
+                <i class="fa-solid fa-file-alt"></i>
+                <span>Changelog</span>
             </a>
         </li>
     @endif
+
 
     <hr class="sidebar-divider d-none d-md-block">
 

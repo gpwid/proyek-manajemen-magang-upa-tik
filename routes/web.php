@@ -2,6 +2,7 @@
 
 // Admin
 use App\Http\Controllers\Admin\AttendanceController as AdminAttendanceController;
+use App\Http\Controllers\admin\ChangelogController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\InstituteController;
 use App\Http\Controllers\Admin\InternshipController;
@@ -133,15 +134,17 @@ Route::middleware(['auth', 'verified', 'role:admin'])
 
         // === NEW: export riwayat logbook & absensi per peserta ===
         Route::get('/peserta/{participant}/logbook/export/excel', [ParticipantController::class, 'exportLogbookExcel'])->name('peserta.logbook.export.excel');
-        Route::get('/peserta/{participant}/logbook/export/pdf',   [ParticipantController::class, 'exportLogbookPdf'])->name('peserta.logbook.export.pdf');
-        Route::get('/peserta/{participant}/absen/export/excel',   [ParticipantController::class, 'exportAttendanceExcel'])->name('peserta.absen.export.excel');
-        Route::get('/peserta/{participant}/absen/export/pdf',     [ParticipantController::class, 'exportAttendancePdf'])->name('peserta.absen.export.pdf');
+        Route::get('/peserta/{participant}/logbook/export/pdf', [ParticipantController::class, 'exportLogbookPdf'])->name('peserta.logbook.export.pdf');
+        Route::get('/peserta/{participant}/absen/export/excel', [ParticipantController::class, 'exportAttendanceExcel'])->name('peserta.absen.export.excel');
+        Route::get('/peserta/{participant}/absen/export/pdf', [ParticipantController::class, 'exportAttendancePdf'])->name('peserta.absen.export.pdf');
 
         // ===== Absensi Manual (Admin) =====
         Route::get('/attendance/manual/create', [\App\Http\Controllers\Admin\ManualAttendanceController::class, 'create'])
             ->name('attendance.manual.create');
         Route::post('/attendance/manual', [\App\Http\Controllers\Admin\ManualAttendanceController::class, 'store'])
             ->name('attendance.manual.store');
+
+        Route::resource('changelog', ChangelogController::class)->names('changelog');
     });
 
 /*
@@ -269,4 +272,4 @@ Route::middleware(['auth', 'role:pembimbing'])
     });
 
 // Route autentikasi Breeze
-require __DIR__ . '/auth.php';
+require __DIR__.'/auth.php';

@@ -73,6 +73,7 @@ class UsersController extends Controller
             </div>";
 
                 return $actions;
+
             })
 
             ->rawColumns(['aksi'])

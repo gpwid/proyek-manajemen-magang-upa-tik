@@ -3,7 +3,7 @@
 
     <!-- Sidebar - Brand -->
     <a class="sidebar-brand d-flex flex-column align-items-center justify-content-center my-3"
-       href="{{ route('atasan.dashboard.index') ?? '#' }}">
+        href="{{ route('atasan.dashboard.index') ?? '#' }}">
         <div class="sidebar-brand-text mx-3 text-uppercase font-weight-bold">SIMBA</div>
         <div class="small">Panel Atasan</div>
     </a>

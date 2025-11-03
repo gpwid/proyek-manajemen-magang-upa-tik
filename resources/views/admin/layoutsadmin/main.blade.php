@@ -141,7 +141,7 @@
     <div id="pembimbingMobileSidebarOverlay" class="pembimbing-mobile-sidebar-overlay" aria-hidden="true">
         <div class="pembimbing-mobile-sidebar-panel" role="dialog" aria-label="Menu">
             {{-- Render ulang sidebar SB-Admin di panel mobile --}}
-            @include('pemagang.layoutspemagang.sidebar')
+            @include('admin.layoutsadmin.sidebar')
         </div>
     </div>
 

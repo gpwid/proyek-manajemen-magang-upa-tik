@@ -24,7 +24,7 @@ class ParticipantService
             throw new \Exception('Peserta ini sudah memiliki akun atau sudah disetujui.');
         }
         // 1. Hasilkan password acak yang aman
-        $temporaryPassword = $participant->nisnim;
+        $temporaryPassword = $participant->nik;
 
         // 2. Bungkus semua operasi database dalam satu transaksi
         DB::transaction(function () use ($participant, $temporaryPassword) {
@@ -32,7 +32,8 @@ class ParticipantService
             $user = User::create([
                 'name' => $participant->nama,
                 'email' => $participant->email,
-                'nisnim' => $participant->nisnim, // Pastikan peserta punya nisnim yang unik
+                'nisnim' => $participant->nisnim,
+                'nik' => $participant->nik, // Pastikan peserta punya nik yang unik
                 'password' => Hash::make($temporaryPassword),
                 'role' => 'pemagang',
             ]);

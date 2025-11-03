@@ -80,6 +80,15 @@
                         </div>
                     </div>
 
+                    <div class="col-md-6">
+                        <div class="info-item">
+                            <label class="info-label text-body-secondary my-0">Terakhir Login</label>
+                            <div class="info-value fw-bold">
+                                {{ $user->last_login_at }}
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
             </div>
         </div>
