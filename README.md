@@ -1,58 +1,90 @@
-## Tutorial Kontribusi
+# SIMBA — Sistem Informasi Bakat Magang
 
-### PASTIKAN UNTUK MEMBUAT BRANCH DAN DAN REQUEST MERGE JIKA SUDAH"
+Singkat: aplikasi manajemen magang (permohonan, peserta, pembimbing, internship, logbook, absensi, admin).  
+Dibangun dengan Laravel (PHP), MySQL (WAMP) dan Bootstrap 5.
 
-Halo, untuk berkontribusi pada project ini diharapkan untuk :
-1. Menggunakan Laragon versi terbaru, dan membuka directory Laragon dengan terminal (C:\laragon\www)
-2. ```bash
-   \\ Jalankan kode ini di terminal Laragon
-   git clone https://gitlab.com/upa-tik/proyek-manajemen-magang-upa-tik
-   cd proyek-manajemen-magang-upa-tik
+## Fitur utama
+- Autentikasi & peran user (admin, pembimbing, atasan, pemagang)  
+- Formulir permohonan dan management instansi  
+- Pendaftaran peserta (sinkronisasi dengan permohonan / institusi)  
+- Pembuatan internship & relasi peserta ↔ internship  
+- Logbook harian dan ekspor (Excel / PDF)  
+- Absensi QR / check-in dengan IP/time window checks  
+- Panel admin untuk kelola pengguna, instansi, permohonan, peserta
+
+## Persyaratan
+- PHP >= 8.x  
+- Composer  
+- Node.js & NPM (untuk asset)  
+- MySQL (WAMP sudah tersedia di lingkungan development Anda)  
+- Ekstensi PHP yang umum: mbstring, json, pdo_mysql, fileinfo, openssl, bcmath
+
+## Instalasi (development)
+1. Clone repo:
+   git clone <repo-url> c:\wamp64\www\proyek-manajemen-magang-upa-tik
+2. Masuk direktori:
+   cd c:\wamp64\www\proyek-manajemen-magang-upa-tik
+3. Install PHP dependencies:
    composer install
+4. Salin file environment:
+   cp .env.example .env
+   - Atur DB_DATABASE, DB_USERNAME, DB_PASSWORD sesuai WAMP
+5. Generate key:
    php artisan key:generate
+6. Jalankan migration & seeder:
    php artisan migrate --seed
+   (atau jika ada data lama, buat migration penyesuaian yang diperlukan)
+7. Install dan build assets (opsional dev):
    npm install
-
+   npm run dev
+8. Buat symlink storage:
+   php artisan storage:link
+9. Jalankan server:
    php artisan serve
-   ```
-3. Jika sudah, maka sudah bisa kerja. Jangan lupa untuk membuat branch baru dan kabari kalo mau merge.
-4. Untuk membuat branch, buat dulu dari GitLab atau GitHub dengan nama fitur yang ingin di tambah. Bisa dari GitLab nya, atau lewat terminal :
-   ```bash
-   git switch main
-   git pull                 # sinkron dengan remote
-   git switch -c feat/nama-fitur   # contoh: feat/user-auth
-   # ...koding...
-   git add .
-   git commit -m "feat: deskripsi singkat perubahan"
-   git push -u origin feat/nama-fitur   # -u: set upstream (sekali saja)
-   ```
-5. Atau jika sudah ada branch,
-   ```bash
-   git fetch origin
-   git switch feat/nama-fitur
-   git pull
-   # ...koding...
-   git add .
-   git commit -m "feat: update fitur X"
-   git push
-   ```
-   Konvensi nama branch:
-   - feat/<nama-fitur> — fitur baru
-   - fix/<deskripsi-bug> — bugfix
-   - chore/<aktivitas> — pekerjaan non-fungsional (build, deps)
-   - docs/<topik> — dokumentasi
+   atau akses melalui VirtualHost di WAMP
 
-6. Untuk buat Merge Request (MR) ke main, Checklist sebelum minta review:
-   - Sinkron dulu dengan main:
+## Seeder penting
+- `Database\Seeders\UserSeeder` membuat akun admin default.
+- Jika data awal tidak muncul, jalankan:
+  php artisan db:seed --class=UserSeeder
 
-   ```bash
-   git fetch origin
-   git rebase origin/main   # atau git merge origin/main
-   ```
-   - Tidak ada file terlarang di commit (.env, vendor/, node_modules/, dump .sql).
+## Pengaturan yang sering diperlukan
+- Timezone: pastikan `.env` / config/app.php set ke `Asia/Jakarta` bila ingin waktu UTC+7.
+- Email: set konfigurasi MAIL_* di `.env` untuk verifikasi / notifikasi.
+- Jika upload file tidak bekerja: pastikan form pakai `enctype="multipart/form-data"` dan `php.ini` mengijinkan ukuran file.
 
-   - Migration & seeder sudah jalan di lokal (php artisan migrate --seed).
+## Tips debugging umum
+- "Undefined method file" / "Undefined method session" pada IDE: tambahkan PHPDoc di FormRequest, contoh:
+  ```
+  /**
+   * @method \Illuminate\Http\UploadedFile|null file(string $key = null)
+   * @method \Illuminate\Session\Store session()
+   */
+  ```
+  (letakkan di atas class FormRequest yang relevan) — hanya untuk Intellisense.
+- Jika field model tidak tersimpan (contoh `nisnim` kosong) — pastikan nama kolom ada di `$fillable` atau gunakan `$guarded = []`.
+- Jika relasi participants/internship tidak bekerja: pastikan migration pivot (`internship_participant`) ter-migrate dan model punya relasi `belongsToMany`.
+- Sidebar panjang/scrolling: atur CSS sidebar (`overflow-y: auto; overflow-x: hidden;`), gunakan `box-sizing: border-box` dan `white-space: nowrap` + `text-overflow: ellipsis` untuk link panjang.
+- Setelah ubah blade/config: bersihkan cache view/config:
+  php artisan view:clear
+  php artisan cache:clear
+  php artisan config:clear
 
-   - Kode sudah dirapikan (pint) dan test penting lulus (php artisan test).
+## Struktur penting (lokasi file)
+- app/Models — model Eloquent (User, Participant, Internship, Permohonan, Logbook)  
+- app/Http/Controllers — pengontrol untuk admin / pemagang / auth  
+- app/Services — logika bisnis terpisah (ParticipantService, InternshipService)  
+- resources/views — Blade templates (admin/, pemagang/, auth/)  
+- database/migrations — struktur tabel  
+- database/seeders — seed data awal
 
-   - MR kecil & fokus (lebih mudah direview).
+## Routes & policies
+- Routes utama di `routes/web.php` dan `routes/auth.php` (cek middleware role untuk akses)
+- Pastikan route `admin.changelog.index` ada jika menampilkan menu changelog
+
+## Kontribusi
+- Fork → branch fitur → pull request.  
+- Ikuti standar PSR, gunakan migration untuk perubahan DB, sertakan update seeder jika perlu.
+
+## Lisensi
+MIT
