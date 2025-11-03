@@ -16,31 +16,49 @@ Dibangun dengan Laravel (PHP), MySQL (WAMP) dan Bootstrap 5.
 - PHP >= 8.x  
 - Composer  
 - Node.js & NPM (untuk asset)  
-- MySQL (WAMP sudah tersedia di lingkungan development Anda)  
+- MySQL
 - Ekstensi PHP yang umum: mbstring, json, pdo_mysql, fileinfo, openssl, bcmath
+- WAMP/XAMPP/Laragon
 
 ## Instalasi (development)
 1. Clone repo:
+   ```
    git clone <repo-url> c:\wamp64\www\proyek-manajemen-magang-upa-tik
+   ```
 2. Masuk direktori:
+   ```
    cd c:\wamp64\www\proyek-manajemen-magang-upa-tik
+   ```
 3. Install PHP dependencies:
+   ```
    composer install
+   ```
 4. Salin file environment:
+   ```
    cp .env.example .env
    - Atur DB_DATABASE, DB_USERNAME, DB_PASSWORD sesuai WAMP
+   ```
 5. Generate key:
+   ```
    php artisan key:generate
+   ```
 6. Jalankan migration & seeder:
+   ```
    php artisan migrate --seed
-   (atau jika ada data lama, buat migration penyesuaian yang diperlukan)
+   ```
 7. Install dan build assets (opsional dev):
+   ```
    npm install
    npm run dev
+   ```
 8. Buat symlink storage:
+   ```
    php artisan storage:link
+   ```
 9. Jalankan server:
+   ```
    php artisan serve
+   ```
    atau akses melalui VirtualHost di WAMP
 
 ## Seeder penting
