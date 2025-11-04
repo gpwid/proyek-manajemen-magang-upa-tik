@@ -30,12 +30,11 @@ class AuthenticatedSessionController extends Controller
         $request->session()->regenerate();
 
         $user = Auth::user();
+        $user->last_login_at = Carbon::now('Asia/Jakarta');
+        $user->save();
         if ($user->role === 'pemagang' && ! $user->profile_completed) {
             return redirect()->route('pemagang.profile.edit');
         }
-
-        $user->last_login_at = Carbon::now('Asia/Jakarta');
-        $user->save();
 
         return redirect()->route('dashboard');
     }

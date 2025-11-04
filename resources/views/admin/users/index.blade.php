@@ -303,7 +303,10 @@
                     },
                     {
                         data: 'last_login_at',
-                        name: 'last_login_at'
+                        name: 'last_login_at',
+                        render: function(data, type, row) {
+                            return data ? data : '-';
+                        }
                     },
                     {
                         data: 'aksi',
