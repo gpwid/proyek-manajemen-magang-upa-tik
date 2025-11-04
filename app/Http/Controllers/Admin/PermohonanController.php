@@ -7,7 +7,6 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StorePermohonanRequest;
 use App\Http\Requests\UpdatePermohonanRequest;
 use App\Models\Institute;
-use App\Models\Internship;
 use App\Models\Permohonan;
 use App\Services\PermohonanService;
 use Barryvdh\DomPDF\Facade\Pdf;
@@ -22,7 +21,7 @@ class PermohonanController extends Controller
     public function show(Permohonan $application)
     {
 
-        $application->load(['institute', 'participants']);
+        $application->load(['institute', 'participants', 'internships.participants']);
 
         return view('admin.permohonan.show', compact('application'));
     }
@@ -174,20 +173,6 @@ class PermohonanController extends Controller
         // Cek apakah transisi status diizinkan (cari $to di dalam array $allowed)
         if (! in_array($to, $allowed, true)) {
             return back()->withErrors('Transisi status tidak diizinkan dari '.$application->status.' ke '.$to);
-        }
-
-        if ($to === 'Aktif') {
-            // Cek untuk mencegah duplikasi jika data magang sudah ada
-            $existingInternship = Internship::where('id_permohonan', $application->id)->exists();
-
-            if (! $existingInternship) {
-                $internship = Internship::create([
-                    'id_permohonan' => $application->id,
-                    'status_magang' => 'Aktif',
-                ]);
-
-                $internship->participants()->attach($application->participants->pluck('id')->toArray());
-            }
         }
 
         // Update status permohonan

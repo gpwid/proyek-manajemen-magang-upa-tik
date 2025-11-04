@@ -237,20 +237,13 @@
 
                         </div>
 
-                        {{-- ===== Peserta ===== --}}
+                        {{-- ===== Peserta dari semua data magang terkait ===== --}}
                         <div class="mt-4">
                             <div class="section-head">
-                                <h5 class="mb-0"><i class="fa-solid fa-users me-2"></i> Peserta pada Surat Permohonan
+                                <h5 class="mb-0"><i class="fa-solid fa-users me-2"></i> Peserta dari Data Magang Terkait
                                 </h5>
-                                <span class="badge bg-light text-dark">Total:
-                                    {{ $application->participants->count() }}</span>
                             </div>
                             <div class="section-body p-3">
-                                <a href="{{ route('admin.peserta.create', ['permohonan_id' => $application->id]) }}"
-                                    class="btn btn-sm btn-primary mb-2">
-                                    <i class="fa fa-plus"></i> Tambah Peserta
-                                </a>
-
                                 <div class="table-responsive">
                                     <table class="table table-striped table-hover mb-0">
                                         <thead class="table-light">
@@ -266,21 +259,22 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            @forelse($application->participants as $i => $ps)
+                                            @php $no = 1; @endphp
+                                            @forelse($application->internships->flatMap->participants as $participant)
                                                 <tr>
-                                                    <td>{{ $i + 1 }}</td>
-                                                    <td>{{ $ps->nama }}</td>
-                                                    <td>{{ $ps->nik }}</td>
-                                                    <td>{{ $ps->nisnim }}</td>
-                                                    <td>{{ $ps->jenis_kelamin }}</td>
-                                                    <td>{{ $ps->jurusan ?? '-' }}</td>
-                                                    <td>{{ $ps->kontak_peserta ?? '-' }}</td>
-                                                    <td>{{ $ps->keterangan ?? '-' }}</td>
+                                                    <td>{{ $no++ }}</td>
+                                                    <td>{{ $participant->nama }}</td>
+                                                    <td>{{ $participant->nik }}</td>
+                                                    <td>{{ $participant->nisnim }}</td>
+                                                    <td>{{ $participant->jenis_kelamin }}</td>
+                                                    <td>{{ $participant->jurusan ?? '-' }}</td>
+                                                    <td>{{ $participant->kontak_peserta ?? '-' }}</td>
+                                                    <td>{{ $participant->keterangan ?? '-' }}</td>
                                                 </tr>
                                             @empty
                                                 <tr>
                                                     <td colspan="8" class="text-center text-muted py-4">
-                                                        Belum ada peserta untuk permohonan ini.
+                                                        Belum ada peserta untuk data magang terkait.
                                                     </td>
                                                 </tr>
                                             @endforelse

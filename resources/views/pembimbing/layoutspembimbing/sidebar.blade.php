@@ -42,6 +42,13 @@
         </a>
     </li>
 
+    <li class="nav-item @yield('changelog-active')">
+        <a class="nav-link" href="{{ route('pemagang.changelog.index') }}">
+            <i class="fa-solid fa-file-alt"></i>
+            <span>Changelog</span>
+        </a>
+    </li>
+
     <hr class="sidebar-divider d-none d-md-block">
 
     <!-- Sidebar Toggler (Desktop) -->

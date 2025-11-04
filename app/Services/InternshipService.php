@@ -26,21 +26,6 @@ class InternshipService
             ]);
 
             $internship->participants()->attach($validatedData['id_peserta']);
-            $existingParticipants = Participant::where('permohonan_id', $validatedData['id_permohonan'])
-                ->whereNotIn('id', $validatedData['id_peserta'])
-                ->pluck('id')
-                ->toArray();
-
-            if (! empty($existingParticipants)) {
-                $internship->participants()->attach($existingParticipants);
-            }
-            $permohonan = \App\Models\Permohonan::find($validatedData['id_permohonan']);
-            $instituteId = $permohonan ? $permohonan->id_institute : null;
-
-            Participant::whereIn('id', $validatedData['id_peserta'])
-                ->update(['permohonan_id' => $validatedData['id_permohonan'],
-                    'institute_id' => $instituteId,
-                ]);
 
             return $internship;
         });
@@ -64,17 +49,10 @@ class InternshipService
 
             $changes = $internship->participants()->sync($validatedData['id_peserta']);
 
-            // Update permohonan_id untuk peserta baru
+            // Update permohonan_id hanya untuk peserta yang baru ditambahkan ke magang ini
             if (! empty($changes['attached'])) {
                 Participant::whereIn('id', $changes['attached'])
                     ->update(['permohonan_id' => $validatedData['id_permohonan']]);
-            }
-
-            // Kosongkan permohonan_id untuk peserta yang dilepas
-            if (! empty($changes['detached'])) {
-                Participant::whereIn('id', $changes['detached'])
-                    ->where('permohonan_id', $internship->id_permohonan) // Hanya jika menunjuk ke permohonan lama
-                    ->update(['permohonan_id' => null]);
             }
 
             return $internship;

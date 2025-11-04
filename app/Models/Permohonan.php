@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Permohonan extends Model
 {
@@ -47,5 +48,10 @@ class Permohonan extends Model
     public function institute()
     {
         return $this->belongsTo(\App\Models\Institute::class, 'id_institute');
+    }
+
+    public function internships(): HasMany
+    {
+        return $this->hasMany(\App\Models\Internship::class, 'id_permohonan');
     }
 }

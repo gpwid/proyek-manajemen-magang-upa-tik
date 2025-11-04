@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
 
 class UpdateInternshipRequest extends FormRequest
@@ -22,6 +23,9 @@ class UpdateInternshipRequest extends FormRequest
      */
     public function rules(): array
     {
+
+        $internshipId = $this->internship->id;
+
         return [
             'id_permohonan' => [
                 'required',
@@ -31,7 +35,23 @@ class UpdateInternshipRequest extends FormRequest
             'id_pembimbing' => 'required|integer|exists:supervisors,id',
             'status_magang' => ['required', Rule::in(['Aktif', 'Nonaktif', 'Tidak Selesai'])],
             'id_peserta' => 'nullable|array',
-            'id_peserta.*' => 'integer|exists:participants,id',
+            'id_peserta.*' => [
+                'integer',
+                'exists:participants,id',
+                // Validasi kustom: pastikan peserta ini tidak ada di magang aktif LAINNYA
+                function ($attribute, $value, $fail) use ($internshipId) {
+                    $isAssignedLain = DB::table('internship_participant')
+                        ->join('internship', 'internship_participant.internship_id', '=', 'internship.id')
+                        ->where('internship_participant.participant_id', $value)
+                        ->where('internship.status_magang', 'Aktif')
+                        ->where('internship.id', '!=', $internshipId) // <-- Pengecualian
+                        ->exists();
+
+                    if ($isAssignedLain) {
+                        $fail('Salah satu peserta yang dipilih sudah terdaftar di sesi magang aktif lainnya.');
+                    }
+                },
+            ],
         ];
     }
 

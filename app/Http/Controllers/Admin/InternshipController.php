@@ -143,20 +143,10 @@ class InternshipController extends Controller
 
     public function store(StoreInternshipRequest $request, InternshipService $service): RedirectResponse
     {
-        // Pastikan semua participant_id yang dipilih termasuk yang diizinkan
-        $requestedIds = collect($request->input('participant_ids', []))->filter()->map(fn ($v) => (int) $v)->values();
-        if ($requestedIds->isNotEmpty()) {
-            $allowed = $this->allowedParticipantIdsForNewInternship();
-            $diff = $requestedIds->diff($allowed);
-            if ($diff->isNotEmpty()) {
-                throw ValidationException::withMessages([
-                    'participant_ids' => ['Terdapat peserta yang tidak memenuhi syarat (belum disetujui / akun belum aktif / sudah terdaftar magang aktif).'],
-                ]);
-            }
-        }
+        $validatedData = $request->validated();
 
         try {
-            $service->createInternship($request->validated());
+            $service->createInternship($validatedData);
 
             return redirect()->route('admin.internship.index')
                 ->with('success', 'Data magang berhasil ditambahkan.');

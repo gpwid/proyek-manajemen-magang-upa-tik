@@ -19,4 +19,4 @@ yarn-error.log
 /.vscode
 /storage/app/public
 /storage/framework/views/*
-/storage/logs
+/storage/logs/*

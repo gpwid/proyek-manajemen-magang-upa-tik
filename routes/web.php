@@ -170,6 +170,9 @@ Route::middleware(['auth', 'role:pemagang'])
         // -- Profil Pengguna (dari Breeze) --
         Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
         Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+
+        Route::resource('changelog', ChangelogController::class)->names('changelog');
+
     });
 
 /*
@@ -229,9 +232,12 @@ Route::middleware(['auth', 'role:atasan'])
             ->names('penugasan')
             ->parameters(['penugasan' => 'task']);
 
+        Route::resource('changelog', ChangelogController::class)->names('changelog');
+
         // -- Profil Pengguna (dari Breeze) --
         Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
         Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+
     });
 
 /*
@@ -269,6 +275,9 @@ Route::middleware(['auth', 'role:pembimbing'])
             ->name('task.update');
         Route::delete('/peserta/{participant}/task/{task}', [PembimbingTaskController::class, 'destroy'])
             ->name('task.destroy');
+
+        Route::resource('changelog', ChangelogController::class)->names('changelog');
+
     });
 
 // Route autentikasi Breeze

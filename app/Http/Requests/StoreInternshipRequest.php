@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
 
 class StoreInternshipRequest extends FormRequest
@@ -30,8 +31,22 @@ class StoreInternshipRequest extends FormRequest
             ],
             'id_pembimbing' => 'nullable|integer|exists:supervisors,id',
             'id_peserta' => 'nullable|array|',
-            'id_peserta.*' => 'integer|exists:participants,id',
+            'id_peserta.*' => [ // Cek setiap peserta yang dipilih
+                'integer',
+                'exists:participants,id',
+                // Validasi kustom: pastikan peserta ini tidak ada di magang aktif lainnya
+                function ($attribute, $value, $fail) {
+                    $isAssigned = DB::table('internship_participant')
+                        ->join('internship', 'internship_participant.internship_id', '=', 'internship.id')
+                        ->where('internship_participant.participant_id', $value)
+                        ->where('internship.status_magang', 'Aktif')
+                        ->exists();
 
+                    if ($isAssigned) {
+                        $fail('Salah satu peserta yang dipilih sudah terdaftar di sesi magang aktif lainnya.');
+                    }
+                },
+            ],
         ];
     }
 
