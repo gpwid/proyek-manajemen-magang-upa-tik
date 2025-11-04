@@ -37,7 +37,7 @@ class AttendanceController extends Controller
         }
 
         $clientIp = $request->ip();
-        $isIpAllowed = Str::startsWith($clientIp, '172.') || $clientIp === '127.0.0.1';
+        $isIpAllowed = Str::startsWith($clientIp, '103.') || Str::startsWith($clientIp, '172.') || $clientIp === '127.0.0.1';
 
         // 2) Validasi IP yang diizinkan
         if (!$isIpAllowed) {
