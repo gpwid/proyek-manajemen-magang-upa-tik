@@ -119,7 +119,7 @@
                                 <label class="form-label">Jenis Magang <span class="text-danger">*</span></label>
                                 <select name="jenis_magang" class="form-select @error('jenis_magang') is-invalid @enderror"
                                     required>
-                                    @foreach (['Mandiri', 'MBKM', 'Sekolah'] as $jm)
+                                    @foreach (['Mandiri', 'MBKM', 'Sekolah', 'Kemitraan', 'Lainnya'] as $jm)
                                         <option value="{{ $jm }}"
                                             @if (old('jenis_magang') == '{{ $jm }}') selected @endif>{{ $jm }}
                                         </option>

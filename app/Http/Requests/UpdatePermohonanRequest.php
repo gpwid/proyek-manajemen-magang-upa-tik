@@ -28,7 +28,7 @@ class UpdatePermohonanRequest extends FormRequest
             'tgl_selesai' => 'required|date|after_or_equal:tgl_mulai',
             'pembimbing_sekolah' => 'required|string|max:255',
             'kontak_pembimbing' => 'required|string|max:13',
-            'jenis_magang' => 'required|in:Mandiri,MBKM,Sekolah',
+            'jenis_magang' => 'required|in:Mandiri,MBKM,Sekolah,Kemitraan,Lainnya',
             'file_permohonan' => 'nullable|file|mimes:pdf|max:5120',
             'file_suratbalasan' => 'nullable|file|mimes:pdf|max:5120',
             'catatan' => 'nullable|string|max:255',

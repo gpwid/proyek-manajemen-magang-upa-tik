@@ -61,7 +61,7 @@
                         <label class="form-label">Jenis Magang</label>
                         <select name="jenis_magang" class="form-select select2-filter">
                             <option value="">Semua jenis magang…</option>
-                            @foreach (['Sekolah', 'MBKM', 'Mandiri'] as $jm)
+                            @foreach (['Sekolah', 'MBKM', 'Mandiri', 'Kemitraan', 'Lainnya'] as $jm)
                                 <option value="{{ $jm }}" @selected(request('jenis_magang') === $jm)>{{ $jm }}
                                 </option>
                             @endforeach
@@ -359,7 +359,7 @@
                 e.preventDefault();
                 const qs = buildQueryPermohonan();
                 window.location.href = '{{ route('atasan.permohonan.export.pdf') }}' + (qs ? '?' + qs :
-                '');
+                    '');
             });
         });
     </script>
