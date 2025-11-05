@@ -5,15 +5,6 @@
 
     <div class="container-fluid">
 
-        {{-- Tombol Tambah Changelog --}}
-        @if (Auth::user()->isAdmin())
-            <div class="mb-3">
-                <a href="{{ route('admin.changelog.create') }}" class="btn btn-primary">
-                    <i class="fas fa-plus me-2"></i> Tambah Changelog
-                </a>
-            </div>
-        @endif
-
         <div class="row g-3">
             @foreach ($changelogs as $changelog)
                 <div class="col-12">
