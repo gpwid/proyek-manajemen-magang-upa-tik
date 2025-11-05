@@ -2,7 +2,7 @@
 
 // Admin
 use App\Http\Controllers\Admin\AttendanceController as AdminAttendanceController;
-use App\Http\Controllers\admin\ChangelogController;
+use App\Http\Controllers\Admin\ChangelogController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\InstituteController;
 use App\Http\Controllers\Admin\InternshipController;
