@@ -1,4 +1,4 @@
-@extends('admin.layoutsadmin.main')
+@extends('atasan.layoutsatasan.main')
 @section('title', 'Changelog')
 @section('changelog-active', 'active')
 @section('content')

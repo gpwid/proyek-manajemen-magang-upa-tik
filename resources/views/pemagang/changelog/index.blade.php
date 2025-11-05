@@ -1,4 +1,4 @@
-@extends('admin.layoutsadmin.main')
+@extends('pemagang.layoutspemagang.main')
 @section('title', 'Changelog')
 @section('changelog-active', 'active')
 @section('content')
