@@ -15,6 +15,21 @@ class PermohonanService
      */
     public function createPermohonan(array $data, ?UploadedFile $filePermohonan, ?UploadedFile $fileSurat): Permohonan
     {
+
+        // pastikan nilai jenis_magang valid untuk enum DB
+        $allowed = ['Mandiri', 'MBKM', 'Sekolah', 'Kemitraan', 'Lainnya'];
+        $map = [
+            'mandiri' => 'Mandiri',
+            'mbkm' => 'MBKM',
+            'sekolah' => 'Sekolah',
+            'kemitraan' => 'Kemitraan',
+            'lainnya' => 'Lainnya',
+        ];
+
+        $raw = isset($data['jenis_magang']) ? trim((string) $data['jenis_magang']) : '';
+        $norm = $map[strtolower($raw)] ?? (in_array($raw, $allowed, true) ? $raw : null);
+        $data['jenis_magang'] = $norm ?? 'Lainnya';
+
         // Simpan file ke storage dan dapatkan path-nya
         $permohonanPath = $filePermohonan->store('permohonan', 'public');
         $suratBalasanPath = $fileSurat ? $fileSurat->store('permohonan', 'public') : null;

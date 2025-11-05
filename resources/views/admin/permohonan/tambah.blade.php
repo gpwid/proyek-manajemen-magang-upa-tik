@@ -171,7 +171,7 @@
                         <hr class="mt-2 mb-3">
                         <div class="row g-3 row-split">
                             <div class="col-md-6">
-                                <label class="form-label">Pembimbing Sekolah <span class="text-danger">*</span></label>
+                                <label class="form-label">Penanggungjawab <span class="text-danger">*</span></label>
                                 <input type="text" name="pembimbing_sekolah" value="{{ old('pembimbing_sekolah') }}"
                                     class="form-control @error('pembimbing_sekolah') is-invalid @enderror" maxlength="100"
                                     required>
@@ -181,7 +181,7 @@
                             </div>
 
                             <div class="col-md-6">
-                                <label class="form-label">Kontak Pembimbing <span class="text-danger">*</span></label>
+                                <label class="form-label">Kontak Penanggungjawab <span class="text-danger">*</span></label>
                                 <input type="text" name="kontak_pembimbing" value="{{ old('kontak_pembimbing') }}"
                                     class="form-control @error('kontak_pembimbing') is-invalid @enderror" maxlength="20"
                                     placeholder="08xxxxxxxxxx" required>

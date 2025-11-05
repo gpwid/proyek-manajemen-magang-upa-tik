@@ -96,7 +96,7 @@
                             <th>Jenis</th>
                             <th>Status</th>
                             <th>Tanggal Surat Masuk</th>
-                            <th>Pembimbing</th>
+                            <th>Penanggungjawab</th>
                             <th>Kontak</th>
                             <th class="text-nowrap">Aksi</th>
                         </tr>
