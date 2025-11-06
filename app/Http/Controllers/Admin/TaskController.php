@@ -96,7 +96,21 @@ class TaskController extends Controller
 
     public function store(StoreTaskRequest $request): RedirectResponse
     {
-        Task::create($request->validated());
+        $data = $request->validated();
+
+        // pastikan participant_id termasuk dalam peserta internship yang dipilih
+        $belongs = Participant::where('id', $data['participant_id'])
+            ->whereHas('internships', function ($q) use ($data) {
+                $q->where('internship.id', $data['internship_id']);
+            })->exists();
+
+        if (! $belongs) {
+            return back()
+                ->withErrors(['participant_id' => 'Peserta tidak terdaftar pada internship yang dipilih.'])
+                ->withInput();
+        }
+
+        Task::create($data);
 
         return redirect()->route('admin.penugasan.index')->with('success', 'Tugas baru berhasil ditambahkan!');
     }

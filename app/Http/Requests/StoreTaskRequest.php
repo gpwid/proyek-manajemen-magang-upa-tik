@@ -16,8 +16,8 @@ class StoreTaskRequest extends FormRequest
     public function rules(): array
     {
         return [
-            // Tabel kamu: internship (singular). Kalau nanti tabelnya jamak, ubah ke internships.
             'internship_id' => ['required', 'integer', 'exists:internship,id'],
+            'participant_id' => ['required', 'integer', 'exists:participants,id'],
             'title' => ['required', 'string', 'max:200'],
             'description' => ['required', 'string'], // TIDAK nullable di migrasi
             'task_date' => ['required', 'date'],   // TIDAK nullable di migrasi
