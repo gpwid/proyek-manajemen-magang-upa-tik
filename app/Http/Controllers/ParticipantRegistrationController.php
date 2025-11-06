@@ -31,7 +31,7 @@ class ParticipantRegistrationController extends Controller
             'nik' => ['required', 'string', 'digits:16', 'unique:participants,nik'],
             'jenis_kelamin' => ['required', 'in:L,P'],
             'institute_id' => ['nullable', 'exists:institutes,id'],
-            'jurusan' => ['required', 'string', 'max:50'],
+            'jurusan' => ['nullable', 'string', 'max:50'],
             'kontak_peserta' => ['required', 'string', 'max:13'],
             'alamat_asal' => ['nullable', 'string', 'max:255'],
             'nama_wali' => ['nullable', 'string', 'max:255'],

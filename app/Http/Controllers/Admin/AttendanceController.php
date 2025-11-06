@@ -12,15 +12,15 @@ class AttendanceController extends Controller
     public function showQrCode(): View
     {
         $now = Carbon::now('Asia/Jakarta'); // Waktu lokal
-        $startOfDay = $now->copy()->startOfDay(); // Pukul 12:00 malam
+        $startOfDay = $now->copy()->startOfDay(); // Mulai dari pukul 00:00
 
         // QR Check-In: Berlaku dari pukul 6:00 pagi hingga 12:00 siang
         $checkInStart = $startOfDay->copy()->addHours(6);
         $checkInEnd = $startOfDay->copy()->addHours(12);
 
-        // QR Check-Out: Berlaku dari pukul 1:30 siang hingga 6:30 sore
-        $checkOutStart = $startOfDay->copy()->addHours(13)->addMinutes(30);
-        $checkOutEnd = $startOfDay->copy()->addHours(18)->addMinutes(30);
+        // QR Check-Out: Berlaku dari pukul 14:00 siang hingga 18:00 sore
+        $checkOutStart = $startOfDay->copy()->addHours(14);
+        $checkOutEnd = $startOfDay->copy()->addHours(18);
 
         // Tentukan QR code yang akan ditampilkan berdasarkan waktu saat ini
         $currentQrType = null;
