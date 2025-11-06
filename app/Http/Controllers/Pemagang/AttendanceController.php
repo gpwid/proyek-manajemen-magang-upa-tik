@@ -91,7 +91,7 @@ class AttendanceController extends Controller
                 ]);
             }
 
-            $attendance->check_in_time = $now;
+            $attendance->check_in_time = $now->setTimezone('Asia/Jakarta');
             $attendance->check_in_ip_address = $clientIp;
             $attendance->save();
 

@@ -26,7 +26,7 @@ class UpdateParticipantRequest extends FormRequest
             'nik' => 'required|string|max:16',
             'nisnim' => 'nullable|string|max:20',
             'jenis_kelamin' => 'required|in:L,P',
-            'jurusan' => 'required|string|max:50',
+            'jurusan' => 'nullable|string|max:50', // ubah menjadi nullable
             'kontak_peserta' => 'required|string|max:13',
             'tahun_aktif' => 'required|digits:4',
             'keterangan' => 'nullable|string|max:255',

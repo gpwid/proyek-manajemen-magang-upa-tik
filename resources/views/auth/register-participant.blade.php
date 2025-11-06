@@ -40,13 +40,14 @@
                     </div>
                     <div class="row">
                         <div class="col-md-12 mb-3">
-                            <label class="form-label">NIS/NIM <span class="text-danger">*</span></label>
+                            <label class="form-label">NIS/NIM</label>
                             <input type="text" name="nisnim" value="{{ old('nisnim') }}"
-                                class="form-control @error('nisnim') is-invalid @enderror" maxlength="100" required>
+                                class="form-control @error('nisnim') is-invalid @enderror" maxlength="100">
                             @error('nisnim')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
-                            <label class="form-text text-muted">* Isi strip "-" jika tidak memiliki NIS/NIM</label>
+                            <label class="form-text text-muted">* Isi strip "-" atau kosongkan jika tidak memiliki
+                                NIS/NIM</label>
                         </div>
                     </div>
                     <div class="row">
@@ -103,9 +104,9 @@
                     </div>
                     <div class="row">
                         <div class="col-md-12 mb-3">
-                            <label class="form-label">Jurusan <span class="text-danger">*</span></label>
+                            <label class="form-label">Jurusan</label>
                             <input type="text" name="jurusan" value="{{ old('jurusan') }}"
-                                class="form-control @error('jurusan') is-invalid @enderror" maxlength="100" required>
+                                class="form-control @error('jurusan') is-invalid @enderror" maxlength="100">
                             @error('jurusan')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror

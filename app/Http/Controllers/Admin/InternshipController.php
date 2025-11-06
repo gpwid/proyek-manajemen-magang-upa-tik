@@ -200,6 +200,9 @@ class InternshipController extends Controller
         ));
     }
 
+    /**
+     * @param  \Illuminate\Http\Request  $request
+     */
     public function update(UpdateInternshipRequest $request, Internship $internship, InternshipService $service): RedirectResponse
     {
         // Validasi tambahan untuk peserta BARU yang hendak ditambahkan saat edit:

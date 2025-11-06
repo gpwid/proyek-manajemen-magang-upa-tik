@@ -22,11 +22,10 @@ class UpdateUserRequest extends FormRequest
         return [
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', Rule::unique('users')->ignore($userId)],
-            // Password hanya divalidasi jika diisi
             'password' => ['nullable', 'confirmed', Password::defaults()],
             'role' => ['required', 'in:admin,atasan,pembimbing,pemagang'],
             'nip' => ['nullable', 'string', 'max:30', Rule::unique('users')->ignore($userId), 'required_if:role,admin,atasan,pembimbing'],
-            'nisnim' => ['nullable', 'string', 'max:20', Rule::unique('users')->ignore($userId), 'required_if:role,pemagang'],
+            'nisnim' => ['nullable', 'string', 'max:20', Rule::unique('users', 'nisnim')->ignore($userId)->whereNot('nisnim', '-')],
         ];
     }
 }

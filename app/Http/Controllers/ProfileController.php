@@ -34,7 +34,7 @@ class ProfileController extends Controller
     }
 
     /**
-     * Memperbarui informasi profil pengguna.
+     * @param  \Illuminate\Http\Request  $request
      */
     public function update(ProfileUpdateRequest $request): RedirectResponse
     {

@@ -66,6 +66,15 @@
                         </div>
                     @endif
 
+                    @if ($user->participant->nik)
+                        <div class="col-md-6">
+                            <div class="info-item">
+                                <label class="info-label text-body-secondary my-0">NIK</label>
+                                <div class="info-value fw-bold">{{ $user->participant->nik }}</div>
+                            </div>
+                        </div>
+                    @endif
+
                     <div class="col-md-6">
                         <div class="info-item">
                             <label class="info-label text-body-secondary my-0">Akun Dibuat Pada</label>

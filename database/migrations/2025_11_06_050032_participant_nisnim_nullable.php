@@ -14,7 +14,10 @@ return new class extends Migration
     {
         Schema::table('participants', function (Blueprint $table) {
             try {
-                $table->dropUnique('participants_nisnim_unique');
+                $indexes = DB::select("SHOW INDEX FROM participants WHERE Key_name = 'participants_nisnim_unique'");
+                if (! empty($indexes)) {
+                    $table->dropUnique('participants_nisnim_unique');
+                }
             } catch (\Exception $e) {
                 // Handle the exception if the index does not exist
             }

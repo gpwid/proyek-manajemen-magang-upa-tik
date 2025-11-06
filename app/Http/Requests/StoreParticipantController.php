@@ -27,6 +27,7 @@ class StoreParticipantController extends FormRequest
             'nik' => 'required|string|max:16|unique:participants,nik',
             'nisnim' => 'nullable|string|max:20',
             'jenis_kelamin' => 'required|in:L,P',
+            'jurusan' => 'nullable|string|max:50',
             'tahun_aktif' => 'required|digits:4',
             'keterangan' => 'nullable|string|max:255',
         ];

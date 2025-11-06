@@ -5,6 +5,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules\Password;
 
 class StoreUserRequest extends FormRequest
@@ -24,7 +25,7 @@ class StoreUserRequest extends FormRequest
             // Wajib diisi jika role bukan pemagang, dan harus unik
             'nip' => ['nullable', 'string', 'max:30', 'unique:users,nip', 'required_if:role,admin,atasan,pembimbing'],
             // Wajib diisi jika role adalah pemagang, dan harus unik
-            'nisnim' => ['nullable', 'string', 'max:20', 'unique:users,nisnim', 'required_if:role,pemagang'],
+            'nisnim' => ['nullable', 'string', 'max:20', Rule::unique('users', 'nisnim')->whereNot('nisnim', '-')],
         ];
     }
 }

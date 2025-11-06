@@ -23,6 +23,7 @@ class ParticipantService
         if ($participant->status === 'approved' || $participant->user_id) {
             throw new \Exception('Peserta ini sudah memiliki akun atau sudah disetujui.');
         }
+
         // 1. Hasilkan password acak yang aman
         $temporaryPassword = $participant->nik;
 
@@ -32,16 +33,16 @@ class ParticipantService
             $user = User::create([
                 'name' => $participant->nama,
                 'email' => $participant->email,
-                'nisnim' => $participant->nisnim,
+                'nisnim' => $participant->nisnim !== '-' ? $participant->nisnim : null, // Abaikan jika "-"
                 'nik' => $participant->nik, // Pastikan peserta punya nik yang unik
                 'password' => Hash::make($temporaryPassword),
                 'role' => 'pemagang',
             ]);
 
-            // 4. PERBAIKAN KRITIS: Update kolom `user_id` pada peserta, BUKAN `id` peserta.
+            // 4. Update kolom `user_id` pada peserta
             $participant->update([
                 'status' => 'approved',
-                'user_id' => $user->id, // Pastikan kolom ini ada di tabel participants
+                'user_id' => $user->id,
             ]);
         });
 
