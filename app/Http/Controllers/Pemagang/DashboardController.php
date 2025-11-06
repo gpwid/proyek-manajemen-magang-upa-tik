@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Pemagang;
 use App\Http\Controllers\Controller;
 use App\Models\Attendance;
 use App\Models\Logbook;
+use App\Models\Task;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 
@@ -34,12 +35,22 @@ class DashboardController extends Controller
                 ->first();
         }
 
+        $latestTask = null;
+        $participant = $user->participant;
+        if ($participant) {
+            $latestTask = Task::where('participant_id', $participant->id)
+                ->orderByDesc('task_date')
+                ->orderByDesc('created_at')
+                ->first();
+        }
+
         return view('pemagang.dashboard.index', compact(
             'user',
             'greeting',
             'activeInternship',
             'logbookCount',
-            'todayAttendance'
+            'todayAttendance',
+            'latestTask'
         ));
     }
 

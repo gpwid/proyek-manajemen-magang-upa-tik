@@ -83,6 +83,40 @@
                         </div>
                     </div>
                 </div>
+
+
+
+            </div>
+
+            <div class="row">
+                <!-- Tugas Terbaru -->
+                @if (!empty($latestTask))
+                    <div class="col-xl-12 mb-4">
+                        <div class="card shadow h-100">
+                            <div class="card-header py-3 d-flex justify-content-between align-items-center">
+                                <h6 class="m-0 font-weight-bold text-primary">Tugas Terbaru</h6>
+                                <span
+                                    class="small text-muted">{{ $latestTask->task_date ? \Carbon\Carbon::parse($latestTask->task_date)->translatedFormat('d M Y') : '-' }}</span>
+                            </div>
+                            <div class="card-body">
+                                <h5 class="mb-1">{{ $latestTask->title }}</h5>
+                                <p class="mb-2 text-muted small">
+                                    {{ \Illuminate\Support\Str::limit($latestTask->description, 160) }}
+                                </p>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <span
+                                            class="badge bg-{{ $latestTask->status === 'Selesai' ? 'success' : ($latestTask->status === 'Dikerjakan' ? 'info' : 'warning') }}">
+                                            {{ $latestTask->status }}
+                                        </span>
+                                        <span class="text-muted ms-2 small">oleh
+                                            {{ $latestTask->participant->nama ?? '-' }}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                @endif
             </div>
         @else
             <div class="alert alert-warning text-center">
