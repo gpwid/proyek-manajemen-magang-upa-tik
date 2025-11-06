@@ -24,11 +24,10 @@ class ParticipantRegistrationController extends Controller
      */
     public function store(Request $request)
     {
-        // Validasi semua data yang dibutuhkan untuk tabel Participant
         $validated = $request->validate([
             'nama' => ['required', 'string', 'max:255'],
-            'nisnim' => ['required', 'string', 'max:20', 'unique:participants,nisnim'],
-            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:participants,email'],
+            'nisnim' => ['nullable', 'string', 'max:20'],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:participants,email'],
             'nik' => ['required', 'string', 'digits:16', 'unique:participants,nik'],
             'jenis_kelamin' => ['required', 'in:L,P'],
             'institute_id' => ['nullable', 'exists:institutes,id'],
@@ -39,11 +38,9 @@ class ParticipantRegistrationController extends Controller
             'kontak_wali' => ['nullable', 'string', 'max:13'],
         ]);
 
-        // Buat data Participant baru dengan status 'pending'
-        // Tidak ada pembuatan akun User di sini
         Participant::create([
             'nama' => $validated['nama'],
-            'nisnim' => $validated['nisnim'],
+            'nisnim' => $validated['nisnim'] ?? '-', // fallback '-' jika kosong
             'email' => $validated['email'],
             'nik' => $validated['nik'],
             'jenis_kelamin' => $validated['jenis_kelamin'],
@@ -54,10 +51,9 @@ class ParticipantRegistrationController extends Controller
             'jurusan' => $validated['jurusan'],
             'kontak_peserta' => $validated['kontak_peserta'],
             'tahun_aktif' => Carbon::now()->year,
-            'status' => 'pending', // Status awal, menunggu persetujuan admin
+            'status' => 'pending',
         ]);
 
-        // Arahkan ke halaman login dengan pesan sukses
         return redirect()->route('login')->with('success', 'Pendaftaran berhasil! Data Anda akan segera ditinjau oleh admin.');
     }
 }

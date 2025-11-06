@@ -24,7 +24,7 @@ class UpdateParticipantRequest extends FormRequest
         return [
             'nama' => 'required|string|max:50',
             'nik' => 'required|string|max:16',
-            'nisnim' => 'required|string|max:20',
+            'nisnim' => 'nullable|string|max:20',
             'jenis_kelamin' => 'required|in:L,P',
             'jurusan' => 'required|string|max:50',
             'kontak_peserta' => 'required|string|max:13',
