@@ -52,10 +52,6 @@ class AttendanceController extends Controller
         $nowJakarta = $now->clone()->setTimezone('Asia/Jakarta');
         $type = $request->query('type'); // 'check-in' atau 'check-out'
 
-        // ========= ANTI-CHEAT: blokir absen dari IP sama oleh akun BERBEDA dalam window waktu =========
-        $windowMinutes = (int) env('ATTENDANCE_IP_WINDOW_MINUTES', 3); // bisa diubah di .env
-        $since = $nowJakarta->clone()->subMinutes($windowMinutes);
-
         // Dapatkan/siapkan record absensi hari ini untuk peserta ini
         $attendance = Attendance::firstOrNew([
             'participant_id' => $participant->id,
