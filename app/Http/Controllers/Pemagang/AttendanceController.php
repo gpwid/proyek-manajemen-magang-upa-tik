@@ -56,27 +56,6 @@ class AttendanceController extends Controller
         $windowMinutes = (int) env('ATTENDANCE_IP_WINDOW_MINUTES', 3); // bisa diubah di .env
         $since = $nowJakarta->clone()->subMinutes($windowMinutes);
 
-        // Jika dalam X menit terakhir ada absen (in/out) dari IP yang sama oleh peserta lain → tolak
-        $recentCheckInByOther = Attendance::query()
-            ->where('check_in_ip_address', $clientIp)
-            ->where('check_in_time', '>=', $since)
-            ->where('participant_id', '!=', $participant->id)
-            ->exists();
-
-        $recentCheckOutByOther = Attendance::query()
-            ->where('check_out_ip_address', $clientIp)
-            ->where('check_out_time', '>=', $since)
-            ->where('participant_id', '!=', $participant->id)
-            ->exists();
-
-        if ($recentCheckInByOther || $recentCheckOutByOther) {
-            $msg = "Anti-cheat: Terdeteksi absensi lain dari IP yang sama dalam {$windowMinutes} menit terakhir. "
-                 .'Silakan coba lagi beberapa menit kemudian.';
-
-            return view('pemagang.attendance.result', ['isError' => true, 'message' => $msg]);
-        }
-        // ==============================================================================================
-
         // Dapatkan/siapkan record absensi hari ini untuk peserta ini
         $attendance = Attendance::firstOrNew([
             'participant_id' => $participant->id,
