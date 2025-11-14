@@ -51,7 +51,7 @@
                             <div class="col-12 col-md-6">
                                 <div class="info-item">
                                     <label class="info-label">NISN / NIM</label>
-                                    <div class="info-value">{{ $participant->nisnim }}</div>
+                                    <div class="info-value">{{ $participant->nisnim ?? '-' }}</div>
                                 </div>
                             </div>
 

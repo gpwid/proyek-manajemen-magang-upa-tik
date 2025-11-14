@@ -29,6 +29,7 @@ class UpdateParticipantRequest extends FormRequest
             'jurusan' => 'nullable|string|max:50', // ubah menjadi nullable
             'kontak_peserta' => 'required|string|max:13',
             'tahun_aktif' => 'required|digits:4',
+            'institute_id' => 'nullable|exists:institutes,id',
             'keterangan' => 'nullable|string|max:255',
         ];
     }

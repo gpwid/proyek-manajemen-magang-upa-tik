@@ -97,10 +97,9 @@
                     <div class="row g-3 row-split">
                         {{-- NISN/NIM --}}
                         <div class="col-md-6">
-                            <label class="form-label">NISN/NIM <span class="text-danger">*</span></label>
+                            <label class="form-label">NISN/NIM </label>
                             <input type="text" name="nisnim" value="{{ old('nisnim') }}"
-                                class="form-control @error('nisnim') is-invalid @enderror" placeholder="Masukkan NISN/NIM"
-                                required>
+                                class="form-control @error('nisnim') is-invalid @enderror" placeholder="Masukkan NISN/NIM">
                             @error('nisnim')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
@@ -124,6 +123,24 @@
                     </div>
 
                     <div class="row g-3 row-split mt-0">
+
+                        <div class="col-md-6">
+                            <label for="institute_id" class="form-label fw-semibold">Instansi Asal </label>
+                            <select id="institute_id" name="institute_id"
+                                class="form-select @error('institute_id') is-invalid @enderror">
+                                <option value="">-- Pilih Instansi --</option>
+                                @foreach ($institutes as $institute)
+                                    <option value="{{ $institute->id }}"
+                                        {{ old('institute_id') == $institute->id ? 'selected' : '' }}>
+                                        {{ $institute->nama_instansi }}
+                                    </option>
+                                @endforeach
+                            </select>
+                            @error('institute_id')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
+
 
                         {{-- Tahun Aktif --}}
                         <div class="col-md-6">
