@@ -246,9 +246,9 @@
                                                         <td><span
                                                                 class="badge {{ $badge }}">{{ $ab->status }}</span>
                                                         </td>
-                                                        <td>{{ $ab->check_in_time ? \Carbon\Carbon::parse($ab->check_in_time)->format('H:i:s') : '-' }}
+                                                        <td>{{ $ab->check_in_time ? $ab->check_in_time->setTimezone('Asia/Jakarta')->format('H:i:s') : '-' }}
                                                         </td>
-                                                        <td>{{ $ab->check_out_time ? \Carbon\Carbon::parse($ab->check_out_time)->format('H:i:s') : '-' }}
+                                                        <td>{{ $ab->check_out_time ? $ab->check_out_time->setTimezone('Asia/Jakarta')->format('H:i:s') : '-' }}
                                                         </td>
                                                         <td>{{ $ab->check_in_ip_address ?? '-' }}</td>
                                                         <td>{{ $ab->check_out_ip_address ?? '-' }}</td>
