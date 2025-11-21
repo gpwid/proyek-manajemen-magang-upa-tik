@@ -47,7 +47,7 @@
     <a class="sidebar-brand d-inline-flex flex-column align-items-center justify-content-center mb-4 mt-3"
         href="{{ route('admin.dashboard.index') }}">
         <div class="text-xl fw-bold">SIMBA</div>
-        <div class="small">Sistem Informasi Bakat Magang</div>
+        <div class="small">Sistem Informasi Magang Berbasis Aplikasi</div>
     </a>
 
     <hr class="sidebar-divider my-0">
