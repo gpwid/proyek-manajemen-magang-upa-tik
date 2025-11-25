@@ -1,7 +1,5 @@
 <?php
 
-// app/Http/Controllers/Pemagang/AttendanceController.php
-
 namespace App\Http\Controllers\Pemagang;
 
 use App\Http\Controllers\Controller;
@@ -25,7 +23,7 @@ class AttendanceController extends Controller
 
     public function record(Request $request)
     {
-        // 1. Validasi URL yang ditandatangani (dari QR Code)
+        // 1. Validasi URL yang ditandatangani
         if (! $request->hasValidSignature()) {
             $redirectUrl = route('dashboard');
             $message = 'URL absensi tidak valid atau telah kedaluwarsa. Silakan coba lagi dengan memindai QR code terbaru.';
@@ -37,27 +35,33 @@ class AttendanceController extends Controller
         }
 
         $clientIp = $request->ip();
+        // Cek IP lokal/private
         $isIpAllowed = Str::startsWith($clientIp, '103.') || Str::startsWith($clientIp, '172.') || $clientIp === '127.0.0.1';
 
-        // 2) Validasi IP yang diizinkan
+        // 2. Validasi IP
         if (! $isIpAllowed) {
             $message = "Anda harus terhubung ke jaringan WiFi kampus yang diizinkan untuk melakukan absensi. (IP Anda: {$clientIp})";
-
             return view('pemagang.attendance.result', ['isError' => true, 'message' => $message]);
         }
 
         $participant = Auth::user()->participant;
         $today = Carbon::today()->toDateString();
-        $now = now();
+        
+        // Kita ambil waktu sekarang (biasanya UTC di server)
+        $now = now(); 
+        
+        // Siapkan variabel waktu Jakarta HANYA untuk tampilan pesan (feedback user)
         $nowJakarta = $now->clone()->setTimezone('Asia/Jakarta');
+
         $type = $request->query('type'); // 'check-in' atau 'check-out'
 
-        // Dapatkan/siapkan record absensi hari ini untuk peserta ini
+        // Dapatkan/siapkan record absensi hari ini
         $attendance = Attendance::firstOrNew([
             'participant_id' => $participant->id,
             'date' => $today,
         ]);
 
+        // --- LOGIKA CHECK-IN ---
         if ($type === 'check-in') {
             if ($attendance->check_in_time) {
                 return view('pemagang.attendance.result', [
@@ -66,15 +70,19 @@ class AttendanceController extends Controller
                 ]);
             }
 
-            $attendance->check_in_time = $now->setTimezone('Asia/Jakarta');
+            // PERBAIKAN: Simpan 'now()' mentah. Biarkan Laravel menghandle format DB (UTC).
+            // Jangan convert ke timezone Jakarta saat menyimpan ke DB.
+            $attendance->check_in_time = $now;
             $attendance->check_in_ip_address = $clientIp;
             $attendance->save();
 
             return view('pemagang.attendance.result', [
+                // Tampilkan ke user menggunakan jam Jakarta agar user tidak bingung
                 'message' => 'Check-in berhasil direkam pada pukul '.$nowJakarta->format('H:i:s'),
             ]);
         }
 
+        // --- LOGIKA CHECK-OUT ---
         if ($type === 'check-out') {
             if (is_null($attendance->check_in_time)) {
                 return view('pemagang.attendance.result', [
@@ -90,7 +98,8 @@ class AttendanceController extends Controller
                 ]);
             }
 
-            $attendance->check_out_time = $now->setTimezone('Asia/Jakarta');
+            // PERBAIKAN: Simpan 'now()' mentah.
+            $attendance->check_out_time = $now;
             $attendance->check_out_ip_address = $clientIp;
             $attendance->save();
 
